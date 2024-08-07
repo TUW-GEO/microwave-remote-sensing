@@ -1,0 +1,15 @@
+name: 01_eo-discover-eodag
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - mamba
+  - jupyter
+  - numpy
+  - scipy
+  - xarray
+  - zarr
+  - netcdf4
+  - pip:
+    - eodag
