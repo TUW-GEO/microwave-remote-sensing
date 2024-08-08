@@ -1,0 +1,8 @@
+name: 03_backscatter-coefficients
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - mamba
+  - jupyter

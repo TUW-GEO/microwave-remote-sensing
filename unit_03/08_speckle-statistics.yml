@@ -1,0 +1,8 @@
+name: 08_speckle-statistics
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - mamba
+  - jupyter

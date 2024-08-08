@@ -1,6 +1,6 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TU Wien GEO MRS group/microwave_remote_sensing/main)
+#  UE Microwave Remote Sensing (120.030)
 
-TODO: Add you lecture description. 
+These are the hand-outs and exercises of the Master course Microwave Remote Sensing (120.030) at the TU Wien.
 
 # Generate Jupyter Conda environment and Jupyter Kernel from `yml`
 

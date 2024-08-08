@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 .PHONY: help clean environment kernel post-render data
 
-YML = $(wildcard *.yml)
+YML = $(wildcard **/*.yml)
 REQ = $(basename $(notdir $(YML)))
 
 CONDA_ENV_DIR := $(foreach i,$(REQ),$(shell conda info --base)/envs/$(i))
@@ -28,7 +28,7 @@ teardown:
 	for i in $(REQ); do conda remove -n $$i --all -y ; jupyter kernelspec uninstall -y $$i ; done
 
 $(CONDA_ENV_DIR):
-	for i in $(YML); do conda env create -f $$i; done
+	- for i in $(YML); do conda env create -f $$i; done
 
 environment: $(CONDA_ENV_DIR)
 	@echo -e "conda environments are ready."
@@ -36,7 +36,11 @@ environment: $(CONDA_ENV_DIR)
 $(KERNEL_DIR): $(CONDA_ENV_DIR)
 	pip install --upgrade pip
 	pip install jupyter
-	for i in $(REQ); do $(CONDA_ACTIVATE) $$i ; python -m ipykernel install --user --name $$i --display-name $$i ; conda deactivate; done
+	for i in $(REQ)
+	do $(CONDA_ACTIVATE) $$i 
+		python -m ipykernel install --user --name $$i --display-name $$i
+		conda deactivate
+	done
 
 kernel: $(KERNEL_DIR)
 	@echo -e "conda jupyter kernel is ready."
