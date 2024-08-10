@@ -8,3 +8,5 @@ dependencies:
   - jupyter
   - folium
   - pystac
+  - odc-stac
+  - dask
