@@ -9,3 +9,4 @@ dependencies:
   - xarray
   - rioxarray
   - matplotlib
+  - folium
