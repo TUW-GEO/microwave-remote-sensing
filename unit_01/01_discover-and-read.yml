@@ -10,5 +10,5 @@ dependencies:
   - pystac
   - odc-stac
   - dask
-  - matplotlib.pyplot
+  - matplotlib
   - numpy
