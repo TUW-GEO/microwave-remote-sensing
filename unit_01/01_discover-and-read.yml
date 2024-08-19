@@ -6,3 +6,9 @@ dependencies:
   - pip
   - mamba
   - jupyter
+  - folium
+  - pystac-client
+  - odc-stac
+  - dask
+  - matplotlib
+  - numpy
