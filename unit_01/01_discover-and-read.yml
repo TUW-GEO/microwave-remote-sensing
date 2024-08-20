@@ -12,3 +12,4 @@ dependencies:
   - dask
   - matplotlib
   - numpy
+  - rich
