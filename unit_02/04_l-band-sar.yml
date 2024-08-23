@@ -7,3 +7,5 @@ dependencies:
   - mamba
   - jupyter
   - pystac-client
+  - rasterio
+  - matplotlib
