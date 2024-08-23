@@ -6,3 +6,6 @@ dependencies:
   - pip
   - mamba
   - jupyter
+  - pystac-client
+  - rasterio
+  - matplotlib
