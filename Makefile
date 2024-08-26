@@ -25,7 +25,11 @@ clean:
 	rm --force --recursive .ipynb_checkpoints/
 
 teardown:
-	for i in $(REQ); do conda remove -n $$i --all -y ; jupyter kernelspec uninstall -y $$i ; done
+	for i in $(REQ)
+	do 
+		conda remove -n $$i --all -y 
+		jupyter kernelspec uninstall -y $$i 
+	done
 
 $(CONDA_ENV_DIR):
 	- for i in $(YML); do conda env create -f $$i; done
@@ -37,7 +41,8 @@ $(KERNEL_DIR): $(CONDA_ENV_DIR)
 	pip install --upgrade pip
 	pip install jupyter
 	for i in $(REQ)
-	do $(CONDA_ACTIVATE) $$i 
+	do 
+		$(CONDA_ACTIVATE) $$i 
 		python -m ipykernel install --user --name $$i --display-name $$i
 		conda deactivate
 	done

@@ -6,3 +6,12 @@ dependencies:
   - pip
   - mamba
   - jupyter
+  - xarray
+  - rioxarray
+  - pystac-client
+  - odc-stac
+  - stackstac
+  - matplotlib
+  - graphviz
+  - pip:
+    - graphviz

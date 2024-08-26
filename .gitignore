@@ -53,3 +53,8 @@ venv
 
 # make file markers
 .install*
+
+# data
+data/
+**/*.tif
+**/*_solution.ipynb
