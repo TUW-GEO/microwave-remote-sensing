@@ -1,0 +1,122 @@
+---
+title: "120.030 Microwave Remote Sensing"
+---
+
+This is a short guide to create and run the notbooks and environments in the JupiterHub for the Master course Microwave Remote Sensing (120.030) at the TU Wien.
+
+## Starting JupyterHub
+
+In TUWEL, click on the JupyterHub icon ![JupyterHub Icon](assets/images/jupiterhub_icon.png){width=7em}, which redirects you to your own JupyterLab user environment. You should then select the Server for the **Desktop Notebook** from the **Microwave Remote Sensing** course. Be patient - this can take a couple of minutes.
+
+<p style="text-align: center;">
+  <img src="assets/images/select_server.png" style="border: 1px solid black; width: 25em; "/>
+</p>
+
+Please note that all screenshots in this guide refer to the lecture 120.030 Microwave Remote Sensing (2024W), even if a few things are different for you, the overall functionality and interface remain the same.
+
+## Exploring JupyterLab
+
+When you start your server for the first time, your point of entry will be this starting page:
+
+<p style="text-align: center;">
+  <img src="assets/images/startingpage.png" style="border: 1px solid black; width: 25em; "/>
+</p>
+
+In the center, you have the Launcher where you can create Python or other files, play around with Jupyter Notebooks, store intermediate data. You can also open a Python console, a terminal, a text file, and many more.
+On the left, you can see your home directory where you have the folders `lectures` and `shared`. There might be other folders as well, but don't be concerned about them.
+
+::: {.columns}
+:::: {.column width="60%"}
+After some intense coding and analysis, it can happen that you have many terminal and notebook tabs open. However, simply closing them does not quit the processes and running kernels in the background. Therefore, we recommend that you tidy up your running processes after some time, which can be done as marked by the top-left circle. As an overview, the number of running kernels and terminals are always shown at the bottom-left corner.
+::::
+
+:::: {.column width="40%"}
+<p style="text-align: center;">
+  <img src="assets/images/quit_processes.png" style="border: 1px solid black; width: 12em; "/>
+</p>
+::::
+:::
+
+## Setup of Exercise Environment
+
+To use the Notebooks from the course, the following steps need to be taken:
+
+1. Navigate to the folder `~/shared/120.030-2024W/`where you should find a `Makefile` and a `README.md`.
+
+<p style="text-align: center;">
+  <img src="assets/images/start_terminal.png" style="border: 1px solid black; width: 25em; "/>
+</p>
+
+2. In this file, you should open a Terminal using the Launcher and run the command 
+
+   ```bash
+   make notebooks
+   ```
+
+   Wait until the installation is finished - this can take a couple of minutes.
+
+3. The notebooks and an environment, where the important packages and all their dependencies are included, have been installed for you.
+
+4. It might be necessary to re-login to the JupyterHub to see it coming into effect.
+
+5. Now you should see a file named `microwave-remote-sensing` containing the notebooks and additional kernels in the Launcher of JupyterLab.
+
+<p style="text-align: center;">
+  <img src="assets/images/new_notebooks.png" style="border: 1px solid black; width: 25em; "/>
+</p>
+
+6. Select the kernel with the equivalent name as the `.ipynb` notebook to execute the notebook. For example, `01_lecture.ipynb` requires the kernel `01_lecture` for execution of the code blocks.
+
+<p style="text-align: center;">
+  <img src="assets/images/select_kernel.png" style="border: 1px solid black; width: 25em; "/>
+</p>
+
+&nbsp;
+
+::: {.callout-note appearance="simple"}
+In case you could not select the correct server and could not find the folder from step one, you might be in the wrong server. You can change your server by selecting 
+
+```
+File -> Hub Control Panel
+```
+
+&nbsp;
+
+and clicking on `Stop My Server`.
+
+<p style="text-align: center;">
+  <img src="assets/images/stop_server.png" style="border: 1px solid black; width: 25em; "/>
+</p>
+
+Then press `Start My Server` and you should be able to select the Deeplearning Notebook for the Data Science Projects in Remote Sensing course.
+:::
+
+## Clean-up
+
+If you want to remove Jupiter checkpoints navigate to the folder `~/microwave-remote-sensing/` and run the command:
+
+```bash
+make clean
+```
+
+in order to remove the Conda environments and Jupiter kernels run:
+
+```bash
+make teardown
+```
+
+## Developing
+
+Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
+
+```bash
+pip install nbstripout
+nbstripout ../*.ipynb
+```
+
+The pre-commit hooks can be used to check whether outputs are empty. This can be achieved, like so:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
