@@ -12,6 +12,8 @@ dependencies:
   - odc-stac
   - stackstac
   - matplotlib
+  - seaborn
+  - cmcrameri
   - graphviz
   - pip:
     - graphviz
