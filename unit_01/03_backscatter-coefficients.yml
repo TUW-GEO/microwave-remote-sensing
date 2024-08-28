@@ -10,3 +10,5 @@ dependencies:
   - rioxarray
   - matplotlib
   - folium
+  - dask
+  - scipy
