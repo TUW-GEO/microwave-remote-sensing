@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>JupyerHub Guide - Template Notebook for TUW JupyterHub</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">JupyerHub Guide</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Template Notebook for TUW JupyterHub</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Calculate the absolute difference in power on a linear scale:</p>
+<p><span class="math display">\[ A = P_{\gamma^0} - P_{\sigma^0} \, [1] \quad \text{,}  \]</span></p>
+<p>and the ratio of power on the Decibel range of the <span class="math inline">\(\gamma^0\)</span> relative to the <span class="math inline">\(\sigma^0\)</span>, like so:</p>
+<p><span class="math display">\[ R = \frac{P_{\gamma^0}}{P_{\sigma^0}} \, [dB] \quad \text{.} \]</span></p>
+<p>We can do these conversions by component wise mathematical operations with standard math operators. Remember the rules of logarithms when performing these operations!</p>
+<p>Use the following Python modules and data for the calculations.</p>
+<div id="cell-2" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-3" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _preprocess(x):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">*</span> <span class="fl">0.01</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x.rename(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"band_data"</span>: Path(x.encoding[<span class="st">"source"</span>]).parent.stem}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ).squeeze(<span class="st">"band"</span>).drop_vars(<span class="st">"band"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> xr.open_mfdataset(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../data/A0105/EQUI7_EU010M/E047N012T1/**/*.tif"</span>, </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    engine<span class="op">=</span><span class="st">"rasterio"</span>, </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    combine<span class="op">=</span><span class="st">'nested'</span>, </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    preprocess<span class="op">=</span>_preprocess</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ds_aoi <span class="op">=</span> ds.sel(x<span class="op">=</span><span class="bu">slice</span>(<span class="fl">4.78e6</span>, <span class="fl">4.795e6</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="fl">1.28e6</span>, <span class="fl">1.265e6</span>)).compute()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>ds_aoi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+html[data-theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.Dataset&gt; Size: 27MB
+Dimensions:      (x: 1500, y: 1500)
+Coordinates:
+  * x            (x) float64 12kB 4.78e+06 4.78e+06 ... 4.795e+06 4.795e+06
+  * y            (y) float64 12kB 1.28e+06 1.28e+06 ... 1.265e+06 1.265e+06
+    spatial_ref  int64 8B 0
+Data variables:
+    gmr          (y, x) float32 9MB -9.16 -10.34 -8.54 ... -7.67 -8.39 -8.35
+    plia         (y, x) float32 9MB 27.44 27.98 27.62 ... 29.76 32.95 32.58
+    sig0         (y, x) float32 9MB -8.82 -10.01 -8.25 -6.24 ... -7.65 -8.5 -9.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-872f6d7e-d011-42a1-8a4f-a98fa3164f80" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-872f6d7e-d011-42a1-8a4f-a98fa3164f80" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">x</span>: 1500</li><li><span class="xr-has-index">y</span>: 1500</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-921929b1-ac7c-4c14-9598-b6da05be52ac" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-921929b1-ac7c-4c14-9598-b6da05be52ac" class="xr-section-summary">Coordinates: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">4.78e+06 4.78e+06 ... 4.795e+06</div><input id="attrs-5f49f3eb-b86e-48d5-b287-01d3c94680bc" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-5f49f3eb-b86e-48d5-b287-01d3c94680bc" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-cf9ccb25-eb1b-4f31-8ee0-bc23ee1c96ff" class="xr-var-data-in" type="checkbox"><label for="data-cf9ccb25-eb1b-4f31-8ee0-bc23ee1c96ff" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([4780005., 4780015., 4780025., ..., 4794975., 4794985., 4794995.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.28e+06 1.28e+06 ... 1.265e+06</div><input id="attrs-fa66c4c8-f864-4310-82fa-f50bff7930ef" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-fa66c4c8-f864-4310-82fa-f50bff7930ef" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a744d532-32ff-44c8-bdba-0a017f18c10c" class="xr-var-data-in" type="checkbox"><label for="data-a744d532-32ff-44c8-bdba-0a017f18c10c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1279995., 1279985., 1279975., ..., 1265025., 1265015., 1265005.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-3ca0929b-9f72-42de-83c3-73c8d6757f20" class="xr-var-attrs-in" type="checkbox"><label for="attrs-3ca0929b-9f72-42de-83c3-73c8d6757f20" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f3906e9a-c7c5-4478-9938-c429997d5b4a" class="xr-var-data-in" type="checkbox"><label for="data-f3906e9a-c7c5-4478-9938-c429997d5b4a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>projected_crs_name :</span></dt><dd>Azimuthal_Equidistant</dd><dt><span>grid_mapping_name :</span></dt><dd>azimuthal_equidistant</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>53.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>24.0</dd><dt><span>false_easting :</span></dt><dd>5837287.81977</dd><dt><span>false_northing :</span></dt><dd>2121415.69617</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd><dt><span>GeoTransform :</span></dt><dd>4700000.0 10.0 0.0 1300000.0 0.0 -10.0</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-1791b4ea-57db-4902-8a4b-60829117e059" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-1791b4ea-57db-4902-8a4b-60829117e059" class="xr-section-summary">Data variables: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>gmr</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">-9.16 -10.34 -8.54 ... -8.39 -8.35</div><input id="attrs-a34da079-ca12-4a63-9d05-53dce2fe6283" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-a34da079-ca12-4a63-9d05-53dce2fe6283" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ecf727b2-0d59-432b-82c1-6cc1448d484f" class="xr-var-data-in" type="checkbox"><label for="data-ecf727b2-0d59-432b-82c1-6cc1448d484f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[ -9.16     , -10.34     ,  -8.54     , ...,  -5.27     ,
+         -5.79     ,  -8.48     ],
+       [ -8.97     , -11.41     , -12.469999 , ...,  -5.8399997,
+         -7.08     ,  -8.01     ],
+       [ -8.26     ,  -9.45     , -11.04     , ...,  -4.2      ,
+         -7.71     ,  -9.62     ],
+       ...,
+       [ -6.8799996,  -9.55     , -12.34     , ...,  -8.88     ,
+        -10.679999 , -10.4      ],
+       [ -8.889999 , -10.84     , -13.74     , ...,  -9.4      ,
+         -9.41     ,  -8.7      ],
+       [-10.929999 , -13.04     , -13.65     , ...,  -7.6699996,
+         -8.389999 ,  -8.349999 ]], dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>plia</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">27.44 27.98 27.62 ... 32.95 32.58</div><input id="attrs-f3c3f085-023d-4beb-bb28-a468d46ca5bf" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f3c3f085-023d-4beb-bb28-a468d46ca5bf" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e7d5f377-db21-4237-a8a0-25b25bc7b70a" class="xr-var-data-in" type="checkbox"><label for="data-e7d5f377-db21-4237-a8a0-25b25bc7b70a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[27.439999, 27.98    , 27.619999, ..., 36.01    , 34.3     ,
+        34.3     ],
+       [28.46    , 28.599998, 26.42    , ..., 35.16    , 34.3     ,
+        34.3     ],
+       [29.609999, 28.89    , 26.099998, ..., 34.46    , 34.3     ,
+        34.3     ],
+       ...,
+       [33.07    , 30.82    , 33.36    , ..., 31.55    , 35.25    ,
+        34.26    ],
+       [32.219997, 30.82    , 33.36    , ..., 29.849998, 34.04    ,
+        33.79    ],
+       [32.219997, 30.82    , 34.76    , ..., 29.76    , 32.95    ,
+        32.579998]], dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>sig0</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">-8.82 -10.01 -8.25 ... -8.5 -9.0</div><input id="attrs-1f7e1b25-9a6b-4371-9cc4-fd0ce4705dd6" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-1f7e1b25-9a6b-4371-9cc4-fd0ce4705dd6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4b14265a-8097-46ba-8d07-a9f28c5eda92" class="xr-var-data-in" type="checkbox"><label for="data-4b14265a-8097-46ba-8d07-a9f28c5eda92" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[ -8.82     , -10.01     ,  -8.25     , ...,  -6.2799997,
+         -6.73     ,  -9.12     ],
+       [ -8.73     , -11.139999 , -12.009999 , ...,  -6.83     ,
+         -7.6099997,  -8.92     ],
+       [ -8.13     ,  -9.179999 , -10.51     , ...,  -5.0099998,
+         -8.4      , -10.44     ],
+       ...,
+       [ -7.37     ,  -9.98     , -12.9      , ...,  -9.44     ,
+        -11.41     , -11.139999 ],
+       [ -9.33     , -11.25     , -14.48     , ...,  -9.74     ,
+         -9.83     ,  -9.49     ],
+       [-11.509999 , -13.44     , -14.61     , ...,  -7.6499996,
+         -8.5      ,  -9.       ]], dtype=float32)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-1a2172db-6b85-4008-b1ef-fd48523eb23b" class="xr-section-summary-in" type="checkbox"><label for="section-1a2172db-6b85-4008-b1ef-fd48523eb23b" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-96b2a757-cee1-4e4e-81ef-ec3a2cbec4fa" class="xr-index-data-in" type="checkbox"><label for="index-96b2a757-cee1-4e4e-81ef-ec3a2cbec4fa" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([4780005.0, 4780015.0, 4780025.0, 4780035.0, 4780045.0, 4780055.0,
+       4780065.0, 4780075.0, 4780085.0, 4780095.0,
+       ...
+       4794905.0, 4794915.0, 4794925.0, 4794935.0, 4794945.0, 4794955.0,
+       4794965.0, 4794975.0, 4794985.0, 4794995.0],
+      dtype='float64', name='x', length=1500))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-27c5d663-32d3-482a-afe7-601ab71994b7" class="xr-index-data-in" type="checkbox"><label for="index-27c5d663-32d3-482a-afe7-601ab71994b7" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1279995.0, 1279985.0, 1279975.0, 1279965.0, 1279955.0, 1279945.0,
+       1279935.0, 1279925.0, 1279915.0, 1279905.0,
+       ...
+       1265095.0, 1265085.0, 1265075.0, 1265065.0, 1265055.0, 1265045.0,
+       1265035.0, 1265025.0, 1265015.0, 1265005.0],
+      dtype='float64', name='y', length=1500))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-745ad3e2-f680-4acd-9b71-cf8f9b647c3d" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-745ad3e2-f680-4acd-9b71-cf8f9b647c3d" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+</div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ds_aoi[<span class="st">"gmr_lin"</span>] <span class="op">=</span> <span class="dv">10</span><span class="op">**</span>(ds_aoi.gmr <span class="op">/</span> <span class="dv">10</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ds_aoi[<span class="st">"sig0_lin"</span>] <span class="op">=</span> <span class="dv">10</span><span class="op">**</span>(ds_aoi.sig0 <span class="op">/</span> <span class="dv">10</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> ds_aoi.gmr_lin <span class="op">-</span> ds_aoi.sig0_lin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-5" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>A.plot(robust<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"viridis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_backscatter-coefficients_solution_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-6" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> ds_aoi.gmr <span class="op">-</span> ds_aoi.sig0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>R.plot(robust<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"viridis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_backscatter-coefficients_solution_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
