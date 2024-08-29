@@ -1,6 +1,9 @@
-#  UE Microwave Remote Sensing (120.030)
+
+# UE Microwave Remote Sensing (120.030)
 
 These are the hand-outs and exercises of the Master course Microwave Remote Sensing (120.030) at the TU Wien.
+
+A guide for creating the notebooks and the environments in JupiterHub can be found in the file [`JupyterHub_Guide.qmd`](./JupyterHub_Guide.qmd).
 
 # Generate Jupyter Conda environment and Jupyter Kernel from `yml`
 
@@ -23,7 +26,7 @@ To remove Jupyter checkpoints run:
 make clean
 ```
 
-In order to remove the Conda environments and Jupyter kernels runL
+In order to remove the Conda environments and Jupyter kernels run:
 
 ```
 make teardown
@@ -37,6 +40,7 @@ Commit notebooks without output for smaller file sizes and interactive teaching.
 pip install nbstripout
 nbstripout ../*.ipynb
 ```
+
 The pre-commit hooks can be used to check whether outputs are empty. This can be achieved, like so:
 
 ```
