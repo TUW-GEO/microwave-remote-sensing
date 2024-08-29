@@ -58,3 +58,9 @@ venv
 data/
 **/*.tif
 **/*_solution.ipynb
+
+# generated files
+*.html
+*_files/
+/.quarto/
+_site/
