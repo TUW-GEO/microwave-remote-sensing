@@ -81,8 +81,6 @@ In case you could not select the correct server and could not find the folder fr
 File -> Hub Control Panel
 ```
 
-&nbsp;
-
 and clicking on `Stop My Server`.
 
 <p style="text-align: center;">
