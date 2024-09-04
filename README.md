@@ -38,7 +38,14 @@ Commit notebooks without output for smaller file sizes and interactive teaching.
 
 ```
 pip install nbstripout
-nbstripout ../*.ipynb
+nbstripout **/*.ipynb
+```
+
+Check you code for correct syntax as we want to show off good practices. You can use flake8-nb to check your writing.
+
+```
+pip install flake8-nb
+flake8-nb **/*.ipynb
 ```
 
 The pre-commit hooks can be used to check whether outputs are empty. This can be achieved, like so:
