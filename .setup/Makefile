@@ -6,7 +6,7 @@ GIT_ACCOUNT = TUW-GEO
 REPO_NAME = microwave-remote-sensing
 GIT_BRANCH = main
 GIT_REPO = https://github.com/$(GIT_ACCOUNT)/$(REPO_NAME).git
-ROOT = ~/$(REPO_NAME)
+ROOT = ${HOME}/$(REPO_NAME)
 
 
 help:
