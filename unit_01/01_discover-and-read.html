@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Discover data on EODC catalog and read it - Sentinel 1 – JupyerHub Guide</title>
+<title>Discover Sentinel 1 data using the EODC STAC catalog – JupyerHub Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Discover data on EODC catalog and read it - Sentinel 1</h1>
+<h1 class="title">Discover Sentinel 1 data using the EODC STAC catalog</h1>
 </div>
 
 
@@ -167,12 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Earth Observation (EO) data is wide term for data coming from satellite observations of our planet, including satellite imagery (visible and the rest of the electromagnetic spectrum), thermal data, sea level measurements, atmospheric observations and so on. This data can range from “raw” observations from satellite sensors to human-interpretable imagery. Therefore data providers can range from space agencies owning satellites, to companies or research groups which publish processed measurements. Either way, those institutions often give access to picobytes of datasets that are available with different levels of processing and can be accessed with different paradigm. Sometimes it is web interface, sometimes data can be downloaded with Application Programming Interface (API). API is bridge between user, application submitting request, and server, that operates database.</p>
-<p>This choice of data providers leads to inconvenience of the user not being aware of what is available, for what region of the world and in which timeframe. Morevoer, usually separate accounts have to be made even for freely available data. For that reasons, community has established SpatioTemporal Asset Catalog (STAC), standard that uses common structure to describe data. In other words, metadata can be accessed with STAC which simplifies data discovery. This metadata can be: provider of satellite imagery, platform (satellite), time moment at which imagery was taken, spatial position and coordinate reference system, acquisition methods and so on.</p>
-<p>Most important metadata of EO data - Area of interest: bounding box or other polygon consisting of coordinates - Time range - Bands of data: polarisation of radar data, visible colors of imagery, etc</p>
-<p>Different EO data providers have different APIs and new code has to be written from scratch for each. Therefore, STAC makes this data access easier by cataloging data in common way. It is important to note that with STAC, one can search for data and check what is available, however STAC is not tool developed for downloading datasets. It stores geospatial metadata, which for satellite imagery could be: provider of imagery, description of dataset and acquisition methods, time moment at which imagery was taken, spatial position and coordinate reference system, and so on.</p>
-<p>The STAC Specification has four specifications: STAC Item, STAC Catalog, STAC Collection and STAC API. STAC Item is spatiotemporal unit, for instance a SAR image at moment of acquisition. Each must have type (of GeoJSON object), id, STAC version, geometry, bounding box, links (to description, license, quicklook, collection folder, …), assets (bands of data, …), and properties (coordinate reference system, …). Those field names are required, but their structure and what metadata is stored in them is determined by data provider. STAC Catalog links items together, while STAC Collection extends Catalog with information such as links, temporal extent, license and so on.</p>
-<p>This notebook shows example of how to access EODC Catalogue with STAC in python, using pystac. EODC is EO data and High Peformance Computing service provider. Firstly, STAC client has to be loaded in python and with it EODC catalogue.</p>
+<p>This notebook demonstrates how to access radar data in a STAC Catalogue using the pystac library. In this examples we use here Sentinel-1 data on the EODC stac catalog. In the further process we will learn how to query a STAC catalog, select specific items and display their metadata.</p>
 <div id="cell-3" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pystac_client</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
@@ -185,9 +180,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>eodc_catalog</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The URL <a href="https://stac.eodc.eu/api/v1">https://stac.eodc.eu/api/v1</a>, served over Hypertext Transfer Protocol (HTTP), is STAC-compliant API endpoint (specific URL address where API service is available) that leads to EODC Catalogue. Besides EODC, others can be found on <a href="https://stacindex.org/catalogs">STAC Index</a>, such as United States Geological Survey (USGS) Landsat imagery, Sentinel Hub, Copernicus Data Space Ecosystem and so on. Briefly - STAC can be used to search, discover and access metadata of these datasets with same code. <a href="https://services.eodc.eu/browser/#/?.language=en">EODC Catalogue</a> can be accessed on the web as well.</p>
-<p>Each catalog, composed by different providers, has many collections. To get all collections of a catalog, one could print all of them and their ids, which are used to fetch them from the catalog.</p>
-<div id="cell-7" class="cell">
+<p>Each catalog, composed by different providers, has many collections. To get all collections of a catalog, we can print all of them and their ids, which are used to fetch them from the catalog.</p>
+<div id="cell-6" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>collections <span class="op">=</span> eodc_catalog.get_collections()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>max_length <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(collection.<span class="bu">id</span>) <span class="cf">for</span> collection <span class="kw">in</span> collections) <span class="co">#length of string of collection.id, for pretty print</span></span>
@@ -195,48 +189,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> collection <span class="kw">in</span> eodc_catalog.get_collections():</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>collection<span class="sc">.</span><span class="bu">id</span><span class="sc">.</span>ljust(max_length)<span class="sc">}</span><span class="ss"> : </span><span class="sc">{</span>collection<span class="sc">.</span>title<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>To get a specific collection from the above list, we should put id into <code>client.get_collection()</code> method. It can be displayed with its description, id, temporal and spatial extend, licence, etc. This depends on a provider.</p>
-<div id="cell-9" class="cell">
+<p>To get a specific collection from the catalog, we can use the <code>client.get_collection()</code> method and provide the collection name. We can then display its description, id, temporal and spatial extend, licence, etc.</p>
+<div id="cell-8" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>colllection_id <span class="op">=</span> <span class="st">'SENTINEL1_SIG0_20M'</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>collection <span class="op">=</span> eodc_catalog.get_collection(colllection_id)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>collection</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Each collection has items, which is one spatio-temporal instance of EO imagery. If items are needed for specific timeframe and for specific region of interest, those could be defined as query in the following way.</p>
-<div id="cell-11" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#time_range = "2022-01-01/.." # up to current date, an open range</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"2022-10-01/2022-10-07"</span> <span class="co"># closed range</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># GEOJSON can be created on geojson.io</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># This specific area of interest is a rectangle, but since it is closed polygon it seems like it has five nodes</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>area_of_interest <span class="op">=</span> {</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"coordinates"</span>: [</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>          [</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>              <span class="fl">17.710928010825853</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>              <span class="fl">49.257630084442496</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>              <span class="fl">13.881798300915221</span>,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>              <span class="fl">49.257630084442496</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>              <span class="fl">13.881798300915221</span>,</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>              <span class="fl">46.34747715326259</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>              <span class="fl">17.710928010825853</span>,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>              <span class="fl">46.34747715326259</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>              <span class="fl">17.710928010825853</span>,</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>              <span class="fl">49.257630084442496</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>            ]</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>          ]</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        ],</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"type"</span>: <span class="st">"Polygon"</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>      }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Each collection has multiple items. An item is one spatio-temporal instance the collection, for instance a satellite image. If items are needed for a specific timeframe or for a specific region of interest, we can define this as a query.</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: could you provide here more examples for instanc for a specific day only, etc.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#time_range = "2022-01-01/.." # up to current date, an open range</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"2022-10-01/2022-10-07"</span> <span class="co"># closed range</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>A spatial region of interest can be defined in different ways. One option is to define a simple bounding box:</p>
 <p>To make the code cleaner, the following bounding box could be used, but generally any area of the world can be selected as polygon (does not have to be a rectangle) with geojson.io and <code>interescts</code>.</p>
 <div id="cell-13" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>latmin, latmax <span class="op">=</span> <span class="fl">46.3</span>, <span class="fl">49.3</span> <span class="co"># South to North</span></span>
@@ -244,137 +210,172 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>bounding_box <span class="op">=</span> [lonmin, latmin, lonmax, latmax]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>From previously loaded catalog with STAC client, a search can be done. Search can have several input parameters, for example if area of interest is specified in geojson format - one should use <code>interescts</code>, like below. Another way would be the bounding box, that could be a list, a tuple or iterator, but generally the list should have the following format:</p>
+<p>If the region of interest is not rectengular, we can also define a polygon:</p>
 <div id="cell-15" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>colllection_id, <span class="co"># can also be a list of several collections</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box, <span class="co"># search by bounding box</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#intersects=area_of_interest, # GeoJSON search</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span>time_range,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># max_items = 1 # number of max items to load, if commented it will load all of them</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>items_eodc <span class="op">=</span> search.item_collection()</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"On EODC we found </span><span class="sc">{</span><span class="bu">len</span>(items_eodc)<span class="sc">}</span><span class="ss"> items for the given search query"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GEOJSON can be created on geojson.io</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This specific area of interest is a rectangle, but since it is closed polygon it seems like it has five nodes</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>area_of_interest <span class="op">=</span> {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"coordinates"</span>: [</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>          [</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="fl">17.710928010825853</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="fl">49.257630084442496</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>              <span class="fl">13.881798300915221</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>              <span class="fl">49.257630084442496</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>              <span class="fl">13.881798300915221</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>              <span class="fl">46.34747715326259</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>              <span class="fl">17.710928010825853</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>              <span class="fl">46.34747715326259</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>              <span class="fl">17.710928010825853</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>              <span class="fl">49.257630084442496</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>            ]</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>          ]</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"type"</span>: <span class="st">"Polygon"</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>      }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now, a single item, in this case SAR image, can be fetched and good practice is to check what metadata provider stored on item level.</p>
+<p>Using our previously loaded STAC catalog, we can now search for items fullfilling our query. In this example we are using the bounding box. If we want to use an area of interest specified in the geojson format - one hast to use the intersects parameter as documented in the comment below.</p>
 <div id="cell-17" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>items_eodc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>colllection_id, <span class="co"># can also be a list of several collections</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box, <span class="co"># search by bounding box</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#intersects=area_of_interest, # GeoJSON search</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span>time_range,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># max_items = 1 # number of max items to load, if commented it will load all of them</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>items_eodc <span class="op">=</span> search.item_collection()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"On EODC we found </span><span class="sc">{</span><span class="bu">len</span>(items_eodc)<span class="sc">}</span><span class="ss"> items for the given search query"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Lets display only VV polarisation of the item and information about data.</p>
+<p>Now, we can fetch a single item, in this case a Sentinel-1 image, from the query results. A good practice is to always check what metadata the data provider has stored on the item level.</p>
 <div id="cell-19" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>items_eodc[<span class="dv">0</span>].assets[<span class="st">'VV'</span>].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>items_eodc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For instance, in EODC catalogue an item can conveniently be displayed with thumbnail.</p>
+<p>Lets display only VV polarisation of the item and some information about the data.</p>
 <div id="cell-21" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>items_eodc[<span class="dv">0</span>].assets[<span class="st">'thumbnail'</span>].href</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>items_eodc[<span class="dv">0</span>].assets[<span class="st">'VV'</span>].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here is a way to quickly check how the data found by search query looks on a map.</p>
+<p>In the EODC STAC catalogue an item can conveniently be displayed using its thumbnail.</p>
 <div id="cell-23" class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span> <span class="op">=</span> folium.Map(location<span class="op">=</span>[(latmin<span class="op">+</span>latmax)<span class="op">/</span><span class="dv">2</span>, (lonmin<span class="op">+</span>lonmax)<span class="op">/</span><span class="dv">2</span>], zoom_start<span class="op">=</span><span class="dv">7</span>,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                  zoom_control<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                  scrollWheelZoom<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                  dragging<span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(area_of_interest, name<span class="op">=</span><span class="st">"Area of Interest"</span>).add_to(<span class="bu">map</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items_eodc:</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    image_url <span class="op">=</span> item.assets[<span class="st">'thumbnail'</span>].href <span class="co"># url leading to display of an item, can also be used as hyperlink</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    bounds <span class="op">=</span> item.bbox</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    folium.raster_layers.ImageOverlay(</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>image_url,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        bounds<span class="op">=</span>[[bounds[<span class="dv">1</span>], bounds[<span class="dv">0</span>]], [bounds[<span class="dv">3</span>], bounds[<span class="dv">2</span>]]], <span class="co"># bounds of item</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        ).add_to(<span class="bu">map</span>)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>folium.LayerControl().add_to(<span class="bu">map</span>)</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>items_eodc[<span class="dv">0</span>].assets[<span class="st">'thumbnail'</span>].href</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is a way to quickly check how the data found by a search query looks on a map.</p>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span> <span class="op">=</span> folium.Map(location<span class="op">=</span>[(latmin<span class="op">+</span>latmax)<span class="op">/</span><span class="dv">2</span>, (lonmin<span class="op">+</span>lonmax)<span class="op">/</span><span class="dv">2</span>], zoom_start<span class="op">=</span><span class="dv">7</span>,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                  zoom_control<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                  scrollWheelZoom<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                                  dragging<span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(area_of_interest, name<span class="op">=</span><span class="st">"Area of Interest"</span>).add_to(<span class="bu">map</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items_eodc:</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    image_url <span class="op">=</span> item.assets[<span class="st">'thumbnail'</span>].href <span class="co"># url leading to display of an item, can also be used as hyperlink</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    bounds <span class="op">=</span> item.bbox</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    folium.raster_layers.ImageOverlay(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>image_url,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        bounds<span class="op">=</span>[[bounds[<span class="dv">1</span>], bounds[<span class="dv">0</span>]], [bounds[<span class="dv">3</span>], bounds[<span class="dv">2</span>]]], <span class="co"># bounds of item</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        ).add_to(<span class="bu">map</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>folium.LayerControl().add_to(<span class="bu">map</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="data-reading" class="level2">
 <h2 class="anchored" data-anchor-id="data-reading">Data Reading</h2>
-<p>STAC can be useful tool for discovery of data, however it only loads metadata. This saves memory, but if one would like to do further analysis the data has to be loaded into memory or downloaded on disk.</p>
-<p>Library used for loading data is <code>odc-stac</code>.</p>
-<div id="cell-25" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> (<span class="st">"VV"</span>, <span class="st">"VH"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>crs <span class="op">=</span> <span class="st">"EPSG:4326"</span> <span class="co"># Coordinate Reference System - World Geodetic System 1984 (WGS84) in this case </span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="fl">0.00018</span> <span class="co"># 20 meter in degree</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sig0_ds <span class="op">=</span> odc_stac.load(items_eodc,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>{<span class="st">'time'</span>:<span class="dv">5</span>}, <span class="co"># this is size of DataArray chunk, how much time instances are loaded at once</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Lets display for example VV band of the dataset.</p>
+<p>STAC can also be a useful tool for the discovery of data, however it only loads metadata. This saves memory, but if one would like to do further analysis the data has to be loaded into memory or downloaded on disk.</p>
+<p>The library we use here for loading the data is called <code>odc-stac</code>.</p>
 <div id="cell-27" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sig0_ds.VV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> (<span class="st">"VV"</span>, <span class="st">"VH"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>crs <span class="op">=</span> <span class="st">"EPSG:4326"</span> <span class="co"># Coordinate Reference System - World Geodetic System 1984 (WGS84) in this case </span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="fl">0.00018</span> <span class="co"># 20 meter in degree</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sig0_ds <span class="op">=</span> odc_stac.load(items_eodc,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>{<span class="st">'time'</span>:<span class="dv">5</span>}, <span class="co"># this is size of DataArray chunk, how much time instances are loaded at once</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Displayed data is “lazily” loaded, which means that structure of DataArray is constructed, but data is not loaded yet. It is loaded only at instance when it is needed, for example plotting, computing and so on. Dask library then constructs graphs with order of operations that plotting will be done, so that is the way to handle large datasets. In this example, we have 31 time instances, or 31 items.</p>
-<p>Nevertheless, it is better to choose smaller area.</p>
+<p>Lets display for example the VV band of the dataset.</p>
 <div id="cell-29" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>latmin_smaller, latmax_smaller <span class="op">=</span> <span class="dv">48</span>, <span class="fl">48.4</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lonmin_smaller, lonmax_smaller <span class="op">=</span> <span class="dv">16</span>, <span class="fl">16.5</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>smaller_bounding_box <span class="op">=</span> [[latmin_smaller, lonmin_smaller],</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                        [latmax_smaller, lonmax_smaller]]</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span> <span class="op">=</span> folium.Map(location<span class="op">=</span>[(latmin_smaller<span class="op">+</span>latmax_smaller)<span class="op">/</span><span class="dv">2</span>, (lonmin_smaller<span class="op">+</span>lonmax_smaller)<span class="op">/</span><span class="dv">2</span>], zoom_start<span class="op">=</span><span class="dv">8</span>,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                 zoom_control<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                 scrollWheelZoom<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                 dragging<span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(area_of_interest, name<span class="op">=</span><span class="st">"Area of Interest"</span>).add_to(<span class="bu">map</span>)</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>folium.Rectangle(</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    bounds<span class="op">=</span>smaller_bounding_box,</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"red"</span>,</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>).add_to(<span class="bu">map</span>)</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items_eodc:</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    image_url <span class="op">=</span> item.assets[<span class="st">'thumbnail'</span>].href</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    bounds <span class="op">=</span> item.bbox</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    folium.raster_layers.ImageOverlay(</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>image_url,</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        bounds<span class="op">=</span>[[bounds[<span class="dv">1</span>], bounds[<span class="dv">0</span>]], [bounds[<span class="dv">3</span>], bounds[<span class="dv">2</span>]]],</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        ).add_to(<span class="bu">map</span>)</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>folium.LayerControl().add_to(<span class="bu">map</span>)</span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sig0_ds.VV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-30" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sig0_ds <span class="op">=</span> odc_stac.load(items_eodc,</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>{<span class="st">'time'</span>:<span class="dv">5</span>},</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>[lonmin_smaller, latmin_smaller, lonmax_smaller, latmax_smaller],</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                        <span class="co">#groupby='time'</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                        )</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>sig0_ds.VV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case, the displayed data is “lazily” loaded. This means the structure of the DataArray is constructed, but data is not loaded yet. It is loaded only at instance when it is needed, for example for plotting or computing.</p>
+<p>#TODO: I would not mention dask here cause we don’t need it in the following notebooks. Instead I would mention that the stac load function returns an xarray dataset and breifly explain in two sentences xarray and provide a link to the read the docs. #TODO: Could we use here directly the item from the line items_eodc[0] by assigning it to a variable? This would make selecting a subset obsolet and maybe simplify the notebook. Dask library then constructs graphs with order of operations that plotting will be done, so that is the way to handle large datasets. In this example, we have 31 time instances, or 31 items.</p>
+<p>Nevertheless, it is better to choose smaller area.</p>
+<div id="cell-31" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>latmin_smaller, latmax_smaller <span class="op">=</span> <span class="dv">48</span>, <span class="fl">48.4</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lonmin_smaller, lonmax_smaller <span class="op">=</span> <span class="dv">16</span>, <span class="fl">16.5</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>smaller_bounding_box <span class="op">=</span> [[latmin_smaller, lonmin_smaller],</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                        [latmax_smaller, lonmax_smaller]]</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span> <span class="op">=</span> folium.Map(location<span class="op">=</span>[(latmin_smaller<span class="op">+</span>latmax_smaller)<span class="op">/</span><span class="dv">2</span>, (lonmin_smaller<span class="op">+</span>lonmax_smaller)<span class="op">/</span><span class="dv">2</span>], zoom_start<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                 zoom_control<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                 scrollWheelZoom<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                 dragging<span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>folium.GeoJson(area_of_interest, name<span class="op">=</span><span class="st">"Area of Interest"</span>).add_to(<span class="bu">map</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>folium.Rectangle(</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    bounds<span class="op">=</span>smaller_bounding_box,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"red"</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>).add_to(<span class="bu">map</span>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items_eodc:</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    image_url <span class="op">=</span> item.assets[<span class="st">'thumbnail'</span>].href</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    bounds <span class="op">=</span> item.bbox</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    folium.raster_layers.ImageOverlay(</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span>image_url,</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        bounds<span class="op">=</span>[[bounds[<span class="dv">1</span>], bounds[<span class="dv">0</span>]], [bounds[<span class="dv">3</span>], bounds[<span class="dv">2</span>]]],</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        ).add_to(<span class="bu">map</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>folium.LayerControl().add_to(<span class="bu">map</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-32" class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sig0_ds <span class="op">=</span> odc_stac.load(items_eodc,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>{<span class="st">'time'</span>:<span class="dv">5</span>},</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>[lonmin_smaller, latmin_smaller, lonmax_smaller, latmax_smaller],</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                        <span class="co">#groupby='time'</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>sig0_ds.VV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now dataset is considerably smaller. Lets plot first time instance.</p>
-<div id="cell-32" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sig0_ds.VV.isel(time<span class="op">=</span><span class="dv">0</span>).plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-34" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sig0_ds.VV.isel(time<span class="op">=</span><span class="dv">0</span>).plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>As bounding box could “slice” tiles, that are defined by data provider - sometimes there is no data, in this case as -9999. This visible on previous plot, so nodata has to be disregarded. Furthermore, to save the memory, EODC multiplied data by factor of 10. To store integers (e.g.&nbsp;25), instead of floats (e.g.&nbsp;2.5).</p>
+<p>Due to the way the data is acquired and stored, some items include “no data” areas. In our case, no data has the value -9999, but this can very from data provider to data provider. This information can usually be found in the metadata. Furthermore, to save the memory, data is often stored as integer (e.g.&nbsp;25) and not at float (e.g.&nbsp;2.5) format. For this reason, the backscatter values are often multiplied by a scale factor, in this case the factor 10.</p>
+<p>#TODO: I would also move this to the second unit and visualize here only a single item.</p>
 <p>As Sentinel-1 satellites overpasses Austria every few days and does acquisition of backscatter for few minutes, only some part of dataset will have physical data. So it is better to take daily averages (average scene that Sentinel observed for few minutes of overpass) and to see how it looks over whole week (that was previously defined in STAC search).</p>
 <p>Note: cell belows will take some time to run.</p>
-<div id="cell-34" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> items_eodc[<span class="dv">0</span>].assets[<span class="st">'VV'</span>].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'scale'</span>] <span class="co"># raster:bands is STAC raster extension</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>nodata <span class="op">=</span> items_eodc[<span class="dv">0</span>].assets[<span class="st">'VV'</span>].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'nodata'</span>]</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>sig0_ds <span class="op">=</span> sig0_ds.where(sig0_ds <span class="op">!=</span> nodata) <span class="op">/</span> scale</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>daily_averages <span class="op">=</span> sig0_ds.resample(time<span class="op">=</span><span class="st">'1D'</span>).mean()</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>daily_averages.VV.plot(col<span class="op">=</span><span class="st">'time'</span>, col_wrap<span class="op">=</span><span class="dv">4</span>, robust<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-36" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> items_eodc[<span class="dv">0</span>].assets[<span class="st">'VV'</span>].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'scale'</span>] <span class="co"># raster:bands is STAC raster extension</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>nodata <span class="op">=</span> items_eodc[<span class="dv">0</span>].assets[<span class="st">'VV'</span>].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'nodata'</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Resampling should be done in the linear domain, which is only introduced in the second exercise. To keep this exercise also a bit shorter, please remove/move the part below. </span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>sig0_ds <span class="op">=</span> sig0_ds.where(sig0_ds <span class="op">!=</span> nodata) <span class="op">/</span> scale</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>daily_averages <span class="op">=</span> sig0_ds.resample(time<span class="op">=</span><span class="st">'1D'</span>).mean()</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>daily_averages.VV.plot(col<span class="op">=</span><span class="st">'time'</span>, col_wrap<span class="op">=</span><span class="dv">4</span>, robust<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To see a bit better how scene looked over one day:</p>
-<div id="cell-36" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>daily_averages.VV[<span class="dv">0</span>].plot(robust<span class="op">=</span><span class="va">True</span>) <span class="co"># robust argument does not display outliers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-38" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>daily_averages.VV[<span class="dv">0</span>].plot(robust<span class="op">=</span><span class="va">True</span>) <span class="co"># robust argument does not display outliers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

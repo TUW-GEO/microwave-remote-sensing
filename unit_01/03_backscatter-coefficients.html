@@ -248,7 +248,7 @@ window.Quarto = {
 <section id="area-of-interest" class="level2">
 <h2 class="anchored" data-anchor-id="area-of-interest">Area of Interest</h2>
 <p>Let’s have a closer look at the area of interest by taking the bounding box of the <code>xarray</code> Dataset with <code>rioxarray</code> method <code>transform_bounds</code> and using this to define the viewing window on a <a href="https://leafletjs.com/">leaflet</a> map with <code>folium</code>.</p>
-<div id="cell-5" class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]">
+<div id="cell-5" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ds_aoi <span class="op">=</span> ds.sel(x<span class="op">=</span><span class="bu">slice</span>(<span class="fl">4.78e6</span>, <span class="fl">4.795e6</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="fl">1.28e6</span>, <span class="fl">1.265e6</span>)).compute()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> ds_aoi.rio.transform_bounds(<span class="st">"EPSG:4326"</span>)</span>
