@@ -64,3 +64,4 @@ data/
 *_files/
 /.quarto/
 _site/
+experiments*
