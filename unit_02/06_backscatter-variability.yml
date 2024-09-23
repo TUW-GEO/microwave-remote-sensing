@@ -15,3 +15,7 @@ dependencies:
   - folium
   - dask
   - scipy
+  - holoviews
+  - bokeh
+  - jupyter_bokeh
+  - ipywidgets
