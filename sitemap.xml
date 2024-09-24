@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/08_speckle-statistics _exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/08_speckle-statistics.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/09_interferograms_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.578Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/index.html</loc>
-    <lastmod>2024-09-13T08:26:42.566Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/03_backscatter-coefficients.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/02_unit-conversions_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/02_unit-conversions.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/04_l-band-sar_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/06_backscatter-variability_exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.374Z</lastmod>
   </url>
   <url>
     <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/06_backscatter-variability.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
+    <lastmod>2024-09-24T06:56:58.374Z</lastmod>
   </url>
   <url>
     <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/04_l-band-sar.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
+    <lastmod>2024-09-24T06:56:58.372Z</lastmod>
   </url>
   <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/05_c-and-l-band-comparison.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/05_c-and-l-band-comparison_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/06_backscatter-variability_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/01_discover-and-read.html</loc>
-    <lastmod>2024-09-13T08:26:42.566Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/01_discover-and-read _exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.566Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/03_backscatter-coefficients_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.570Z</lastmod>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/09_interferograms_exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.377Z</lastmod>
   </url>
   <url>
     <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/07_amplitude-and-phase.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
+    <lastmod>2024-09-24T06:56:58.375Z</lastmod>
   </url>
   <url>
-    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/09_interferograms.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/08_speckle-statistics _exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.376Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/02_unit-conversions.html</loc>
+    <lastmod>2024-09-24T06:56:58.370Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/01_discover-and-read.html</loc>
+    <lastmod>2024-09-24T06:56:58.369Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/03_backscatter-coefficients.html</loc>
+    <lastmod>2024-09-24T06:56:58.371Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/index.html</loc>
+    <lastmod>2024-09-24T06:56:58.368Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/03_backscatter-coefficients_exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.371Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/02_unit-conversions_exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.370Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_01/01_discover-and-read _exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.369Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/08_speckle-statistics.html</loc>
+    <lastmod>2024-09-24T06:56:58.376Z</lastmod>
   </url>
   <url>
     <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/07_amplitude-and-phase_exercise.html</loc>
-    <lastmod>2024-09-13T08:26:42.574Z</lastmod>
+    <lastmod>2024-09-24T06:56:58.375Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_03/09_interferograms.html</loc>
+    <lastmod>2024-09-24T06:56:58.377Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/05_c-and-l-band-comparison.html</loc>
+    <lastmod>2024-09-24T06:56:58.373Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/04_l-band-sar_exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.372Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TUW-GEO.github.io/microwave-remote-sensing/unit_02/05_c-and-l-band-comparison_exercise.html</loc>
+    <lastmod>2024-09-24T06:56:58.373Z</lastmod>
   </url>
 </urlset>
