@@ -16,5 +16,6 @@ dependencies:
   - cmcrameri
   - graphviz
   - scikit-image
+  - snaphu
   - pip:
     - graphviz
