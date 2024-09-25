@@ -9,6 +9,6 @@ dependencies:
   - xarray
   - rioxarray
   - matplotlib
-  - folium
+  - jupyter_bokeh
   - dask
   - scipy
