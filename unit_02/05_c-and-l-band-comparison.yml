@@ -6,4 +6,3 @@ dependencies:
   - pip
   - mamba
   - jupyter
-  - eomaps
