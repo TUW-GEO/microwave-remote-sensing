@@ -65,3 +65,4 @@ data/
 /.quarto/
 _site/
 experiments*
+**/*_old.ipynb
