@@ -20,7 +20,7 @@
       {"value": 18, "color": "#e6e64d", "label": "Pastures"},
       {"value": 19, "color": "#ffe6a6", "label": "Annual crops associated with permanent crops"},
       {"value": 20, "color": "#ffe64d", "label": "Complex cultivation patterns"},
-      {"value": 21, "color": "#e6cc4d", "label": "Land principally occupied by agriculture with significant areas of natural vegetation"},
+      {"value": 21, "color": "#e6cc4d", "label": "Agricultural land with natural vegetation"},
       {"value": 22, "color": "#f2cca6", "label": "Agro-forestry areas"},
       {"value": 23, "color": "#80ff00", "label": "Broad-leaved forest"},
       {"value": 24, "color": "#00a600", "label": "Coniferous forest"},
