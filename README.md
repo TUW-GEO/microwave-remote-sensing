@@ -3,7 +3,7 @@
 
 These are the hand-outs and exercises of the Master course Microwave Remote Sensing (120.030) at the TU Wien.
 
-A guide for creating the notebooks and the environments in JupiterHub can be found in the file [`JupyterHub_Guide.qmd`](./JupyterHub_Guide.qmd).
+A guide for creating the notebooks and the environments in JupiterHub can be found in the file [`Index.qmd`](./Index.qmd).
 
 # Generate Jupyter Conda environment and Jupyter Kernel from `yml`
 
