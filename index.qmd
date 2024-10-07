@@ -109,3 +109,5 @@ For the multiple choice questions double click on the Markdown cell and replace 
 
 - [ ] Original
 - [x] Selected answer
+
+To save your work use the drop-down menu under `File` and select `Save Notebook` or use the shortcut `CTRL + S`.
