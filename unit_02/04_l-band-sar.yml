@@ -6,3 +6,8 @@ dependencies:
   - pip
   - mamba
   - jupyter
+  - xarray
+  - rioxarray
+  - shapely
+  - dask
+  - folium
