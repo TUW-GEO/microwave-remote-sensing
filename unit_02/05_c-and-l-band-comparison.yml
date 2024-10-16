@@ -6,4 +6,9 @@ dependencies:
   - pip
   - mamba
   - jupyter
-  - eomaps
+  - rioxarray
+  - dask
+  - jupyter_bokeh
+  - matplotlib
+  - holoviews
+  - hvplot
