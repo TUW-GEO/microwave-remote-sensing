@@ -14,3 +14,5 @@ dependencies:
   - dask
   - scipy
   - datashader
+  - ipywidgets
+  - ipympl
