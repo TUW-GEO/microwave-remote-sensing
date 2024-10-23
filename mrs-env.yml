@@ -1,0 +1,33 @@
+name: mrs-env
+channels:
+  - conda-forge
+dependencies:
+  - bokeh
+  - cmcrameri
+  - dask
+  - datashader
+  - eomaps
+  - folium
+  - graphviz
+  - holoviews
+  - hvplot
+  - ipywidgets
+  - jupyter
+  - jupyter_bokeh
+  - mamba
+  - matplotlib
+  - numpy
+  - odc-stac
+  - pip
+  - pyproj
+  - pystac-client
+  - python=3.10
+  - rioxarray
+  - scikit-image
+  - scipy
+  - seaborn
+  - snaphu
+  - stackstac
+  - xarray
+  - pip:
+    - graphviz

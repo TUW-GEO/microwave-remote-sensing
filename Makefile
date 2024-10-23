@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 .PHONY: help clean environment kernel teardown
 
-YML = $(wildcard **/*.yml)
+YML = environment.yml
 REQ = $(basename $(notdir $(YML)))
 BASENAME = $(shell basename $(CURDIR))
 
