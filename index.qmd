@@ -48,7 +48,7 @@ To use the Notebooks from the course, the following steps need to be taken:
   <img src="assets/images/start_terminal.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
-2. In this file, you should open a Terminal using the Launcher and run the command 
+2. In this file, you should open a Terminal using the Launcher and run the command
 
    ```bash
    make notebooks
@@ -66,7 +66,7 @@ To use the Notebooks from the course, the following steps need to be taken:
   <img src="assets/images/new_notebooks.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
-6. Select the kernel with the equivalent name as the `.ipynb` notebook to execute the notebook. For example, `01_lecture.ipynb` requires the kernel `01_lecture` for execution of the code blocks.
+6. Select the kernel `mrs-env` kernel for execution of the code blocks in the notebook.
 
 <p style="text-align: center;">
   <img src="assets/images/select_kernel.png" style="border: 1px solid black; width: 25em; "/>
@@ -75,7 +75,7 @@ To use the Notebooks from the course, the following steps need to be taken:
 &nbsp;
 
 ::: {.callout-note appearance="simple"}
-In case you could not select the correct server and could not find the folder from step one, you might be in the wrong server. You can change your server by selecting 
+In case you could not select the correct server and could not find the folder from step one, you might be in the wrong server. You can change your server by selecting
 
 ```
 File -> Hub Control Panel
@@ -87,5 +87,27 @@ and clicking on `Stop My Server`.
   <img src="assets/images/stop_server.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
-Then press `Start My Server` and you should be able to select the Deeplearning Notebook for the Data Science Projects in Remote Sensing course.
+Then press `Start My Server` and you should be able to select the "**Desktop Notebook**" for the "120.030-2024W: 120.030 Microwave Remote Sensing" course.
 :::
+
+## Editing Jupyter Notebooks
+
+The homework exercises of the course are labeled with the postfix `_exercise.ipynb`. You are supposed to use these notebooks for the homework assignments and the completed notebooks should be submitted through TUWEL. The notebooks consist of two types of cells: Python and Markdown cells. Python cells contain executable Python code, whereas Markdown cells are used for open text and multiple choice questions. Double click on an existing cell to alter its content. To add new cells click select the cell type from the drop-down menu and click on the plus sign, as follows for Python cells:
+
+![](assets/images/code_cell.png)
+
+And for Markdown cells:
+
+![](assets/images/markdown_cell.png)
+
+For the multiple choice questions double click on the Markdown cell and replace the correct answers, as follows:
+
+```{markdown}
+- [ ] Original
+- [x] Selected answer
+```
+
+- [ ] Original
+- [x] Selected answer
+
+To save your work use the drop-down menu under `File` and select `Save Notebook` or use the shortcut `CTRL + S`.

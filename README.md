@@ -16,7 +16,7 @@ To re-create the environment as a Jupyter kernel for execution of the notebooks,
 make kernel
 ```
 
-Select the kernel with the equivalent name as the `.ipynb` notebook to execute the notebook. For example, `01_lecture.ipynb` requires the kernel `01_lecture` for execution of the code blocks.
+Select the kernel `mrs-env`.
 
 # Clean-up
 
@@ -34,7 +34,7 @@ make teardown
 
 # Developing
 
-Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
+Use the `environment-dev.yml` to setup a conda environment for developing the lecture notebooks. Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
 
 ```
 pip install nbstripout
