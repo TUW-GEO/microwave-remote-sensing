@@ -29,5 +29,6 @@ dependencies:
   - snaphu
   - stackstac
   - xarray
+  - zarr
   - pip:
     - graphviz
