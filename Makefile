@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 .PHONY: help clean environment kernel teardown
 
-YML = environment.yml
+YML = mrs-env.yml
 REQ = $(basename $(notdir $(YML)))
 BASENAME = $(shell basename $(CURDIR))
 
