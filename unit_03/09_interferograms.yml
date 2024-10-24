@@ -6,3 +6,10 @@ dependencies:
   - pip
   - mamba
   - jupyter
+  - matplotlib
+  - dask
+  - folium
+  - pyproj
+  - rioxarray
+  - xarray
+  - scipy
