@@ -16,6 +16,7 @@ dependencies:
   - jupyter_bokeh
   - mamba
   - matplotlib
+  - netcdf4
   - numpy
   - odc-stac
   - pip
