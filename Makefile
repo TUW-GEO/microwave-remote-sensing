@@ -4,10 +4,10 @@ SHELL = /bin/bash
 
 YML = mrs-env.yml
 REQ = $(basename $(notdir $(YML)))
-BASENAME = $(shell basename $(CURDIR))
+BASENAME = $(CURDIR)
 
 CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
-PREFIX = ${HOME}/$(BASENAME)/.conda_envs
+PREFIX = $(BASENAME)/.conda_envs
 CONDA_ENV_DIR := $(foreach i,$(REQ),$(PREFIX)/$(i))
 KERNEL_DIR := $(foreach i,$(REQ),$(shell jupyter --data-dir)/kernels/$(i))
 
@@ -27,13 +27,16 @@ clean:
 
 teardown:
 	$(foreach f, $(REQ), \
+		$(CONDA_ACTIVATE) $(f); \
 		jupyter kernelspec uninstall -y $(f); \
+		conda deactivate; \
 		conda remove -n $(f) --all -y ; \
 		conda deactivate; )
 	- conda config --remove envs_dirs $(PREFIX)
 
 $(CONDA_ENV_DIR): $(YML)
 	- conda config --prepend envs_dirs $(PREFIX)
+	- conda update -n base -c conda-forge conda -y
 	$(foreach f, $^, \
 		conda env create --file $(f) \
 			--prefix $(PREFIX)/$(basename $(notdir $(f))); )

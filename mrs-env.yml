@@ -12,17 +12,19 @@ dependencies:
   - holoviews
   - hvplot
   - ipywidgets
+  - ipympl
   - jupyter
   - jupyter_bokeh
   - mamba
   - matplotlib
+  - nodejs
   - netcdf4
   - numpy
   - odc-stac
   - pip
   - pyproj
   - pystac-client
-  - python=3.10
+  - python=3.11
   - rioxarray
   - scikit-image
   - scipy
