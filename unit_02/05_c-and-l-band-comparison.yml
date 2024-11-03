@@ -1,8 +1,0 @@
-name: 05_c-and-l-band-comparison
-channels:
-  - conda-forge
-dependencies:
-  - python=3.10
-  - pip
-  - mamba
-  - jupyter
