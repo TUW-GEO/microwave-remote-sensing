@@ -66,3 +66,7 @@ data/
 /.quarto/
 _site/
 **/*.zarr
+_book/
+_freeze/
+site_libs/
+**/.jupyter_cache

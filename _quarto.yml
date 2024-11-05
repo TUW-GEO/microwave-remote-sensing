@@ -1,17 +1,36 @@
 project:
-  type: website
+  type: book
 
-website:
+book:
   title: "JupyerHub Guide"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-
+  chapters:
+    - index.qmd
+    - part: "Unit 1"
+      chapters:
+        - text: EO Data Discovery
+          file: unit_01/01_in_class_exercise.ipynb
+        - text: Unit Conversions
+          file: unit_01/02_in_class_exercise.ipynb
+        - text: Backscattering Coefficients
+          file: unit_01/03_in_class_exercise.ipynb
+    - part: "Unit 2"
+      chapters:
+        - text: Datacubes
+          file: unit_02/04_in_class_exercise.ipynb
+        - text: Wavelengths and Polarization
+          file: unit_02/05_in_class_exercise.ipynb
+        - text: Backscatter Variability
+          file: unit_02/06_in_class_exercise.ipynb
+  navbar: 
+    logo: assets/images/tuw-geo-logo.svg
+  sidebar:
+    logo: assets/images/tuw-geo-logo.svg
+    
 format:
   html:
     theme: cosmo
-    toc: true
+    title-block-banner: "#006699"
+    title-block-banner-color: white
 
-
-
+execute:
+  freeze: true
