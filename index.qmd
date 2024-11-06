@@ -39,7 +39,7 @@ After some intense coding and analysis, it can happen that you have many termina
 
 To use the Notebooks from the course, the following steps need to be taken:
 
-1. Navigate to the folder `~/shared/120.030-2024W/`where you should find a `Makefile` and a `README.md`.
+1. Navigate to the folder `~/shared/120.030-2024W/` where you should find a `Makefile` and a `README.md`.
 
 <p style="text-align: center;">
   <img src="assets/images/start_terminal.png" style="border: 1px solid black; width: 25em; "/>
@@ -86,6 +86,14 @@ and clicking on `Stop My Server`.
 
 Then press `Start My Server` and you should be able to select the "**Desktop Notebook**" for the "120.030-2024W: 120.030 Microwave Remote Sensing" course.
 :::
+
+## Removing  Exercise Environment
+
+To remove the exercise notebooks as well as the Jupyter kernel Launch a terminal from `~/shared/120.030-2024W/` and type:
+
+   ```bash
+   make delete
+   ```
 
 ## Editing Jupyter Notebooks
 
