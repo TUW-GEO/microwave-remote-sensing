@@ -23,7 +23,8 @@ help:
 	@echo "  make help         - Display this help message"
 
 clean:
-	rm --force --recursive .ipynb_checkpoints/
+	rm --force --recursive .ipynb_checkpoints/ **/.ipynb_checkpoints/ _book/ \
+		_freeze/ .quarto/
 
 teardown:
 	$(foreach f, $(REQ), \

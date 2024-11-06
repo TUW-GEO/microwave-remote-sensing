@@ -17,15 +17,15 @@ book:
       chapters:
         - text: Datacubes
           file: unit_02/04_in_class_exercise.ipynb
-        - text: Wavelengths and Polarization
+        - text: Wavelength and Polarization
           file: unit_02/05_in_class_exercise.ipynb
         - text: Backscatter Variability
           file: unit_02/06_in_class_exercise.ipynb
-  navbar: 
+  navbar:
     logo: assets/images/tuw-geo-logo.svg
   sidebar:
     logo: assets/images/tuw-geo-logo.svg
-    
+
 format:
   html:
     theme: cosmo

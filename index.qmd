@@ -1,7 +1,4 @@
----
-title: JupyterHub Guide
-Subtitle: "120.030 Microwave Remote Sensing"
----
+# JupyterHub Guide {.unnumbered}
 
 This is a short guide to create and run the notbooks and environments in the JupiterHub for the Master course Microwave Remote Sensing (120.030) at the TU Wien.
 
@@ -48,7 +45,7 @@ To use the Notebooks from the course, the following steps need to be taken:
   <img src="assets/images/start_terminal.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
-2. In this file, you should open a Terminal using the Launcher and run the command
+2. At this level, you should open a Terminal using the Launcher and run the command
 
    ```bash
    make notebooks
@@ -60,7 +57,7 @@ To use the Notebooks from the course, the following steps need to be taken:
 
 4. It might be necessary to re-login to the JupyterHub to see it coming into effect.
 
-5. Now you should see a file named `microwave-remote-sensing` containing the notebooks and additional kernels in the Launcher of JupyterLab.
+5. Now you should see a folder named `microwave-remote-sensing` containing the notebooks and additional kernels in the Launcher of JupyterLab.
 
 <p style="text-align: center;">
   <img src="assets/images/new_notebooks.png" style="border: 1px solid black; width: 25em; "/>
@@ -92,7 +89,7 @@ Then press `Start My Server` and you should be able to select the "**Desktop Not
 
 ## Editing Jupyter Notebooks
 
-The homework exercises of the course are labeled with the postfix `_exercise.ipynb`. You are supposed to use these notebooks for the homework assignments and the completed notebooks should be submitted through TUWEL. The notebooks consist of two types of cells: Python and Markdown cells. Python cells contain executable Python code, whereas Markdown cells are used for open text and multiple choice questions. Double click on an existing cell to alter its content. To add new cells click select the cell type from the drop-down menu and click on the plus sign, as follows for Python cells:
+The homework exercises of the course are labeled as `homework_exercise.ipynb`. You are supposed to use these notebooks for the homework assignments and the completed notebooks should be submitted through TUWEL. The notebooks consist of two types of cells: Python and Markdown cells. Python cells contain executable Python code, whereas Markdown cells are used for open text and multiple choice questions. Double click on an existing cell to alter its content. To add new cells click select the cell type from the drop-down menu and click on the plus sign, as follows for Python cells:
 
 ![](assets/images/code_cell.png)
 
