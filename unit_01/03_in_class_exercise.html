@@ -287,7 +287,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#loading-backscatter-data" id="toc-loading-backscatter-data" class="nav-link active" data-scroll-target="#loading-backscatter-data"><span class="header-section-number">3.1</span> Loading Backscatter Data</a></li>
-  <li><a href="#geometric-terrain-correction" id="toc-geometric-terrain-correction" class="nav-link" data-scroll-target="#geometric-terrain-correction"><span class="header-section-number">3.2</span> Geometric terrain correction</a></li>
+  <li><a href="#geometric-terrain-correction" id="toc-geometric-terrain-correction" class="nav-link" data-scroll-target="#geometric-terrain-correction"><span class="header-section-number">3.2</span> Geometric Terrain Correction</a></li>
   <li><a href="#backscattering-coefficients" id="toc-backscattering-coefficients" class="nav-link" data-scroll-target="#backscattering-coefficients"><span class="header-section-number">3.3</span> Backscattering Coefficients</a></li>
   <li><a href="#radiometric-terrain-correction" id="toc-radiometric-terrain-correction" class="nav-link" data-scroll-target="#radiometric-terrain-correction"><span class="header-section-number">4</span> Radiometric Terrain Correction</a></li>
   </ul>
@@ -1366,7 +1366,7 @@ Data variables:
 </div>
 </section>
 <section id="geometric-terrain-correction" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="geometric-terrain-correction"><span class="header-section-number">3.2</span> Geometric terrain correction</h2>
+<h2 data-number="3.2" class="anchored" data-anchor-id="geometric-terrain-correction"><span class="header-section-number">3.2</span> Geometric Terrain Correction</h2>
 <p>Level 1 SAR data, such as the “GRD” product only takes into account the ellipsoidal model of the earth (i.e.&nbsp;slant-range distortion; script Chapter 4), without the description of the relief. This makes mountains appear to lean towards the radar system as visible in the below plot of the GRD scene. This latter distortion originates from the side-looking geometry of the SAR system. Due to this, the radar pulse reaches mountain slope facing the sensor before it reaches the base. Consequently, these slopes appear compressed and leaning toward the sensor. During processing to a level 1C product, these slant range distortions are partly corrected using a terrain correction algorithm and a Digital Elevation Model (DEM). The most common algorithm for this is the Range Doppler Terrain Correction.</p>
 <p><img src="https://www.esri.com/arcgis-blog/wp-content/uploads/2024/05/emenezes-esriBlog-GP-tool-fig_Apply-Geometric-Terrain-Correction-detailed.png" class="img-fluid"></p>
 <p><em>Figure 1: Geometric terrain correction. The lower bar shows the GRD without geometric terrain correction in slant geometry. In areas where the ground is elevated, the time of the signal to travel to the earth’s surface and back to the sensor is distorted, causing geometric shifts (foreshortening, lengthening, etc). Using a DEM and the Range Doppler Terrain Correction, the distortions are corrected and the image is orthorectified. (Source: ESRI)</em></p>
