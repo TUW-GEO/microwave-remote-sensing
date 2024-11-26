@@ -21,6 +21,14 @@ book:
           file: unit_02/05_in_class_exercise.ipynb
         - text: Backscatter Variability
           file: unit_02/06_in_class_exercise.ipynb
+    - part: "Unit 3"
+      chapters:
+        - text: Speckle Statistics
+          file: unit_03/07_in_class_exercise.ipynb
+        - text: Interferograms
+          file: unit_03/08_in_class_exercise.ipynb
+        - text: Phase Unwrapping
+          file: unit_03/09_in_class_exercise.ipynb
   navbar:
     logo: assets/images/tuw-geo-logo.svg
   sidebar:
