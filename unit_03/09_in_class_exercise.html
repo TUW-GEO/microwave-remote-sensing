@@ -312,12 +312,12 @@ window.Quarto = {
    
   <ul>
   <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link active" data-scroll-target="#loading-the-data"><span class="header-section-number">9.1</span> Loading the data</a></li>
-  <li><a href="#unwrapping" id="toc-unwrapping" class="nav-link" data-scroll-target="#unwrapping"><span class="header-section-number">9.2</span> Unwrapping</a>
+  <li><a href="#phase-unwrapping" id="toc-phase-unwrapping" class="nav-link" data-scroll-target="#phase-unwrapping"><span class="header-section-number">9.2</span> Phase Unwrapping</a>
   <ul class="collapse">
   <li><a href="#unwrapping-on-a-subset" id="toc-unwrapping-on-a-subset" class="nav-link" data-scroll-target="#unwrapping-on-a-subset"><span class="header-section-number">9.2.1</span> Unwrapping on a Subset</a></li>
   <li><a href="#unwrapping-with-coherence-mask" id="toc-unwrapping-with-coherence-mask" class="nav-link" data-scroll-target="#unwrapping-with-coherence-mask"><span class="header-section-number">9.2.2</span> Unwrapping with coherence mask</a></li>
   </ul></li>
-  <li><a href="#applying-equation-for-displacement-map" id="toc-applying-equation-for-displacement-map" class="nav-link" data-scroll-target="#applying-equation-for-displacement-map"><span class="header-section-number">9.3</span> Applying equation for displacement map</a></li>
+  <li><a href="#applying-an-equation-for-the-displacement-map" id="toc-applying-an-equation-for-the-displacement-map" class="nav-link" data-scroll-target="#applying-an-equation-for-the-displacement-map"><span class="header-section-number">9.3</span> Applying an equation for the displacement map</a></li>
   <li><a href="#coarsen-approach" id="toc-coarsen-approach" class="nav-link" data-scroll-target="#coarsen-approach"><span class="header-section-number">9.4</span> Coarsen approach</a></li>
   </ul>
 </nav>
@@ -330,12 +330,12 @@ window.Quarto = {
 
 
 <p>The goal of this notebook is to read an interferogram image (i.e., 2-D array of phase values) and unwrap it. Phase unwrapping is a critical process in interferometry, which involves recovering unambiguous phase data from the interferogram.</p>
-<p>A SAR interferogram represents the phase difference between two radar acquisitions (i.e., two SLC images). The phase difference is usually wrapped within a range of 0 to 2π, because phase is inherently cyclical. When the true phase difference exceeds 2π, it gets “wrapped” into this range, creating a discontinuous phase signal. Phase unwrapping refers to the process of reconstructing the continuous phase field from the wrapped phase data.</p>
-<p>Unwrapping an interferogram is essential for extracting correctly information contained in the phase such as surface topography and earth surface deformations.</p>
-<p>There are many approaches that tried to solve the unwrapping problem, tackling challenging scenarios involving noise or large phase discontinuities. Here we present the Network-flow Algorithm for Phase Unwrapping approach (C. W. Chen and H. A. Zebker, 2000), which is implemented in the SNAPHU package.</p>
+<p>A SAR interferogram represents the phase difference between two radar acquisitions (i.e., two SLC images). The phase difference is usually wrapped within a range of 0 to 2π, because the phase is inherently cyclical. When the true phase difference exceeds 2π, it gets “wrapped” into this range, creating a discontinuous phase signal. Phase unwrapping refers to the process of reconstructing the continuous phase field from the wrapped phase data.</p>
+<p>Unwrapping an interferogram is essential for extracting correct information contained in the phase such as surface topography and earth surface deformations.</p>
+<p>There are many approaches that tried to solve the unwrapping problem, tackling challenging scenarios involving noise or large phase discontinuities. Here we present the Network-flow Algorithm for phase unwrapping (C. W. Chen and H. A. Zebker, 2000), which is implemented in the SNAPHU package.</p>
 <section id="loading-the-data" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="loading-the-data"><span class="header-section-number">9.1</span> Loading the data</h2>
-<p>The data is stored on the Jupyterhub server, so we need to load it using their respective paths. In this Notebook we will use the resulting wrapped interferogram from <code>Notebook 8</code>, but we need to process it in the radar geometry in order to unwrap it (while in the <code>Notebook 8</code> we end the whole process by doing a geometric orthorectification, just for better visualization puproses)</p>
+<p>The data is stored on the Jupyterhub server, so we need to load it using their respective paths. In this notebook we will use the resulting wrapped interferogram from <code>Notebook 8</code>, but we need to process it in the radar geometry in order to unwrap it (while in <code>Notebook 8</code> we end the whole process by performing the geocoding, just for better visualization purposes).</p>
 <div id="cell-1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -383,29 +383,29 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a mask for the areas which have no data</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> ds.phase.where(ds.phase <span class="op">==</span> <span class="dv">0</span>, <span class="va">True</span>, <span class="va">False</span>).astype(<span class="bu">bool</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Lets start by displaying the phase image, which will be unwrapped.</p>
+<p>Let’s start by displaying the interferogram that needs to be unwrapped. Recall that due to the Slant Range geometry and the satellite acquisition pass (ascending, in our case), the image appears north/south flipped (with respect to the geocoded image)!</p>
 <div id="cell-5" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Phase Image</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Phase Interferogram Image</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    ds.phase.where(mask)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    .plot.imshow(cmap<span class="op">=</span>cmap_cyc, zorder<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    .axes.set_title(<span class="st">"Phase Image"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    .axes.set_title(<span class="st">"Phase Interferogram Image (Wrapped)"</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-5-output-1.png" width="528" height="523" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="unwrapping" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="unwrapping"><span class="header-section-number">9.2</span> Unwrapping</h2>
-<p>As we will be doing the unwrapping multiple times in this notebook lets create a function that does the unwrapping for us on <code>xarray DataArray</code> objects. The actual core function where the unwrapping is happening is <code>snaphu.unwrap_phase</code> from the <code>snaphu</code> package. This function needs a 2D numpy array as input, where each pixel value is a complex number. Therefore we have to convert the <code>xarray DataArray</code> to a 2D numpy array with complex values. We do that by combining the phase and intensity bands to a complex array. The actual unwrapping is essentially an addition of the phase values, such that the values are continuous and not between <span class="math inline">\(-\pi\)</span> and <span class="math inline">\(\pi\)</span>.</p>
+<section id="phase-unwrapping" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="phase-unwrapping"><span class="header-section-number">9.2</span> Phase Unwrapping</h2>
+<p>As we will be doing the unwrapping multiple times in this notebook let’s create a function that does the unwrapping for us on <code>xarray DataArray</code> objects. The actual core function where the unwrapping is happening is <code>snaphu.unwrap_phase</code> from the <code>snaphu</code> package. This function needs a 2D numpy array as input, where each pixel value is a complex number. Therefore we have to convert the <code>xarray DataArray</code> to a 2D numpy array with complex values. We do that by combining the phase and intensity bands to a complex array. The actual unwrapping is essentially an addition of the phase values, such that the values are continuous and not between <span class="math inline">\(-\pi\)</span> and <span class="math inline">\(\pi\)</span>.</p>
 <p><img src="https://forum.step.esa.int/uploads/default/original/3X/5/d/5d9d18e2a3121a4bb80cb93a8f62aed742e35fc2.png" class="img-fluid"></p>
 <p><em>Figure 1: Illustration of how the unwrapping of the phase works. (Source: ESA)</em>.</p>
 <div id="cell-7" class="cell" data-execution_count="5">
@@ -426,66 +426,71 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Unwraps the phase data using the snaphu algorithm.</span></span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">    :param data: xarray DataArray with complex numbers</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">    :param complex_var: Name of the variable with the complex numbers</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">    :param ouput_var: Name of the variable with the unwrapped phase</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">    :param mask: xarray DataArray with mask values</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">    :param coherence: xarray DataArray with coherence values (optional)</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">    :param mask_nodata_value: Value of the no data pixels in the mask</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">    :param coh_low_threshold: Lower threshold for the coherence values</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">    :param coh_high_threshold: Higher threshold for the coherence values</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: xarray DataArray with the unwrapped phase</span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the complex data</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    data_arr <span class="op">=</span> data[complex_var]</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a mask for areas with no data</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mask <span class="kw">is</span> <span class="va">True</span>:</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> (data_arr.real <span class="op">!=</span> mask_nodata_value).astype(<span class="bu">bool</span>)</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply coherence thresholds if provided</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> coherence <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> coh_low_threshold <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>            coh_mask <span class="op">=</span> (coherence <span class="op">&gt;=</span> coh_low_threshold).astype(<span class="bu">bool</span>)</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> mask <span class="op">&amp;</span> coh_mask</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> coh_high_threshold <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>            coh_mask <span class="op">=</span> (coherence <span class="op">&lt;=</span> coh_high_threshold).astype(<span class="bu">bool</span>)</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> mask <span class="op">&amp;</span> coh_mask</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply the mask to the data</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    data_arr <span class="op">=</span> data_arr.where(mask)</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> coherence <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>        coherence <span class="op">=</span> np.ones_like(data_arr.real)</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Unwrap the phase (already in complex form)</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    unw, _ <span class="op">=</span> snaphu.unwrap(</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>        data_arr,</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>        coherence,</span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>        nlooks<span class="op">=</span>nlooks,</span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>        cost<span class="op">=</span>cost,</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>        init<span class="op">=</span>init,</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>        mask<span class="op">=</span>mask,</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>        <span class="op">**</span>kwargs,</span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clear the output to avoid printing the snaphu output</span></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    clear_output()</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build xarray DataArray with the unwrapped phase</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unw_da = xr.DataArray(unw, coords=data.coords, dims=data.dims)</span></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># data = data.to_dataset()</span></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    data[ouput_var] <span class="op">=</span> ((<span class="st">"y"</span>, <span class="st">"x"</span>), unw)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">    data: xarray DataArray with complex numbers</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">    complex_var: Name of the variable with the complex numbers</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">    ouput_var: Name of the variable with the unwrapped phase</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">    mask: xarray DataArray with mask values</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">    coherence: xarray DataArray with coherence values (optional)</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">    mask_nodata_value: Value of the no data pixels in the mask</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">    coh_low_threshold: Lower threshold for the coherence values</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">    coh_high_threshold: Higher threshold for the coherence values</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">    xarray DataArray with the unwrapped phase</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the complex data</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    data_arr <span class="op">=</span> data[complex_var]</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a mask for areas with no data</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mask <span class="kw">is</span> <span class="va">True</span>:</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>        mask <span class="op">=</span> (data_arr.real <span class="op">!=</span> mask_nodata_value).astype(<span class="bu">bool</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply coherence thresholds if provided</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> coherence <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> coh_low_threshold <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>            coh_mask <span class="op">=</span> (coherence <span class="op">&gt;=</span> coh_low_threshold).astype(<span class="bu">bool</span>)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> mask <span class="op">&amp;</span> coh_mask</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> coh_high_threshold <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>            coh_mask <span class="op">=</span> (coherence <span class="op">&lt;=</span> coh_high_threshold).astype(<span class="bu">bool</span>)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> mask <span class="op">&amp;</span> coh_mask</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply the mask to the data</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    data_arr <span class="op">=</span> data_arr.where(mask)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> coherence <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>        coherence <span class="op">=</span> np.ones_like(data_arr.real)</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Unwrap the phase (already in complex form)</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    unw, _ <span class="op">=</span> snaphu.unwrap(</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>        data_arr,</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>        coherence,</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>        nlooks<span class="op">=</span>nlooks,</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>        cost<span class="op">=</span>cost,</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>        init<span class="op">=</span>init,</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>        mask<span class="op">=</span>mask,</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>        <span class="op">**</span>kwargs,</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clear the output to avoid printing the snaphu output</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    clear_output()</span>
 <span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Mask the unwrapped phase</span></span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unw_da = unw_da.where(mask)</span></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    data[ouput_var] <span class="op">=</span> data[ouput_var].where(mask)</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build xarray DataArray with the unwrapped phase</span></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unw_da = xr.DataArray(unw, coords=data.coords, dims=data.dims)</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># data = data.to_dataset()</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    data[ouput_var] <span class="op">=</span> ((<span class="st">"y"</span>, <span class="st">"x"</span>), unw)</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Mask the unwrapped phase</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unw_da = unw_da.where(mask)</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>    data[ouput_var] <span class="op">=</span> data[ouput_var].where(mask)</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="unwrapping-on-a-subset" class="level3" data-number="9.2.1">
 <h3 data-number="9.2.1" class="anchored" data-anchor-id="unwrapping-on-a-subset"><span class="header-section-number">9.2.1</span> Unwrapping on a Subset</h3>
-<p>As the original image is too large to unwrap in a reasonable time, we will unwrap a subset of the image. In this case we will unwrap an area of 500x500 pixels.</p>
+<p>As the original image is too large to unwrap in a reasonable time, we will unwrap a subset of the image. In this case, we will unwrap an area of 500x500 pixels.</p>
 <div id="cell-9" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a subset of the data</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dx, dy <span class="op">=</span> <span class="dv">500</span>, <span class="dv">500</span></span>
@@ -502,7 +507,7 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Unwrap the subset</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> unwrap_array(subset, complex_var<span class="op">=</span><span class="st">"cmplx"</span>, ouput_var<span class="op">=</span><span class="st">"unwrapped"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now lets compare the wrapped and unwrapped phase images, to see what has happend.</p>
+<p>Now let’s compare the wrapped and unwrapped phase images.</p>
 <div id="cell-11" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">4</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -516,7 +521,7 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Unwrapped Phase</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>axs[<span class="dv">1</span>]).axes.set_title(</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>axs[<span class="dv">1</span>], vmin<span class="op">=-</span><span class="dv">80</span>, vmax<span class="op">=</span><span class="dv">80</span>).axes.set_title(</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase of the Subset"</span></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -551,7 +556,7 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-8-output-1.png" width="1327" height="372" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -559,7 +564,7 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 </section>
 <section id="unwrapping-with-coherence-mask" class="level3" data-number="9.2.2">
 <h3 data-number="9.2.2" class="anchored" data-anchor-id="unwrapping-with-coherence-mask"><span class="header-section-number">9.2.2</span> Unwrapping with coherence mask</h3>
-<p>Additionally can we try to calculate the unwrapped image, where we are excluding pixels, where the coherence values are lower than a certain threshold. This is done by masking the coherence image with the threshold value and then unwrapping the phase image with the masked coherence image.</p>
+<p>Additionally, can we try to calculate the unwrapped image, where we are excluding pixels, where the coherence values are lower than a certain threshold. This is done by masking the coherence image with the threshold value and then unwrapping the phase image with the masked coherence image.</p>
 <div id="cell-13" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>threshold1 <span class="op">=</span> <span class="fl">0.3</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> unwrap_array(</span>
@@ -570,17 +575,17 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    ouput_var<span class="op">=</span><span class="st">"unwrapped_coh"</span>,</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Lets compare the unwrapped image with and without the coherence mask.</p>
+<p>Let’s compare the unwrapped image with and without the coherence mask.</p>
 <div id="cell-15" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="dv">5</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>axs[<span class="dv">0</span>]).axes.set_title(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>axs[<span class="dv">0</span>], vmin<span class="op">=-</span><span class="dv">80</span>, vmax<span class="op">=</span><span class="dv">80</span>).axes.set_title(</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"Unwrapped Phase with Coherence Threshold </span><span class="sc">{</span>threshold1<span class="sc">}</span><span class="ss">"</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>axs[<span class="dv">1</span>]).axes.set_title(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>axs[<span class="dv">1</span>], vmin<span class="op">=-</span><span class="dv">80</span>, vmax<span class="op">=</span><span class="dv">80</span>).axes.set_title(</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase without Coherence Threshold"</span></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -589,12 +594,12 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-10-output-1.png" width="1063" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Lets see if another threshold value for the coherence mask gives better results.</p>
+<p>Let’s see if another threshold value for the coherence mask gives better results.</p>
 <div id="cell-17" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>threshold2 <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> unwrap_array(</span>
@@ -607,13 +612,13 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="dv">5</span>))</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh2.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>axs[<span class="dv">0</span>]).axes.set_title(</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh2.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>axs[<span class="dv">0</span>], vmin<span class="op">=-</span><span class="dv">80</span>, vmax<span class="op">=</span><span class="dv">80</span>).axes.set_title(</span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Coherence Threshold 0.5"</span></span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>axs[<span class="dv">1</span>]).axes.set_title(</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>axs[<span class="dv">1</span>], vmin<span class="op">=-</span><span class="dv">80</span>, vmax<span class="op">=</span><span class="dv">80</span>).axes.set_title(</span>
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Coherence Threshold 0.3"</span></span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -621,40 +626,46 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-11-output-1.png" width="1063" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>A higher coherence threshold means that only pixels with a coherence value greater than 0.5 will be used for phase unwrapping. This would result in an unwrapping process that is likely more stable, with reduced noise (invalid phase information in the proximity of the earthquake faults is discarded). However, an excessive coherence threshold might have significant gaps or missing information, especially in areas where motion or surface changes have occurred. The choice of a coherence threshold depends on the balance you want to strike between the accuracy and coverage of the output unwrapped image.</p>
+<p>Keep in mind that in case of large displacements, such as the Ridgecrest earthquake, phase unwrapping can be problematic and lead to poor results: when the displacement is large, the phase difference becomes wrapped multiple times, leading to phase aliasing. In this case, the phase values become ambiguous, we cannot distinguish between multiple phase wraps, thus leading to incorrect results.</p>
 </section>
 </section>
-<section id="applying-equation-for-displacement-map" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="applying-equation-for-displacement-map"><span class="header-section-number">9.3</span> Applying equation for displacement map</h2>
-<p>From the unwrapped phase image we can calculate the displacement map using the following equation:</p>
+<section id="applying-an-equation-for-the-displacement-map" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="applying-an-equation-for-the-displacement-map"><span class="header-section-number">9.3</span> Applying an equation for the displacement map</h2>
+<p>From the unwrapped phase image (we will use the phase masked with a coherence threshold of 0.3) we can calculate the displacement map using the following equation:</p>
 <p>$ d = - _d $</p>
 <p>where: - <span class="math inline">\(\lambda = 0.056\)</span> for Sentinel-1 - <span class="math inline">\(\Delta \phi_d\)</span> is the unwrapped image</p>
 <p>This operation can be very useful for monitoring ground deformation.</p>
-<div id="cell-19" class="cell" data-execution_count="11">
+<div id="cell-20" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> displacement(unw, lambda_val: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.056</span>) <span class="op">-&gt;</span> xr.DataArray:</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the displacement from the unwrapped phase</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :param unw: xarray DataArray with the unwrapped phase</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :type unw: xr.DataArray</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :param lambda_val: Wavelength of the radar signal</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">    :type lambda_val: float</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: xarray DataArray with the displacement</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">    :rtype: xr.DataArray</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    disp <span class="op">=</span> unw <span class="op">*</span> <span class="op">-</span>lambda_val <span class="op">/</span> (<span class="dv">4</span> <span class="op">*</span> np.pi)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> disp</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the displacement</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>disp_subset <span class="op">=</span> displacement(subset.unwrapped_coh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">    unw: xarray DataArray with the unwrapped phase</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">    unw: xr.DataArray</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">    lambda_val: Wavelength of the radar signal</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">    lambda_val: float</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">    xarray DataArray with the displacement</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    disp <span class="op">=</span> unw <span class="op">*</span> <span class="op">-</span>lambda_val <span class="op">/</span> (<span class="dv">4</span> <span class="op">*</span> np.pi)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> disp</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the displacement</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>disp_subset <span class="op">=</span> displacement(subset.unwrapped_coh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-20" class="cell" data-execution_count="12">
+<div id="cell-21" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the displacement map</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    disp_subset.plot.imshow(</span>
@@ -665,7 +676,7 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-13-output-1.png" width="609" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -673,12 +684,12 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 </section>
 <section id="coarsen-approach" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="coarsen-approach"><span class="header-section-number">9.4</span> Coarsen approach</h2>
-<p>As the whole data is too large and the processing time is already exceeds 20 minutes when useing a image with 4000x4000 pixels, we can coarsen the image.</p>
-<div id="cell-22" class="cell" data-execution_count="13">
+<p>As the whole data is too large and the processing time already exceeds 20 minutes when using an image with 4000x4000 pixels, we can coarsen the image so that we can unwrap and compute the displacement for the whole scene.</p>
+<div id="cell-23" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>kernel_size <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lowres <span class="op">=</span> ds.coarsen(x<span class="op">=</span>kernel_size, y<span class="op">=</span>kernel_size, boundary<span class="op">=</span><span class="st">"trim"</span>).median()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-23" class="cell" data-execution_count="14">
+<div id="cell-24" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lowres <span class="op">=</span> unwrap_array(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    lowres,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    ntiles<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">30</span>),</span>
@@ -690,91 +701,82 @@ Warning 1: TIFFFetchNormalTag:Incorrect count for "GeoTiePoints"; tag ignored</c
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now plot the unwrapped image of the low resolution image.</p>
-<div id="cell-25" class="cell" data-execution_count="15">
+<div id="cell-26" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the unwrapped phase</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    lowres.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_lin).axes.set_title(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase enitre scene (coarsened)"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    lowres.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_cyc).axes.set_title(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase entire scene (coarsened)"</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-16-output-1.png" width="605" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We can also now calculate the displacement map and compare them.</p>
-<div id="cell-27" class="cell" data-execution_count="16">
+<div id="cell-28" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>lowres_disp <span class="op">=</span> displacement(lowres.unwrapped)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the displacement map</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    lowres_disp.plot.imshow(</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span>cmap_disp, cbar_kwargs<span class="op">=</span>{<span class="st">"label"</span>: <span class="st">"Meters [m]"</span>}</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    ).axes.set_title(<span class="st">"Displacement Map of Low Resolution"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    ).axes.set_title(<span class="st">"Displacement Map entire scene (coarse resolution)"</span>)</span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-17-output-1.png" width="589" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div id="cell-28" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot summary of all previous plots</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">10</span>))</span>
+<p>Plot a summary of the previous plots:</p>
+<div id="cell-30" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot summary of previous plots</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">10</span>))</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axs.ravel()</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>ax[<span class="dv">0</span>]).axes.set_title(</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase of the Subset"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>ax[<span class="dv">0</span>], vmin<span class="op">=-</span><span class="dv">80</span>, vmax<span class="op">=</span><span class="dv">80</span>).axes.set_title(</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase of the subset with Coherence Threshold 0.3"</span></span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>ax[<span class="dv">1</span>]).axes.set_title(</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase with Coherence Threshold 0.3"</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    disp_subset.plot.imshow(</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span>cmap_disp, ax<span class="op">=</span>ax[<span class="dv">1</span>], cbar_kwargs<span class="op">=</span>{<span class="st">"label"</span>: <span class="st">"Meters [m]"</span>}</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    ).axes.set_title(<span class="st">"Displacement Map of the Subset"</span>)</span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    subset.unwrapped_coh2.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>ax[<span class="dv">2</span>]).axes.set_title(</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase with Coherence Threshold 0.5"</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    lowres.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>ax[<span class="dv">2</span>]).axes.set_title(</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase of the entire scene with Coherence Threshold 0.3 (coarsened)"</span></span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    disp_subset.plot.imshow(</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    lowres_disp.plot.imshow(</span>
 <span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span>cmap_disp, ax<span class="op">=</span>ax[<span class="dv">3</span>], cbar_kwargs<span class="op">=</span>{<span class="st">"label"</span>: <span class="st">"Meters [m]"</span>}</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    ).axes.set_title(<span class="st">"Displacement Map of the Subset"</span>)</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    ).axes.set_title(<span class="st">"Displacement Map entire scene (coarse resolution)"</span>)</span>
 <span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    lowres.unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_lin, ax<span class="op">=</span>ax[<span class="dv">4</span>]).axes.set_title(</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Unwrapped Phase of the entire scene (coarsened)"</span></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>    lowres_disp.plot.imshow(</span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span>cmap_disp, ax<span class="op">=</span>ax[<span class="dv">5</span>], cbar_kwargs<span class="op">=</span>{<span class="st">"label"</span>: <span class="st">"Meters [m]"</span>}</span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>    ).axes.set_title(<span class="st">"Displacement Map of Low Resolution"</span>)</span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_in_class_exercise_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="09_in_class_exercise_files/figure-html/cell-18-output-1.png" width="1200" height="948" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>In the following animation, we can capture the 3D displacement caused by the Ridgecrest quake by observing the after and before elevation model.</p>
+<p><img src="../assets/images/ridgecrest_gif.gif" class="img-fluid"> <em>Credits: NASA</em></p>
 
 
 </section>
