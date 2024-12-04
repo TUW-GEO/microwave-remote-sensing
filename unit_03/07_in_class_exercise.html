@@ -331,7 +331,9 @@ window.Quarto = {
 
 <p>This notebook will provide an empirical demonstration of speckle - how it originates, how it visually and statistically looks like, and some of the most common approaches to filter it.</p>
 <p>Speckle is defined as a kind of noise that affects all radar images. Given the multiple scattering contributions originating from the various elementary objects present within a resolution cell, the resulting backscatter signal can be described as a random constructive and destructive interference of wavelets. As a consequence, speckle is the reason why a granular pattern normally affects SAR images, making it more challenging to interpret and analyse them.</p>
-<div id="cell-1" class="cell" data-execution_count="10">
+<p><img src="../assets/images/speckle_effect.png" class="img-fluid" width="300"></p>
+<p><em>Credits: ESRI</em></p>
+<div id="cell-1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
@@ -856,12 +858,12 @@ if (window.Jupyter !== undefined) {
 </script>
 </div>
 <div class="cell-output cell-output-display">
-<div id="c2bd1be8-f45d-46a9-9cf6-2a0b7d5e6a75">
-  <div id="b71fb274-acdb-4be0-857c-16d27504650b" data-root-id="c2bd1be8-f45d-46a9-9cf6-2a0b7d5e6a75" style="display: contents;"></div>
+<div id="08ff8f65-20e2-4baa-a5fa-208ddf9b1999">
+  <div id="b44cc076-10e0-43c2-a520-a65a37331724" data-root-id="08ff8f65-20e2-4baa-a5fa-208ddf9b1999" style="display: contents;"></div>
 </div>
 <script type="application/javascript">(function(root) {
-  var docs_json = {"097ef486-3384-4545-9d50-57de680714ab":{"version":"3.6.0","title":"Bokeh Application","roots":[{"type":"object","name":"panel.models.browser.BrowserInfo","id":"c2bd1be8-f45d-46a9-9cf6-2a0b7d5e6a75"},{"type":"object","name":"panel.models.comm_manager.CommManager","id":"7e438d32-350d-4e64-b63a-5911600e6081","attributes":{"plot_id":"c2bd1be8-f45d-46a9-9cf6-2a0b7d5e6a75","comm_id":"74cd22aa6f9c4effb99ad505cf2d7969","client_comm_id":"7007e2e1508b4419ba3bc610f593b668"}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"mode","kind":"Any","default":"warn"},{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationAreaBase1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"ReactiveESM1"},{"type":"model","name":"JSComponent1"},{"type":"model","name":"ReactComponent1"},{"type":"model","name":"AnyWidgetComponent1"},{"type":"model","name":"request_value1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"_synced","kind":"Any","default":null},{"name":"_request_sync","kind":"Any","default":0}]}]}};
-  var render_items = [{"docid":"097ef486-3384-4545-9d50-57de680714ab","roots":{"c2bd1be8-f45d-46a9-9cf6-2a0b7d5e6a75":"b71fb274-acdb-4be0-857c-16d27504650b"},"root_ids":["c2bd1be8-f45d-46a9-9cf6-2a0b7d5e6a75"]}];
+  var docs_json = {"6814e474-ea69-496f-95bc-5f4c96d96652":{"version":"3.6.0","title":"Bokeh Application","roots":[{"type":"object","name":"panel.models.browser.BrowserInfo","id":"08ff8f65-20e2-4baa-a5fa-208ddf9b1999"},{"type":"object","name":"panel.models.comm_manager.CommManager","id":"afa49d7a-19d6-43c9-84de-abbb8a977db3","attributes":{"plot_id":"08ff8f65-20e2-4baa-a5fa-208ddf9b1999","comm_id":"f2f99f5eb871420bb9ea7c7bcb78a5a5","client_comm_id":"46369521bb56482cb16d9ae3b5600412"}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"mode","kind":"Any","default":"warn"},{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationAreaBase1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"ReactiveESM1"},{"type":"model","name":"JSComponent1"},{"type":"model","name":"ReactComponent1"},{"type":"model","name":"AnyWidgetComponent1"},{"type":"model","name":"request_value1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"_synced","kind":"Any","default":null},{"name":"_request_sync","kind":"Any","default":0}]}]}};
+  var render_items = [{"docid":"6814e474-ea69-496f-95bc-5f4c96d96652","roots":{"08ff8f65-20e2-4baa-a5fa-208ddf9b1999":"b44cc076-10e0-43c2-a520-a65a37331724"},"root_ids":["08ff8f65-20e2-4baa-a5fa-208ddf9b1999"]}];
   var docs = Object.values(docs_json)
   if (!docs) {
     return
@@ -1015,9 +1017,9 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 \sigma^0 = \frac{1}{\text{area}} \sum_{n \in \text{area}} \sigma_n
 \]</span></p>
 <p>We should ideally have a uniform discrete <strong>sigma naught</strong> <span class="math inline">\(\sigma^0\)</span> value, given that the cornfield pixel is the only individual contributor.</p>
-<p>However, since we already learned from the previous notebooks that a pixel’s ground size can be in the order of tens of meters (i.e., 10 meters for Sentinel-1), we can imagine that many sub-pixel objects (e.g., rocks, trees,…) contribute to the global backscattered information.</p>
+<p>However, since we already learned from the previous notebooks that a pixel’s ground size can be in the order of tens of meters (i.e., 10 meters for Sentinel-1), we can imagine that different distributed targets in the scene contribute to the global backscattered information.</p>
 <p>Let´s replicate this behavior with an ideal uniform area constituted by 100 pixels and then by adding 30% of speckle.</p>
-<div id="cell-3" class="cell" data-execution_count="11">
+<div id="cell-3" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ideal_backscatter <span class="op">=</span> <span class="op">-</span><span class="dv">10</span>  <span class="co"># in dB, a typical value for cornfields</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="dv">12</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> (width, width)</span>
@@ -1037,7 +1039,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize speckled data as the same as the ideal data</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>speckled_data_linear <span class="op">=</span> ideal_data_linear.copy()</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>speckle_noise <span class="op">=</span> np.random.rayleigh(scale<span class="op">=</span><span class="fl">1.0</span>, size<span class="op">=</span>num_speckled_pixels)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>speckle_noise <span class="op">=</span> np.random.gumbel(scale<span class="op">=</span><span class="fl">1.0</span>, size<span class="op">=</span>num_speckled_pixels)</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>speckled_data_linear.ravel()[speckled_indices] <span class="op">*=</span> (</span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    speckle_noise  <span class="co"># Add speckle to the selected pixels</span></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -1089,32 +1091,30 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_72883/3970694764.py:26: RuntimeWarning: invalid value encountered in log10
+  speckled_data_dB = 10 * np.log10(speckled_data_linear)</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="07_in_class_exercise_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="07_in_class_exercise_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><em>Figure 1: Synthetic data that emulates speckles in microwave backscattering</em></p>
-<p>We can imagine that the second plot represents one pixel of cornfield from a real SAR acquisition, while the first plot represents an ideal uniform pixel of cornfield (no speckle). The introduction of a simulated 30% speckle noise could be related to the presence of small objects of any sort present in the scene, which would cause a pixel-to-pixel variation in terms of intensity. Backscatter depends on:</p>
-<ul>
-<li>Dielectric properties of an object,</li>
-<li>Frequency of electromagnetic signal,</li>
-<li>Angle of acquisition,</li>
-<li>Cross-section of ground object, etc.</li>
-</ul>
-<p>All these random contributions (such as the wind) would result in a different speckle pattern each time a SAR scene is acquired over the same area. Many subpixel contributors build up a complex scattered pattern in any SAR image, making it erroneous to rely on a single pixel intensity for making reliable image analysis. In order to enhance the degree of usability of a SAR image, several techniques have been put in place to mitigate speckle. We will now show two of the most common approaches: the temporal and the spatial filter.</p>
+<p>We can imagine that the second plot represents a real SAR acquisition over a cornfield, while the first plot represents an ideal uniform SAR image over a cornfield land (no speckle). The introduction of a simulated 30% speckle noise could be related to the presence of distributed scatterers of any sort present in the scene, which would cause a pixel-to-pixel variation in terms of intensity.</p>
+<p>All the random contributions (such as the wind) would result in a different speckle pattern each time a SAR scene is acquired over the same area. Many subpixel contributors build up a complex scattered pattern in any SAR image, making it erroneous to rely on a single pixel intensity for making reliable image analysis. In order to enhance the degree of usability of a SAR image, several techniques have been put in place to mitigate speckle. We will now show two of the most common approaches: the temporal and the spatial filter.</p>
 <section id="lake-neusiedl-data" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="lake-neusiedl-data"><span class="header-section-number">7.1</span> Lake Neusiedl data</h2>
 <p>We load a dataset that contains the CORINE land cover and Sentinel-1 <span class="math inline">\(\sigma^0_E\)</span> at a 20 meter resolution. This is the same data presented in notebook 6.</p>
-<div id="cell-5" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_path <span class="op">=</span> Path(<span class="st">"~/shared/datasets/rs/corine/fused_land_cover.zarr"</span>).<span class="op">\</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    expanduser()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fused_ds <span class="op">=</span> xr.open_dataset(data_path, decode_coords<span class="op">=</span><span class="st">"all"</span>, engine<span class="op">=</span><span class="st">"zarr"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fused_ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div id="cell-5" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_path <span class="op">=</span> Path(<span class="st">"~/shared/datasets/rs/corine/fused_land_cover.zarr"</span>).<span class="op">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    expanduser()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fused_ds <span class="op">=</span> xr.open_dataset(data_path, decode_coords<span class="op">=</span><span class="st">"all"</span>, engine<span class="op">=</span><span class="st">"zarr"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fused_ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
 <symbol id="icon-database" viewbox="0 0 32 32">
@@ -1493,211 +1493,212 @@ Coordinates:
   * y            (y) float64 10kB 1.571e+06 1.571e+06 ... 1.559e+06 1.559e+06
 Data variables:
     land_cover   (y, x) float64 12MB ...
-    sig0         (time, y, x) float64 96MB ...</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-d4cff278-a230-45e2-acd7-57c07e0d76af" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-d4cff278-a230-45e2-acd7-57c07e0d76af" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 1221</li><li><span class="xr-has-index">x</span>: 1230</li><li><span class="xr-has-index">time</span>: 8</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-b5a547fb-a704-4bf7-b0af-7e182037001f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-b5a547fb-a704-4bf7-b0af-7e182037001f" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-615cee7b-7414-4f6e-b37c-acfbe7c5675e" class="xr-var-attrs-in" type="checkbox"><label for="attrs-615cee7b-7414-4f6e-b37c-acfbe7c5675e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-2fd71429-9862-455a-a9d2-fe93bf45f6cf" class="xr-var-data-in" type="checkbox"><label for="data-2fd71429-9862-455a-a9d2-fe93bf45f6cf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>GeoTransform :</span></dt><dd>5281990.0 10.0 0.0 1570960.0 0.0 -10.0</dd><dt><span>crs_wkt :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd><dt><span>false_easting :</span></dt><dd>5837287.81977</dd><dt><span>false_northing :</span></dt><dd>2121415.69617</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>grid_mapping_name :</span></dt><dd>azimuthal_equidistant</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>53.0</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>24.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>projected_crs_name :</span></dt><dd>Azimuthal_Equidistant</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd></dl></div><div class="xr-var-data"><pre>[1 values with dtype=int64]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">time</span></div><div class="xr-var-dims">(time)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2023-08-05T16:51:22 ... 2023-10-...</div><input id="attrs-f830a9cd-48c4-42c5-8d09-a9f612a409ef" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f830a9cd-48c4-42c5-8d09-a9f612a409ef" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-08c87df1-03bb-4f8d-827f-802220fe7378" class="xr-var-data-in" type="checkbox"><label for="data-08c87df1-03bb-4f8d-827f-802220fe7378" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2023-08-05T16:51:22.000000000', '2023-08-17T16:51:22.000000000',
+    sig0         (time, y, x) float64 96MB ...</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-c4b0dbcb-7e22-4bc7-8b77-665fd0ee8408" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-c4b0dbcb-7e22-4bc7-8b77-665fd0ee8408" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 1221</li><li><span class="xr-has-index">x</span>: 1230</li><li><span class="xr-has-index">time</span>: 8</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-1a504d3f-ff81-481e-9780-85fa101230cc" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-1a504d3f-ff81-481e-9780-85fa101230cc" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-1f5717a0-07fd-492f-ace2-e3908306b855" class="xr-var-attrs-in" type="checkbox"><label for="attrs-1f5717a0-07fd-492f-ace2-e3908306b855" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e5821bbf-9caf-4b1f-969f-3719362b5d5f" class="xr-var-data-in" type="checkbox"><label for="data-e5821bbf-9caf-4b1f-969f-3719362b5d5f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>GeoTransform :</span></dt><dd>5281990.0 10.0 0.0 1570960.0 0.0 -10.0</dd><dt><span>crs_wkt :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd><dt><span>false_easting :</span></dt><dd>5837287.81977</dd><dt><span>false_northing :</span></dt><dd>2121415.69617</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>grid_mapping_name :</span></dt><dd>azimuthal_equidistant</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>53.0</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>24.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>projected_crs_name :</span></dt><dd>Azimuthal_Equidistant</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd></dl></div><div class="xr-var-data"><pre>[1 values with dtype=int64]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">time</span></div><div class="xr-var-dims">(time)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2023-08-05T16:51:22 ... 2023-10-...</div><input id="attrs-c1c8f4cd-e673-4852-a7f3-9f453037bcfe" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-c1c8f4cd-e673-4852-a7f3-9f453037bcfe" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5b3bab84-b780-4e70-bad1-1961da23ee33" class="xr-var-data-in" type="checkbox"><label for="data-5b3bab84-b780-4e70-bad1-1961da23ee33" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2023-08-05T16:51:22.000000000', '2023-08-17T16:51:22.000000000',
        '2023-08-29T16:51:23.000000000', '2023-09-10T16:51:24.000000000',
        '2023-09-22T16:51:24.000000000', '2023-10-04T16:51:24.000000000',
        '2023-10-16T16:51:24.000000000', '2023-10-28T16:51:24.000000000'],
-      dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">5.282e+06 5.282e+06 ... 5.294e+06</div><input id="attrs-f2a52276-66d5-4490-86ac-357f3a1f6648" class="xr-var-attrs-in" type="checkbox"><label for="attrs-f2a52276-66d5-4490-86ac-357f3a1f6648" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6860a547-4927-49a0-9a6e-f9507e07f7c1" class="xr-var-data-in" type="checkbox"><label for="data-6860a547-4927-49a0-9a6e-f9507e07f7c1" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>x coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([5281995., 5282005., 5282015., ..., 5294265., 5294275., 5294285.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.571e+06 1.571e+06 ... 1.559e+06</div><input id="attrs-4759fef0-bf4d-47bf-814b-c91d78059f31" class="xr-var-attrs-in" type="checkbox"><label for="attrs-4759fef0-bf4d-47bf-814b-c91d78059f31" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a7403d87-9e2f-4f7b-9862-5258f6b232ad" class="xr-var-data-in" type="checkbox"><label for="data-a7403d87-9e2f-4f7b-9862-5258f6b232ad" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>y coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([1570955., 1570945., 1570935., ..., 1558775., 1558765., 1558755.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-811ad3d4-7790-48a1-b325-63a2e94238ab" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-811ad3d4-7790-48a1-b325-63a2e94238ab" class="xr-section-summary">Data variables: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>land_cover</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-757fae4f-61f8-418a-90c3-12b1621862cd" class="xr-var-attrs-in" type="checkbox"><label for="attrs-757fae4f-61f8-418a-90c3-12b1621862cd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-04755001-1dbc-4bcc-a9ae-55ab73895392" class="xr-var-data-in" type="checkbox"><label for="data-04755001-1dbc-4bcc-a9ae-55ab73895392" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>DataType :</span></dt><dd>Thematic</dd><dt><span>RepresentationType :</span></dt><dd>THEMATIC</dd><dt><span>STATISTICS_COVARIANCES :</span></dt><dd>136.429646247598</dd><dt><span>STATISTICS_MAXIMUM :</span></dt><dd>48</dd><dt><span>STATISTICS_MEAN :</span></dt><dd>25.753373398066</dd><dt><span>STATISTICS_MINIMUM :</span></dt><dd>1</dd><dt><span>STATISTICS_SKIPFACTORX :</span></dt><dd>1</dd><dt><span>STATISTICS_SKIPFACTORY :</span></dt><dd>1</dd><dt><span>STATISTICS_STDDEV :</span></dt><dd>11.680310194836</dd></dl></div><div class="xr-var-data"><pre>[1501830 values with dtype=float64]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>sig0</span></div><div class="xr-var-dims">(time, y, x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-65deef59-5a79-4410-99fd-53899062d37e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-65deef59-5a79-4410-99fd-53899062d37e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a95efb42-eefa-4984-aa61-00ba69d1ec33" class="xr-var-data-in" type="checkbox"><label for="data-a95efb42-eefa-4984-aa61-00ba69d1ec33" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[12014640 values with dtype=float64]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-82ff526a-775b-4f46-a02d-baf0488f8bad" class="xr-section-summary-in" type="checkbox"><label for="section-82ff526a-775b-4f46-a02d-baf0488f8bad" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>time</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-0816d736-ddd5-4432-af91-908c8dd4bbac" class="xr-index-data-in" type="checkbox"><label for="index-0816d736-ddd5-4432-af91-908c8dd4bbac" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2023-08-05 16:51:22', '2023-08-17 16:51:22',
+      dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">5.282e+06 5.282e+06 ... 5.294e+06</div><input id="attrs-41f4169e-6300-4f15-8179-a175c8dbc5cb" class="xr-var-attrs-in" type="checkbox"><label for="attrs-41f4169e-6300-4f15-8179-a175c8dbc5cb" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-831d2aa0-39c8-4d7e-88e7-823741233ccc" class="xr-var-data-in" type="checkbox"><label for="data-831d2aa0-39c8-4d7e-88e7-823741233ccc" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>x coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([5281995., 5282005., 5282015., ..., 5294265., 5294275., 5294285.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.571e+06 1.571e+06 ... 1.559e+06</div><input id="attrs-74200b90-baf7-4aab-87c8-61f898082e7c" class="xr-var-attrs-in" type="checkbox"><label for="attrs-74200b90-baf7-4aab-87c8-61f898082e7c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-8657b141-4fd0-4ad6-9806-609bf4512e9b" class="xr-var-data-in" type="checkbox"><label for="data-8657b141-4fd0-4ad6-9806-609bf4512e9b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>y coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([1570955., 1570945., 1570935., ..., 1558775., 1558765., 1558755.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-3a518720-c430-42a5-b0ec-95f0be0bf7a7" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-3a518720-c430-42a5-b0ec-95f0be0bf7a7" class="xr-section-summary">Data variables: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>land_cover</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-6ee1fed6-efa7-4818-b155-453d8236af05" class="xr-var-attrs-in" type="checkbox"><label for="attrs-6ee1fed6-efa7-4818-b155-453d8236af05" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-92298d8f-363a-4115-bb70-840227c66ab2" class="xr-var-data-in" type="checkbox"><label for="data-92298d8f-363a-4115-bb70-840227c66ab2" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>DataType :</span></dt><dd>Thematic</dd><dt><span>RepresentationType :</span></dt><dd>THEMATIC</dd><dt><span>STATISTICS_COVARIANCES :</span></dt><dd>136.429646247598</dd><dt><span>STATISTICS_MAXIMUM :</span></dt><dd>48</dd><dt><span>STATISTICS_MEAN :</span></dt><dd>25.753373398066</dd><dt><span>STATISTICS_MINIMUM :</span></dt><dd>1</dd><dt><span>STATISTICS_SKIPFACTORX :</span></dt><dd>1</dd><dt><span>STATISTICS_SKIPFACTORY :</span></dt><dd>1</dd><dt><span>STATISTICS_STDDEV :</span></dt><dd>11.680310194836</dd></dl></div><div class="xr-var-data"><pre>[1501830 values with dtype=float64]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>sig0</span></div><div class="xr-var-dims">(time, y, x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-9c3ec976-b4aa-4880-85d1-06aa9e424391" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-9c3ec976-b4aa-4880-85d1-06aa9e424391" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-c6ca48a8-b96e-4277-a085-1b2c950a0e50" class="xr-var-data-in" type="checkbox"><label for="data-c6ca48a8-b96e-4277-a085-1b2c950a0e50" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[12014640 values with dtype=float64]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-9cc69fea-65d1-493d-b6e1-154d94e3d6aa" class="xr-section-summary-in" type="checkbox"><label for="section-9cc69fea-65d1-493d-b6e1-154d94e3d6aa" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>time</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-a0525a0a-07f9-4204-a757-6a09d783b070" class="xr-index-data-in" type="checkbox"><label for="index-a0525a0a-07f9-4204-a757-6a09d783b070" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2023-08-05 16:51:22', '2023-08-17 16:51:22',
                '2023-08-29 16:51:23', '2023-09-10 16:51:24',
                '2023-09-22 16:51:24', '2023-10-04 16:51:24',
                '2023-10-16 16:51:24', '2023-10-28 16:51:24'],
-              dtype='datetime64[ns]', name='time', freq=None))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-614b6291-87ea-4c95-a2c7-a3a8a7635a0c" class="xr-index-data-in" type="checkbox"><label for="index-614b6291-87ea-4c95-a2c7-a3a8a7635a0c" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([5281995.0, 5282005.0, 5282015.0, 5282025.0, 5282035.0, 5282045.0,
+              dtype='datetime64[ns]', name='time', freq=None))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-fe72a1ae-a33b-416f-ab0b-acb9e6a3622c" class="xr-index-data-in" type="checkbox"><label for="index-fe72a1ae-a33b-416f-ab0b-acb9e6a3622c" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([5281995.0, 5282005.0, 5282015.0, 5282025.0, 5282035.0, 5282045.0,
        5282055.0, 5282065.0, 5282075.0, 5282085.0,
        ...
        5294195.0, 5294205.0, 5294215.0, 5294225.0, 5294235.0, 5294245.0,
        5294255.0, 5294265.0, 5294275.0, 5294285.0],
-      dtype='float64', name='x', length=1230))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-eb654f3f-06b3-4aac-b906-c160de1be932" class="xr-index-data-in" type="checkbox"><label for="index-eb654f3f-06b3-4aac-b906-c160de1be932" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1570955.0, 1570945.0, 1570935.0, 1570925.0, 1570915.0, 1570905.0,
+      dtype='float64', name='x', length=1230))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-cf64f924-05eb-4f91-81fe-6f66382e0355" class="xr-index-data-in" type="checkbox"><label for="index-cf64f924-05eb-4f91-81fe-6f66382e0355" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1570955.0, 1570945.0, 1570935.0, 1570925.0, 1570915.0, 1570905.0,
        1570895.0, 1570885.0, 1570875.0, 1570865.0,
        ...
        1558845.0, 1558835.0, 1558825.0, 1558815.0, 1558805.0, 1558795.0,
        1558785.0, 1558775.0, 1558765.0, 1558755.0],
-      dtype='float64', name='y', length=1221))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-dd3afe0b-f189-4921-bb7f-0efea7c47e33" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-dd3afe0b-f189-4921-bb7f-0efea7c47e33" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+      dtype='float64', name='y', length=1221))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-73730265-2a18-4622-b66d-ec273fcb7776" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-73730265-2a18-4622-b66d-ec273fcb7776" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>We also create the same dashboard for backscatter of different landcover types over time. In order to make this code reusable and adaptable we will define the following function <code>plot_variability</code>, which allows the injection of a spatial and/or temporal filter. It is not important to understand all the code of the following cell!</p>
-<div id="cell-7" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load encoding</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../assets/06_color_mapping.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    color_mapping_data <span class="op">=</span> json.load(f)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get mapping</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>color_mapping <span class="op">=</span> {item[<span class="st">"value"</span>]: item <span class="cf">for</span> item <span class="kw">in</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                 color_mapping_data[<span class="st">"land_cover"</span>]}</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get landcover codes present in the image</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>present_landcover_codes <span class="op">=</span> np.unique(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    fused_ds.land_cover.values[<span class="op">~</span>np.isnan(fused_ds.land_cover.values)].</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    astype(<span class="bu">int</span>)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(var_ds, time, land_cover, x_range, y_range,</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>               filter_fun_spatial<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">    Callback Function Landcover.</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">    time: panda.datetime</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">        time slice</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">    landcover: int</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">        land cover type</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">    x_range: array_like</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">        longitude range</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">    y_range: array_like</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">        latitude range</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">    holoviews.Image</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> time <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        var_ds <span class="op">=</span> var_ds.sel(time<span class="op">=</span>time)</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> land_cover <span class="op">==</span> <span class="st">"</span><span class="ch">\xa0\xa0\xa0</span><span class="st"> Complete Land Cover"</span>:</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        sig0_selected_ds <span class="op">=</span> var_ds.sig0</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        land_cover_value <span class="op">=</span> <span class="bu">int</span>(land_cover.split()[<span class="dv">0</span>])</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        mask_ds <span class="op">=</span> var_ds.land_cover <span class="op">==</span> land_cover_value</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        sig0_selected_ds <span class="op">=</span> var_ds.sig0.where(mask_ds)</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filter_fun_spatial <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>        sig0_np <span class="op">=</span> filter_fun_spatial(sig0_selected_ds.values)</span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>        sig0_np <span class="op">=</span> sig0_selected_ds.values</span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert unfiltered data into Holoviews Image</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> hv.Dataset(</span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>        (sig0_selected_ds[<span class="st">"x"</span>], sig0_selected_ds[<span class="st">"y"</span>], sig0_np),</span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"x"</span>, <span class="st">"y"</span>],</span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>        <span class="st">"sig0"</span></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x_range <span class="kw">and</span> y_range:</span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> img.select(x<span class="op">=</span>x_range, y<span class="op">=</span>y_range)</span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hv.Image(img)</span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_variability(var_ds, filter_fun_spatial<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>                     filter_fun_temporal<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    robust_min <span class="op">=</span> var_ds.sig0.quantile(<span class="fl">0.02</span>).item()</span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    robust_max <span class="op">=</span> var_ds.sig0.quantile(<span class="fl">0.98</span>).item()</span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    bin_edges <span class="op">=</span> [</span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+</span> j <span class="op">*</span> <span class="fl">0.5</span></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(robust_min) <span class="op">-</span> <span class="dv">2</span>, <span class="bu">int</span>(robust_max) <span class="op">+</span> <span class="dv">2</span>)</span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    land_cover <span class="op">=</span> {<span class="st">"</span><span class="ch">\xa0\xa0\xa0</span><span class="st"> Complete Land Cover"</span>: <span class="dv">1</span>}</span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>    land_cover.update(</span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>        {</span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(value)<span class="sc">: 02}</span><span class="ss"> </span><span class="sc">{</span>color_mapping[value][<span class="st">'label'</span>]<span class="sc">}</span><span class="ss">"</span>: <span class="bu">int</span>(value)</span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> value <span class="kw">in</span> present_landcover_codes</span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>    time <span class="op">=</span> var_ds.sig0[<span class="st">"time"</span>].values</span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>    rangexy <span class="op">=</span> RangeXY()</span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filter_fun_temporal <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>        var_ds <span class="op">=</span> filter_fun_temporal(var_ds)</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>        load_image_ <span class="op">=</span> partial(</span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>            load_image, var_ds<span class="op">=</span>var_ds, filter_fun_spatial<span class="op">=</span>filter_fun_spatial,</span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>            time<span class="op">=</span><span class="va">None</span></span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>        dmap <span class="op">=</span> (</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>            hv.DynamicMap(load_image_, kdims<span class="op">=</span>[<span class="st">"Landcover"</span>], streams<span class="op">=</span>[rangexy])</span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>            .redim.values(Landcover<span class="op">=</span>land_cover)</span>
-<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>            .hist(normed<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span>bin_edges)</span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>        load_image_ <span class="op">=</span> partial(</span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>            load_image, var_ds<span class="op">=</span>var_ds, filter_fun_spatial<span class="op">=</span>filter_fun_spatial</span>
-<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>        dmap <span class="op">=</span> (</span>
-<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>            hv.DynamicMap(load_image_, kdims<span class="op">=</span>[<span class="st">"Time"</span>, <span class="st">"Landcover"</span>],</span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>                          streams<span class="op">=</span>[rangexy])</span>
-<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>            .redim.values(Time<span class="op">=</span>time, Landcover<span class="op">=</span>land_cover)</span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>            .hist(normed<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span>bin_edges)</span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>    image_opts <span class="op">=</span> hv.opts.Image(</span>
-<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span><span class="st">"Greys_r"</span>,</span>
-<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>        colorbar<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>        tools<span class="op">=</span>[<span class="st">"hover"</span>],</span>
-<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>        clim<span class="op">=</span>(robust_min, robust_max),</span>
-<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>        aspect<span class="op">=</span><span class="st">"equal"</span>,</span>
-<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>        framewise<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>        frame_height<span class="op">=</span><span class="dv">500</span>,</span>
-<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>        frame_width<span class="op">=</span><span class="dv">500</span>,</span>
-<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>    hist_opts <span class="op">=</span> hv.opts.Histogram(width<span class="op">=</span><span class="dv">350</span>, height<span class="op">=</span><span class="dv">555</span>)</span>
-<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmap.opts(image_opts, hist_opts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-7" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load encoding</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../assets/06_color_mapping.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    color_mapping_data <span class="op">=</span> json.load(f)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get mapping</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>color_mapping <span class="op">=</span> {item[<span class="st">"value"</span>]: item <span class="cf">for</span> item <span class="kw">in</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                 color_mapping_data[<span class="st">"land_cover"</span>]}</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get landcover codes present in the image</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>present_landcover_codes <span class="op">=</span> np.unique(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    fused_ds.land_cover.values[<span class="op">~</span>np.isnan(fused_ds.land_cover.values)].</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    astype(<span class="bu">int</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_image(var_ds, time, land_cover, x_range, y_range,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>               filter_fun_spatial<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">    Callback Function Landcover.</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">    time: panda.datetime</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">        time slice</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">    landcover: int</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">        land cover type</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">    x_range: array_like</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">        longitude range</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">    y_range: array_like</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">        latitude range</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">    holoviews.Image</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> time <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        var_ds <span class="op">=</span> var_ds.sel(time<span class="op">=</span>time)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> land_cover <span class="op">==</span> <span class="st">"</span><span class="ch">\xa0\xa0\xa0</span><span class="st"> Complete Land Cover"</span>:</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        sig0_selected_ds <span class="op">=</span> var_ds.sig0</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        land_cover_value <span class="op">=</span> <span class="bu">int</span>(land_cover.split()[<span class="dv">0</span>])</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        mask_ds <span class="op">=</span> var_ds.land_cover <span class="op">==</span> land_cover_value</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        sig0_selected_ds <span class="op">=</span> var_ds.sig0.where(mask_ds)</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filter_fun_spatial <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>        sig0_np <span class="op">=</span> filter_fun_spatial(sig0_selected_ds.values)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>        sig0_np <span class="op">=</span> sig0_selected_ds.values</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert unfiltered data into Holoviews Image</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> hv.Dataset(</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        (sig0_selected_ds[<span class="st">"x"</span>], sig0_selected_ds[<span class="st">"y"</span>], sig0_np),</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"x"</span>, <span class="st">"y"</span>],</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>        <span class="st">"sig0"</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x_range <span class="kw">and</span> y_range:</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> img.select(x<span class="op">=</span>x_range, y<span class="op">=</span>y_range)</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hv.Image(img)</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_variability(var_ds, filter_fun_spatial<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>                     filter_fun_temporal<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    robust_min <span class="op">=</span> var_ds.sig0.quantile(<span class="fl">0.02</span>).item()</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    robust_max <span class="op">=</span> var_ds.sig0.quantile(<span class="fl">0.98</span>).item()</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    bin_edges <span class="op">=</span> [</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+</span> j <span class="op">*</span> <span class="fl">0.5</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(robust_min) <span class="op">-</span> <span class="dv">2</span>, <span class="bu">int</span>(robust_max) <span class="op">+</span> <span class="dv">2</span>)</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>)</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>    land_cover <span class="op">=</span> {<span class="st">"</span><span class="ch">\xa0\xa0\xa0</span><span class="st"> Complete Land Cover"</span>: <span class="dv">1</span>}</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>    land_cover.update(</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(value)<span class="sc">: 02}</span><span class="ss"> </span><span class="sc">{</span>color_mapping[value][<span class="st">'label'</span>]<span class="sc">}</span><span class="ss">"</span>: <span class="bu">int</span>(value)</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> value <span class="kw">in</span> present_landcover_codes</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>    time <span class="op">=</span> var_ds.sig0[<span class="st">"time"</span>].values</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>    rangexy <span class="op">=</span> RangeXY()</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filter_fun_temporal <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>        var_ds <span class="op">=</span> filter_fun_temporal(var_ds)</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>        load_image_ <span class="op">=</span> partial(</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>            load_image, var_ds<span class="op">=</span>var_ds, filter_fun_spatial<span class="op">=</span>filter_fun_spatial,</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>            time<span class="op">=</span><span class="va">None</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>        dmap <span class="op">=</span> (</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>            hv.DynamicMap(load_image_, kdims<span class="op">=</span>[<span class="st">"Landcover"</span>], streams<span class="op">=</span>[rangexy])</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>            .redim.values(Landcover<span class="op">=</span>land_cover)</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>            .hist(normed<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span>bin_edges)</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>        load_image_ <span class="op">=</span> partial(</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>            load_image, var_ds<span class="op">=</span>var_ds, filter_fun_spatial<span class="op">=</span>filter_fun_spatial</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>        dmap <span class="op">=</span> (</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>            hv.DynamicMap(load_image_, kdims<span class="op">=</span>[<span class="st">"Time"</span>, <span class="st">"Landcover"</span>],</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>                          streams<span class="op">=</span>[rangexy])</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>            .redim.values(Time<span class="op">=</span>time, Landcover<span class="op">=</span>land_cover)</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>            .hist(normed<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span>bin_edges)</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>    image_opts <span class="op">=</span> hv.opts.Image(</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span><span class="st">"Greys_r"</span>,</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>        colorbar<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>        tools<span class="op">=</span>[<span class="st">"hover"</span>],</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>        clim<span class="op">=</span>(robust_min, robust_max),</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>        aspect<span class="op">=</span><span class="st">"equal"</span>,</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>        framewise<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>        frame_height<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>        frame_width<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>    hist_opts <span class="op">=</span> hv.opts.Histogram(width<span class="op">=</span><span class="dv">350</span>, height<span class="op">=</span><span class="dv">555</span>)</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmap.opts(image_opts, hist_opts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, lets work on the real-life dataset to see how speckle actually looks like.</p>
-<div id="cell-9" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plot_variability(fused_ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div id="cell-9" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_variability(fused_ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"e0146d0f5e324fdba7af78c2912dd121","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"3890968feff346d39352f4369b86992b","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
 <p><em>Figure 2: Lake Neusiedl <span class="math inline">\(\sigma^0_E\)</span> without any filter.</em></p>
 <p>The speckle noise tipycally appears as a “salt-and-pepper” pattern. Also, please note the distribution of backscatter for each land cover. Even though speckle is known for following non-normal distributions (i.e., Rayleigh distribution for amplitude in the linear domain, and the Gumple for intensity in the log domain), we can assume that due to the Central Limit Theorem, the overall backscatter means (dB) tend to follow a Gaussian distribution.</p>
-<p>We can mitigate speckle (it is impossible to remove it completely) by following approaches such as: - spatial filtering - taking mean backscatter value over the same land cover, or - temporal filtering - focusing on a small area or even one pixel, but averaging it over some time period.</p>
+<p>We can mitigate speckle (it is impossible to remove it completely) by following approaches such as: - spatial filtering - taking mean backscatter value over the same land cover, or - temporal filtering - taking the average backscatter value over some time period.</p>
 <p>Either way, one pixel is never representative of ground truth! Therefore we need to look at samples and distributions.</p>
 </section>
 <section id="spatial-filtering" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="spatial-filtering"><span class="header-section-number">7.2</span> Spatial filtering</h2>
-<p>We first introduce a common spatial filter. The Lee filter is an adaptive speckle filter. It follows three assumptions:</p>
+<p>We first introduce a common spatial filter. The Lee filter is an adaptive speckle filter. The filter works using a kernel window with a configurable size, which refers to the dimensions of the neighborhood over which the filter operates. The kernel slides across the data, applying the smoothing operation at each pixel position of the image. It follows three assumptions:</p>
 <ol type="1">
 <li>SAR speckle is modeled as a multiplicative noise - the brighter the area the noisier the data.</li>
 <li>The noise and the signal are statistically independent of each other.</li>
 <li>The sample mean and sample variance of a pixel is equal to its local mean and local variance.</li>
 </ol>
-<p>Let’s build up a function for applying a Lee filter with a kernel size of 7 (do not forget to switch back to linear units before doing this computation and to dB after it):</p>
-<div id="cell-12" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lee_filter(raster, size<span class="op">=</span><span class="dv">7</span>):</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    raster: ndarray</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">        2D array representing the noisy image (e.g., radar image with speckle)</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    size: int</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">        Window size for the filter (must be odd, default is 7)</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">    filtered_image (ndarray): The filtered image with reduced speckle noise</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    raster <span class="op">=</span> np.nan_to_num(raster)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    raster <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (raster <span class="op">/</span> <span class="dv">10</span>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Mean and variance over local window</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    mean_window <span class="op">=</span> uniform_filter(raster, size<span class="op">=</span>size)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    mean_sq_window <span class="op">=</span> uniform_filter(raster<span class="op">**</span><span class="dv">2</span>, size<span class="op">=</span>size)</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    variance_window <span class="op">=</span> mean_sq_window <span class="op">-</span> mean_window<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Noise variance estimation (this could also be set manually)</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    overall_variance <span class="op">=</span> np.var(raster)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the Lee filter</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> variance_window <span class="op">/</span> (variance_window <span class="op">+</span> overall_variance)</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">*</span> np.log10(mean_window <span class="op">+</span> weights <span class="op">*</span> (raster <span class="op">-</span> mean_window))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This approach comes with some limitations: it reduces the spatial resolution of the SAR image.</p>
+<p>Let’s build up a function for applying a Lee filter with a kernel window size of 7 (do not forget to switch back to linear units before doing this computation and to dB after it):</p>
+<div id="cell-12" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lee_filter(raster, size<span class="op">=</span><span class="dv">7</span>):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">    raster: ndarray</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">        2D array representing the noisy image (e.g., radar image with speckle)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">    size: int</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">        Size of the kernel window for the filter (must be odd, default is 7)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">    filtered_image (ndarray): The filtered image with reduced speckle noise</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    raster <span class="op">=</span> np.nan_to_num(raster)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    raster <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (raster <span class="op">/</span> <span class="dv">10</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Mean and variance over local kernel window</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    mean_window <span class="op">=</span> uniform_filter(raster, size<span class="op">=</span>size)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    mean_sq_window <span class="op">=</span> uniform_filter(raster<span class="op">**</span><span class="dv">2</span>, size<span class="op">=</span>size)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    variance_window <span class="op">=</span> mean_sq_window <span class="op">-</span> mean_window<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Noise variance estimation (this could also be set manually)</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    overall_variance <span class="op">=</span> np.var(raster)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the Lee filter</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> variance_window <span class="op">/</span> (variance_window <span class="op">+</span> overall_variance)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">*</span> np.log10(mean_window <span class="op">+</span> weights <span class="op">*</span> (raster <span class="op">-</span> mean_window))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plot_variability(fused_ds, filter_fun_spatial<span class="op">=</span>lee_filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="cell-13" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plot_variability(fused_ds, filter_fun_spatial<span class="op">=</span>lee_filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"8927dea5737346ddacedc150978791d1","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"6579173a6e9b4d398acf3528b15825c7","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
@@ -1705,26 +1706,26 @@ Data variables:
 </section>
 <section id="temporal-filtering" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="temporal-filtering"><span class="header-section-number">7.3</span> Temporal filtering</h2>
-<p>Temporal filtering would involve taking the median of all previous (past) observations for each pixel. This approach comes with severe limitations since it takes out the content-rich information tied to the temporal variability of backscatter.</p>
-<div id="cell-15" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temporal_filter(raster):</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">    raster: ndarray</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">        3D array representing the noisy image over time</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">        (e.g., radar image with speckle)</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">    filtered_image (ndarray): The filtered image with reduced speckle noise</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> raster.median(<span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Temporal filtering would involve taking the average of all previous (past) observations for each pixel. This approach comes with some limitations: it takes out the content-rich information tied to the temporal variability of backscatter.</p>
+<div id="cell-15" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temporal_filter(raster):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    raster: ndarray</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">        3D array representing the noisy image over time</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">        (e.g., radar image with speckle)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">    filtered_image (ndarray): The filtered image with reduced speckle noise</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> raster.mean(<span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-16" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_variability(fused_ds, filter_fun_temporal<span class="op">=</span>temporal_filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div id="cell-16" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot_variability(fused_ds, filter_fun_temporal<span class="op">=</span>temporal_filter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"44c85e5fa6154bf78c63cf246fac96b5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"7e35b25ed40a4b21aeae6349e98ac45e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
