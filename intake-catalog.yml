@@ -1,0 +1,327 @@
+aliases: {}
+data:
+  20d65ecd57feee3f:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/topo
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/topo.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  2b53cea6b559d0b9:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/complex
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/complex.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  33eac142e7827862:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/iw1
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/iw1.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  50c6fedd5ba5388a:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/speckle
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/speckle.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  79e77660bf83328a:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/rtc
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/rtc.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  8ad5641279a00106:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/neusiedler
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/neusiedler.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  8dd2f2bea7784256:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/iw2
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/iw2.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  98dc6e9afebe0b2d:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/fused
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/fused.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  aaada7b4f3ec8ae0:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/coreg
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/coreg.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  af84cd215c131ec5:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/gtc
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/gtc.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  b0ba6f153796b1ad:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/coef
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/coef.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  bc470b875cf081ac:
+    datatype: intake.readers.datatypes:JSONFile
+    kwargs:
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/06_color_mapping
+      url: simplecache::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/cmaps/06_color_mapping.json
+    metadata: {}
+    user_parameters: {}
+  c16000e94a08f8fa:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/iw3
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/iw3.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  e0afc589dd7ce21d:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/geocode
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/geocode.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  e3593524701aaf81:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/inter
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/inter.zarr.zip
+    metadata: {}
+    user_parameters: {}
+  f5d22ba3e5502b66:
+    datatype: intake.readers.datatypes:Zarr
+    kwargs:
+      root: ''
+      storage_options:
+        simplecache:
+          cache_storage: /tmp/fsspec_cache/corine
+      url: simplecache::zip:///::file://~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing/corine.zarr.zip
+    metadata: {}
+    user_parameters: {}
+entries:
+  coef:
+    kwargs:
+      args:
+      - '{data(b0ba6f153796b1ad)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  complex:
+    kwargs:
+      args:
+      - '{data(2b53cea6b559d0b9)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  coreg:
+    kwargs:
+      args:
+      - '{data(aaada7b4f3ec8ae0)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  corine:
+    kwargs:
+      args:
+      - '{data(f5d22ba3e5502b66)}'
+      chunks: {}
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  corine_cmap:
+    kwargs:
+      args:
+      - '{data(bc470b875cf081ac)}'
+    metadata: {}
+    output_instance: fsspec.core:OpenFiles
+    reader: intake.readers.readers:OpenFilesReader
+    user_parameters: {}
+  fused:
+    kwargs:
+      args:
+      - '{data(98dc6e9afebe0b2d)}'
+      chunks:
+        sensor: 4
+        time: 1
+        x: 2508
+        y: 1528
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  geocode:
+    kwargs:
+      args:
+      - '{data(e0afc589dd7ce21d)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  gtc:
+    kwargs:
+      args:
+      - '{data(af84cd215c131ec5)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  inter:
+    kwargs:
+      args:
+      - '{data(e3593524701aaf81)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  iw1:
+    kwargs:
+      args:
+      - '{data(33eac142e7827862)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  iw2:
+    kwargs:
+      args:
+      - '{data(8dd2f2bea7784256)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  iw3:
+    kwargs:
+      args:
+      - '{data(c16000e94a08f8fa)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  neusiedler:
+    kwargs:
+      args:
+      - '{data(8ad5641279a00106)}'
+      chunks: {}
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  rtc:
+    kwargs:
+      args:
+      - '{data(79e77660bf83328a)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  speckle:
+    kwargs:
+      args:
+      - '{data(50c6fedd5ba5388a)}'
+      chunks: {}
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+  topo:
+    kwargs:
+      args:
+      - '{data(20d65ecd57feee3f)}'
+      chunks: -1
+      decode_coords: all
+    metadata: {}
+    output_instance: xarray:Dataset
+    reader: intake.readers.readers:XArrayDatasetReader
+    user_parameters: {}
+metadata: {}
+user_parameters: {}
+version: 2
