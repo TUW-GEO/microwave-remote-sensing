@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 .PHONY: help clean environment kernel teardown
 
-YML = mrs-env.yml
+YML = microwave-remote-sensing.yml
 REQ = $(basename $(notdir $(YML)))
 BASENAME = $(CURDIR)
 
