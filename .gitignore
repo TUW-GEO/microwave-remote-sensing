@@ -56,7 +56,6 @@ venv
 .install*
 
 # data
-data/
 **/*.tif
 **/*_solution.ipynb
 
