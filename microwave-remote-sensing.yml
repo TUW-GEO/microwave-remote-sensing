@@ -21,6 +21,7 @@ dependencies:
   - nodejs
   - numpy
   - odc-stac
+  - pip
   - pyproj
   - pystac-client
   - python=3.11
@@ -32,3 +33,5 @@ dependencies:
   - snaphu
   - xarray
   - zarr=2.18.4
+  - pip:
+      - python-gitlab
