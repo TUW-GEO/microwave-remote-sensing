@@ -33,11 +33,8 @@ teardown:
 		conda deactivate; \
 		conda remove -n $(f) --all -y ; \
 		conda deactivate; )
-	- conda config --remove envs_dirs $(PREFIX)
 
 $(CONDA_ENV_DIR): $(YML)
-	- conda config --prepend envs_dirs $(PREFIX)
-	- conda update -n base -c conda-forge conda -y
 	$(foreach f, $^, \
 		conda env create --file $(f) \
 			--prefix $(PREFIX)/$(basename $(notdir $(f))); )

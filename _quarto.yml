@@ -30,9 +30,9 @@ book:
         - text: Phase Unwrapping
           file: unit_03/09_in_class_exercise.ipynb
   navbar:
-    logo: assets/images/tuw-geo-logo.svg
+    logo: images/tuw-geo-logo.svg
   sidebar:
-    logo: assets/images/tuw-geo-logo.svg
+    logo: images/tuw-geo-logo.svg
 
 format:
   html:

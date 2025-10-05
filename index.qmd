@@ -4,10 +4,10 @@ This is a short guide to create and run the notbooks and environments in the Jup
 
 ## Starting JupyterHub
 
-In TUWEL, click on the JupyterHub icon ![JupyterHub Icon](assets/images/jupiterhub_icon.png){width=7em}, which redirects you to your own JupyterLab user environment. You should then select the Server for the **Desktop Notebook** from the **Microwave Remote Sensing** course. Be patient - this can take a couple of minutes.
+In TUWEL, click on the JupyterHub icon ![JupyterHub Icon](./images/jupiterhub_icon.png){width=7em}, which redirects you to your own JupyterLab user environment. You should then select the Server for the **Desktop Notebook** from the **Microwave Remote Sensing** course. Be patient - this can take a couple of minutes.
 
 <p style="text-align: center;">
-  <img src="assets/images/select_server.png" style="border: 1px solid black; width: 25em; "/>
+  <img src="./images/select_server.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
 Please note that all screenshots in this guide refer to the lecture 120.030 Microwave Remote Sensing (2024W), even if a few things are different for you, the overall functionality and interface remain the same.
@@ -17,7 +17,7 @@ Please note that all screenshots in this guide refer to the lecture 120.030 Micr
 When you start your server for the first time, your point of entry will be this starting page:
 
 <p style="text-align: center;">
-  <img src="assets/images/startingpage.png" style="border: 1px solid black; width: 25em; "/>
+  <img src="./images/startingpage.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
 In the center, you have the Launcher where you can create Python or other files, play around with Jupyter Notebooks, store intermediate data. You can also open a Python console, a terminal, a text file, and many more.
@@ -30,7 +30,7 @@ After some intense coding and analysis, it can happen that you have many termina
 
 :::: {.column width="40%"}
 <p style="text-align: center;">
-  <img src="assets/images/quit_processes.png" style="border: 1px solid black; width: 12em; "/>
+  <img src="./images/quit_processes.png" style="border: 1px solid black; width: 12em; "/>
 </p>
 ::::
 :::
@@ -42,7 +42,7 @@ To use the Notebooks from the course, the following steps need to be taken:
 1. Navigate to the folder `~/shared/120.030-2024W/` where you should find a `Makefile` and a `README.md`.
 
 <p style="text-align: center;">
-  <img src="assets/images/start_terminal.png" style="border: 1px solid black; width: 25em; "/>
+  <img src="./images/start_terminal.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
 2. At this level, you should open a Terminal using the Launcher and run the command
@@ -60,13 +60,13 @@ To use the Notebooks from the course, the following steps need to be taken:
 5. Now you should see a folder named `microwave-remote-sensing` containing the notebooks and additional kernels in the Launcher of JupyterLab.
 
 <p style="text-align: center;">
-  <img src="assets/images/new_notebooks.png" style="border: 1px solid black; width: 25em; "/>
+  <img src="./images/new_notebooks.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
 6. Select the kernel `mrs-env` kernel for execution of the code blocks in the notebook.
 
 <p style="text-align: center;">
-  <img src="assets/images/select_kernel.png" style="border: 1px solid black; width: 25em; "/>
+  <img src="./images/select_kernel.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
 &nbsp;
@@ -81,7 +81,7 @@ File -> Hub Control Panel
 and clicking on `Stop My Server`.
 
 <p style="text-align: center;">
-  <img src="assets/images/stop_server.png" style="border: 1px solid black; width: 25em; "/>
+  <img src="./images/stop_server.png" style="border: 1px solid black; width: 25em; "/>
 </p>
 
 Then press `Start My Server` and you should be able to select the "**Desktop Notebook**" for the "120.030-2024W: 120.030 Microwave Remote Sensing" course.
@@ -99,11 +99,11 @@ To remove the exercise notebooks as well as the Jupyter kernel Launch a terminal
 
 The homework exercises of the course are labeled as `homework_exercise.ipynb`. You are supposed to use these notebooks for the homework assignments and the completed notebooks should be submitted through TUWEL. The notebooks consist of two types of cells: Python and Markdown cells. Python cells contain executable Python code, whereas Markdown cells are used for open text and multiple choice questions. Double click on an existing cell to alter its content. To add new cells click select the cell type from the drop-down menu and click on the plus sign, as follows for Python cells:
 
-![](assets/images/code_cell.png)
+![](./images/code_cell.png)
 
 And for Markdown cells:
 
-![](assets/images/markdown_cell.png)
+![](./images/markdown_cell.png)
 
 For the multiple choice questions double click on the Markdown cell and replace the correct answers, as follows:
 
