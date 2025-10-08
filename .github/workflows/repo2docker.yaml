@@ -6,7 +6,7 @@ on:
       - tuwel
 env:
   REGISTRY: registry.datalab.tuwien.ac.at
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository.name }}
 
 jobs:
   build:
