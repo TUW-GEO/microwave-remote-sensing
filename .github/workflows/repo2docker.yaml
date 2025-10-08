@@ -2,11 +2,12 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches:
-      - tuwel
+    tags:
+      - "*.*.*"
+
 env:
   REGISTRY: registry.datalab.tuwien.ac.at
-  IMAGE_NAME: ${{ github.event.repository.name }}
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
