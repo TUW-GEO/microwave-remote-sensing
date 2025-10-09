@@ -7,6 +7,55 @@ requires-python = ">=3.11"
 requires = ["uv_build >= 0.7.19, <0.9.0"]
 build-backend = "uv_build"
 
+[project]
+authors = [{ name = "Remote Sensing Group, TU Wien", email = "rs@tuwien.ac.at" }]
+name = "mrs"
+version = "0.1.0"
+description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp",
+    "bokeh",
+    "cmcrameri",
+    "dask",
+    "datashader",
+    "folium",
+    "graphviz",
+    "holoviews",
+    "huggingface_hub",
+    "hvplot",
+    "intake",
+    "intake-xarray",
+    "jupyter",
+    "jupyter_bokeh",
+    "matplotlib",
+    "numpy",
+    "odc-stac",
+    "pyproj",
+    "pystac-client",
+    "requests",
+    "rioxarray",
+    "scikit-image",
+    "scipy",
+    "seaborn",
+    "snaphu",
+    "xarray",
+    "zarr<3.0",
+    "python-gitlab",
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX",
+    "Natural Language :: English",
+]
+
 [tool.ruff]
 exclude = [
     ".eggs",
