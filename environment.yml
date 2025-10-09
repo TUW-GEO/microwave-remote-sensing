@@ -36,3 +36,4 @@ dependencies:
   - pre-commit
   - pip:
       - python-gitlab
+      - .

@@ -41,9 +41,6 @@ $(CONDA_ENV_DIR): $(YML)
 
 environment: $(CONDA_ENV_DIR)
 	@echo -e "conda environments are ready."
-	pip install .
-	@command -v pre-commit >/dev/null 2>&1 || pip install pre-commit
-	python -m pre_commit install
 
 $(KERNEL_DIR): $(CONDA_ENV_DIR)
 	$(foreach f, $(REQ), \
@@ -53,6 +50,3 @@ $(KERNEL_DIR): $(CONDA_ENV_DIR)
 
 kernel: $(KERNEL_DIR)
 	@echo -e "conda jupyter kernel is ready."
-	pip install .
-	@command -v pre-commit >/dev/null 2>&1 || pip install pre-commit
-	python -m pre_commit install
