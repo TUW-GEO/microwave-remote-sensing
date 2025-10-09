@@ -1,0 +1,41 @@
+name: Quarto Build
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: "pip"
+
+    - name: Install Jupyter and Jupyter-cache
+      shell: bash
+      run: pip install jupyter jupyter-cache
+
+    - name: Conda Cache Environment
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./.conda_envs
+          /home/runner/.local/share/jupyter/kernels
+        key: ${{ runner.os }}-env-${{ hashFiles('./notebooks/**/*.yml') }}
+        restore-keys: ${{ runner.os }}-env-
+
+    - name: Jupyter Cache Environment
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./unit_01/.jupyter_cache
+          ./unit_02/.jupyter_cache
+          ./unit_03/.jupyter_cache
+        key: ${{ runner.os }}-jupyter
+        restore-keys: ${{ runner.os }}-jupyter
+
+    - name: Render Quarto Project
+      uses: quarto-dev/quarto-actions/render@v2
+      env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}

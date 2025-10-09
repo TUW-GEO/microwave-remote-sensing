@@ -1,5 +1,7 @@
 project:
   type: book
+  pre-render:
+    - make kernel
 
 book:
   title: "JupyerHub Guide"
@@ -41,4 +43,6 @@ format:
     title-block-banner-color: white
 
 execute:
-  freeze: true
+  freeze: auto
+  cache: true
+  eval: true

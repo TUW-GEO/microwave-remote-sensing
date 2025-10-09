@@ -1,0 +1,30 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+
+name: Quarto Publish
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Quarto Book
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build Quarto Book
+        uses: ./.github/actions/build-quarto
+
+      - name: Publish Quarto Book
+        uses: quarto-dev/quarto-actions/publish@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          render: false
+          target: gh-pages
