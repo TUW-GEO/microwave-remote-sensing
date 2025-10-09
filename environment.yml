@@ -33,5 +33,6 @@ dependencies:
   - snaphu
   - xarray
   - zarr=2.18.4
+  - pre-commit
   - pip:
       - python-gitlab
