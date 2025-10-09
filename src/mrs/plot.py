@@ -1,14 +1,12 @@
-import json
+"""Functions for plotting."""
+
+from functools import partial
 
 import holoviews as hv
-import intake
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
-import numpy as np
 import rioxarray  # noqa: F401
-import xarray as xr
 from holoviews.streams import RangeXY
-from matplotlib.colors import BoundaryNorm, ListedColormap
 
 hv.extension("bokeh")
 
@@ -19,11 +17,13 @@ def handles_(color_mapping, present_landcover_codes):
     if info["value"] in present_landcover_codes
 ]
 
-def plot_cor_da(cor_da, cmap, norm, handles):
-    cor_da.plot(figsize=(10, 10), cmap=cmap, norm=norm, add_colorbar=False).axes.set_aspect(
+def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes):
+    cor_da.plot(figsize=(10, 10), cmap=cmap,
+                norm=norm, add_colorbar=False).axes.set_aspect(
         "equal"
     )
 
+    handles = handles_(color_mapping, present_landcover_codes)
     plt.legend(
         handles=handles,
         bbox_to_anchor=(1.01, 1),
@@ -46,7 +46,7 @@ def bin_edges_(robust_min, robust_max):
 ]
 
 def load_image(time, land_cover, x_range, y_range, var_ds=None):
-    """Callback Function Landcover.
+    """Use for Callback Function Landcover.
 
     Parameters
     ----------
@@ -80,15 +80,11 @@ def load_image(time, land_cover, x_range, y_range, var_ds=None):
 
     return hv.Image(img)
 
-
-
-
-
 def image_opts_(var_ds):
     robust_min = var_ds.sig0.quantile(0.02).item()
     robust_max = var_ds.sig0.quantile(0.98).item()
 
-    image_opts = hv.opts.Image(
+    return hv.opts.Image(
         cmap="Greys_r",
         colorbar=True,
         tools=["hover"],
@@ -99,6 +95,31 @@ def image_opts_(var_ds):
         frame_width=500,
     )
 
-    return image_opts
-
 hist_opts = hv.opts.Histogram(width=350, height=555)
+
+def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes ):
+    robust_min = var_ds.sig0.quantile(0.02).item()
+    robust_max = var_ds.sig0.quantile(0.98).item()
+
+    bin_edges = bin_edges_(robust_min, robust_max)
+
+    land_cover.update(
+        {
+            f"{int(value): 02} {color_mapping[value]['label']}": int(value)
+            for value in present_landcover_codes
+        }
+    )
+    time = var_ds.sig0["time"].values
+
+    load_image_partial = partial(load_image, var_ds=var_ds)
+
+    dmap = (
+        hv.DynamicMap(load_image_partial,
+                      kdims=["Time", "Landcover"], streams=[rangexy])
+        .redim.values(Time=time, Landcover=land_cover)
+        .hist(normed=True, bins=bin_edges)
+    )
+
+    image_opts = image_opts_(var_ds)
+
+    return dmap.opts(image_opts, hist_opts)
