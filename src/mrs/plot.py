@@ -13,9 +13,15 @@ import seaborn as sns
 from holoviews.streams import RangeXY
 
 hv.extension("bokeh")
+land_cover = {"\xa0\xa0\xa0 Complete Land Cover": 1}
+rangexy = RangeXY()
+hist_opts = hv.opts.Histogram(width=350, height=555)
+cmap_hls_hex = sns.color_palette("hls", n_colors=256).as_hex()
+cmap_hls = sns.hls_palette(as_cmap=True)
 
 
 def handles_(color_mapping, present_landcover_codes):
+    """Create handles for plot."""
     return [
         mpatches.Patch(
             color=info["color"], label=(f"{info['value']} - " + (info["label"]))
@@ -26,6 +32,7 @@ def handles_(color_mapping, present_landcover_codes):
 
 
 def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes):
+    """Plot using CORINE Land Cover data."""
     cor_da.plot(
         figsize=(10, 10), cmap=cmap, norm=norm, add_colorbar=False
     ).axes.set_aspect("equal")
@@ -41,12 +48,8 @@ def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes)
     plt.title("CORINE Land Cover (EPSG:27704)")
 
 
-land_cover = {"\xa0\xa0\xa0 Complete Land Cover": 1}
-
-rangexy = RangeXY()
-
-
 def bin_edges_(robust_min, robust_max):
+    """Define the edges based of robust min and max values."""
     return [
         i + j * 0.5
         for i in range(int(robust_min) - 2, int(robust_max) + 2)
@@ -93,6 +96,7 @@ def load_image(time, land_cover, x_range, y_range, var_ds=None):
 
 
 def image_opts_(var_ds):
+    """Define robust min and max values and return image opts."""
     robust_min = var_ds.sig0.quantile(0.02).item()
     robust_max = var_ds.sig0.quantile(0.98).item()
 
@@ -108,10 +112,8 @@ def image_opts_(var_ds):
     )
 
 
-hist_opts = hv.opts.Histogram(width=350, height=555)
-
-
 def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
+    """Plot that shows variability over time."""
     robust_min = var_ds.sig0.quantile(0.02).item()
     robust_max = var_ds.sig0.quantile(0.98).item()
 
@@ -141,6 +143,7 @@ def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
 
 
 def plot_slc_all(datasets):
+    """Plot Single Look Complex (SLC) data wih the 3 datasets: IW1, IW2, IW3."""
     fig, ax = plt.subplots(1, 3, figsize=(15, 7), sharey=True)
 
     val_range = dict(vmin=0, vmax=255, cmap="gray")  # noqa C408
@@ -154,10 +157,8 @@ def plot_slc_all(datasets):
     plt.show()
 
 
-cmap_hls = sns.hls_palette(as_cmap=True)
-
-
 def plot_slc_iw2(iw2_ds):
+    """Plot Single Look Complex (SLC) data wih only one datasets: IW2."""
     fig, axes = plt.subplots(1, 2, figsize=(15, 6))  # noqa RUF059
 
     iw2_ds.intensity.plot(ax=axes[0], cmap="gray", robust=True)
@@ -170,6 +171,7 @@ def plot_slc_iw2(iw2_ds):
 
 
 def plot_coregistering(coregistered_ds):
+    """Plot coregistered dataset with Master and Slave Phase Measuarements."""
     fig, axes = plt.subplots(1, 2, figsize=(18, 8))  # noqa RUF059
     coregistered_ds.band_data.sel(band=1).plot(ax=axes[0], cmap="gray", robust=True)
     axes[0].set_title("Master Phase Measurement - 28 Jun 2019")
@@ -180,10 +182,8 @@ def plot_coregistering(coregistered_ds):
     plt.tight_layout()
 
 
-cmap_hls_hex = sns.color_palette("hls", n_colors=256).as_hex()
-
-
 def plot_interferogram(interferogram_ds):
+    """Plot using interferogram dataset."""
     interferogram_ds = interferogram_ds.where(interferogram_ds != 0)
     igf_da = interferogram_ds.sel(band=1).band_data
     coh_da = interferogram_ds.sel(band=2).band_data
@@ -214,6 +214,7 @@ def plot_interferogram(interferogram_ds):
 
 
 def plot_topographic_phase_removal(interferogram_ds, topo_ds):
+    """Plot topographic phase removal."""
     igf_da = interferogram_ds.sel(band=1).band_data
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))  # noqa RUF059
@@ -231,6 +232,7 @@ def plot_topographic_phase_removal(interferogram_ds, topo_ds):
 
 
 def plot_igf_coh(geocoded_ds, step):
+    """Plot igf and coh data."""
     geocoded_ds = geocoded_ds.where(geocoded_ds != 0)
     igf_data = geocoded_ds.sel(band=1).band_data
     coh_da = geocoded_ds.sel(band=2).band_data
@@ -251,6 +253,7 @@ def plot_igf_coh(geocoded_ds, step):
 
 
 def array_to_img(data_array, cmap):
+    """Get array as input, generate plot and save it as image in png format."""
     fig, ax = plt.subplots(figsize=(6, 6), dpi=600)
     data_array.plot(ax=ax, cmap=cmap, add_colorbar=False, add_labels=False)
     ax.set_axis_off()
@@ -261,6 +264,7 @@ def array_to_img(data_array, cmap):
 
 
 def plot_earthquake(geocoded_ds, step):
+    """Plot earthquake having as input geo coded dataset."""
     igf_data = geocoded_ds.sel(band=1).band_data
     igf_data_subset = igf_data.isel(x=slice(0, -1, step), y=slice(0, -1, step))
 
