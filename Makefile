@@ -44,8 +44,7 @@ environment: $(CONDA_ENV_DIR)
 
 $(KERNEL_DIR): $(CONDA_ENV_DIR)
 	@$(foreach f,$(REQ), \
-		eval "$$(conda shell.bash hook)" && \
-		conda activate $(f) && \
+		$(CONDA_ACTIVATE) $(f) && \
 		python -m ipykernel install --user --name $(f) --display-name $(f) && \
 		pre-commit install && \
 		conda deactivate; \
