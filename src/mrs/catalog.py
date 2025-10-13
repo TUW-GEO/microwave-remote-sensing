@@ -15,20 +15,22 @@ ROOT = "https://git.geo.tuwien.ac.at"
 REPO = "/api/v4/projects/1264/repository/files/"
 
 
-def get_intake_url(root: str = ROOT):
+def get_intake_url(root: str = ROOT, branch: str = "main"):
     """Create URL for intake catalog.
 
     Parameters
     ----------
     root : str
         Root of URL
+    branch : str
+        Branch of GitLab repository
 
     Returns
     -------
         Intake catalog : str
 
     """
-    intake_path = root + REPO + "microwave-remote-sensing.yml"
+    intake_path = root + REPO + f"microwave-remote-sensing.yml/raw?ref={branch}"
     print(intake_path)
     return root
 
