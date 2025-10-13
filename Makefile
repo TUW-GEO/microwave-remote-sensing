@@ -43,13 +43,10 @@ environment: $(CONDA_ENV_DIR)
 	@echo -e "conda environments are ready."
 
 $(KERNEL_DIR): $(CONDA_ENV_DIR)
-	@$(foreach f,$(REQ), \
-		. $(CONDA_ACTIVATE) $(f) && \
-		python -m ipykernel install --user --name $(f) --display-name $(f) && \
-		pre-commit install && \
-		conda deactivate; \
-	)
-
+	$(foreach f, $(REQ), \
+		$(CONDA_ACTIVATE) $(f); \
+		python -m ipykernel install --user --name $(f) --display-name $(f); \
+		conda deactivate; )
 
 kernel: $(KERNEL_DIR)
 	@echo -e "conda jupyter kernel is ready."
