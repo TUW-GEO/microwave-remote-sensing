@@ -16,12 +16,26 @@ hv.extension("bokeh")
 land_cover = {"\xa0\xa0\xa0 Complete Land Cover": 1}
 rangexy = RangeXY()
 hist_opts = hv.opts.Histogram(width=350, height=555)
-cmap_hls_hex = sns.color_palette("hls", n_colors=256).as_hex()
 cmap_hls = sns.hls_palette(as_cmap=True)
+cmap_hls_hex = sns.color_palette("hls", n_colors=256).as_hex()
 
 
 def handles_(color_mapping, present_landcover_codes):
-    """Create handles for plot."""
+    """Generate matplotlib legend handles for present land cover codes.
+
+    Parameters
+    ----------
+    color_mapping : dict
+        Maps land cover IDs to dicts with 'color', 'value', and 'label'.
+    present_landcover_codes : iterable
+        Land cover codes to include in the legend.
+
+    Returns
+    -------
+    list of matplotlib.patches.Patch
+        Legend handles for the specified land cover types.
+
+    """
     return [
         mpatches.Patch(
             color=info["color"], label=(f"{info['value']} - " + (info["label"]))
@@ -32,7 +46,28 @@ def handles_(color_mapping, present_landcover_codes):
 
 
 def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes):
-    """Plot using CORINE Land Cover data."""
+    """Plot CORINE land cover data with a legend.
+
+    Parameters
+    ----------
+    cor_da : xarray.DataArray
+        Land cover data array to plot.
+    cmap : matplotlib.colors.Colormap
+        Colormap used for visualization.
+    norm : matplotlib.colors.Normalize
+        Normalization applied to the colormap.
+    color_mapping : dict
+        Maps land cover IDs to dicts with 'color', 'value', and 'label'.
+    present_landcover_codes : iterable
+        Land cover codes to include in the legend.
+
+    Returns
+    -------
+    None
+        Displays the plot with CORINE data, equal aspect ratio, and a legend
+        showing only present land cover classes. Includes title with EPSG code.
+
+    """
     cor_da.plot(
         figsize=(10, 10), cmap=cmap, norm=norm, add_colorbar=False
     ).axes.set_aspect("equal")
@@ -49,7 +84,21 @@ def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes)
 
 
 def bin_edges_(robust_min, robust_max):
-    """Define the edges based of robust min and max values."""
+    """Generate bin edges with 0.5 intervals between robust min and max values.
+
+    Parameters
+    ----------
+    robust_min : float or int
+        Lower bound for bin generation.
+    robust_max : float or int
+        Upper bound for bin generation.
+
+    Returns
+    -------
+    list of float
+        Sequence of bin edges spaced by 0.5 units.
+
+    """
     return [
         i + j * 0.5
         for i in range(int(robust_min) - 2, int(robust_max) + 2)
@@ -96,7 +145,19 @@ def load_image(time, land_cover, x_range, y_range, var_ds=None):
 
 
 def image_opts_(var_ds):
-    """Define robust min and max values and return image opts."""
+    """Create Holoviews image options based on robust intensity range.
+
+    Parameters
+    ----------
+    var_ds : xarray.Dataset
+        Dataset containing 'sig0' variable used to compute intensity bounds.
+
+    Returns
+    -------
+    hv.opts.Image
+        Holoviews image options with dynamic color limits and styling.
+
+    """
     robust_min = var_ds.sig0.quantile(0.02).item()
     robust_max = var_ds.sig0.quantile(0.98).item()
 
@@ -113,7 +174,24 @@ def image_opts_(var_ds):
 
 
 def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
-    """Plot that shows variability over time."""
+    """Plot temporal variability of backscatter across land cover types.
+
+    Parameters
+    ----------
+    color_mapping : dict
+        Maps land cover codes to dicts with 'color', 'value', and 'label'.
+    var_ds : xarray.Dataset
+        Dataset containing the 'sig0' variable with time and land cover dimensions.
+    present_landcover_codes : iterable
+        Land cover codes to include in the analysis.
+
+    Returns
+    -------
+    hv.DynamicMap
+        Interactive Holoviews dynamic map showing temporal variability
+        with corresponding histograms.
+
+    """
     robust_min = var_ds.sig0.quantile(0.02).item()
     robust_max = var_ds.sig0.quantile(0.98).item()
 
@@ -143,7 +221,20 @@ def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
 
 
 def plot_slc_all(datasets):
-    """Plot Single Look Complex (SLC) data wih the 3 datasets: IW1, IW2, IW3."""
+    """Plot multiple Single Look Complex (SLC) intensity datasets side by side.
+
+    Parameters
+    ----------
+    datasets : list of xarray.Dataset
+        List of datasets, each containing an 'intensity' variable to be plotted.
+
+    Returns
+    -------
+    None
+        Creates a matplotlib figure with three subplots showing SLC images
+        in grayscale (0-255 range), shared y-axis, and a horizontal colorbar.
+
+    """
     fig, ax = plt.subplots(1, 3, figsize=(15, 7), sharey=True)
 
     val_range = dict(vmin=0, vmax=255, cmap="gray")  # noqa C408
@@ -158,7 +249,21 @@ def plot_slc_all(datasets):
 
 
 def plot_slc_iw2(iw2_ds):
-    """Plot Single Look Complex (SLC) data wih only one datasets: IW2."""
+    """Plot intensity and phase measurements for the IW2 subswath.
+
+    Parameters
+    ----------
+    iw2_ds : xarray.Dataset
+        Dataset containing 'intensity' and 'phase' variables for IW2.
+
+    Returns
+    -------
+    None
+        Creates a matplotlib figure with two subplots:
+        - Left: Intensity (grayscale, robustly scaled)
+        - Right: Phase (using `cmap_hls` colormap)
+
+    """
     fig, axes = plt.subplots(1, 2, figsize=(15, 6))  # noqa RUF059
 
     iw2_ds.intensity.plot(ax=axes[0], cmap="gray", robust=True)
@@ -171,7 +276,22 @@ def plot_slc_iw2(iw2_ds):
 
 
 def plot_coregistering(coregistered_ds):
-    """Plot coregistered dataset with Master and Slave Phase Measuarements."""
+    """Plot master and slave phase measurements from a coregistered dataset.
+
+    Parameters
+    ----------
+    coregistered_ds : xarray.Dataset
+        Dataset containing 'band_data' with at least two bands:
+        band 1 for the master and band 2 for the slave measurement.
+
+    Returns
+    -------
+    None
+        Creates a matplotlib figure with two subplots:
+        - Left: Intensity (grayscale, robustly scaled)
+        - Right: Phase (using `cmap_hls` colormap)
+
+    """
     fig, axes = plt.subplots(1, 2, figsize=(18, 8))  # noqa RUF059
     coregistered_ds.band_data.sel(band=1).plot(ax=axes[0], cmap="gray", robust=True)
     axes[0].set_title("Master Phase Measurement - 28 Jun 2019")
@@ -183,7 +303,21 @@ def plot_coregistering(coregistered_ds):
 
 
 def plot_interferogram(interferogram_ds):
-    """Plot using interferogram dataset."""
+    """Plot interferogram and coherence data side-by-side.
+
+    Parameters
+    ----------
+    interferogram_ds : xarray.Dataset
+        Dataset containing interferogram and coherence bands. Expected to have
+        'band_data' variable with band=1 (interferogram) and band=2 (coherence).
+
+    Returns
+    -------
+    hv.Layout
+        HoloViews layout with interferogram (left) and coherence (right) plots.
+        Y-axis is inverted for both plots, and axes are shared.
+
+    """
     interferogram_ds = interferogram_ds.where(interferogram_ds != 0)
     igf_da = interferogram_ds.sel(band=1).band_data
     coh_da = interferogram_ds.sel(band=2).band_data
@@ -214,7 +348,24 @@ def plot_interferogram(interferogram_ds):
 
 
 def plot_topographic_phase_removal(interferogram_ds, topo_ds):
-    """Plot topographic phase removal."""
+    """Plot interferogram before and after topographic phase removal.
+
+    Parameters
+    ----------
+    interferogram_ds : xarray.Dataset
+        Dataset containing the interferogram with topographic phase. Expected to
+        have 'band_data' variable with band=1.
+    topo_ds : xarray.Dataset
+        Dataset containing topography data and the corrected interferogram.
+        Expected to have 'topo' and 'Phase' data variables.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Figure with three subplots: original interferogram, topography, and
+        corrected interferogram.
+
+    """
     igf_da = interferogram_ds.sel(band=1).band_data
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))  # noqa RUF059
@@ -232,7 +383,23 @@ def plot_topographic_phase_removal(interferogram_ds, topo_ds):
 
 
 def plot_igf_coh(geocoded_ds, step):
-    """Plot igf and coh data."""
+    """Plot downsampled interferogram and coherence data.
+
+    Parameters
+    ----------
+    geocoded_ds : xarray.Dataset
+        Dataset containing interferogram and coherence bands. Expected to have
+        'band_data' variable with band=1 (interferogram) and band=2 (coherence).
+    step : int
+        Step size for downsampling the data along x and y axes.
+
+    Returns
+    -------
+    hv.Layout
+        HoloViews layout with downsampled interferogram (left) and coherence (right)
+        plots. Coherence plot is scaled between 0 and 1, and axes are shared.
+
+    """
     geocoded_ds = geocoded_ds.where(geocoded_ds != 0)
     igf_data = geocoded_ds.sel(band=1).band_data
     coh_da = geocoded_ds.sel(band=2).band_data
@@ -253,7 +420,21 @@ def plot_igf_coh(geocoded_ds, step):
 
 
 def array_to_img(data_array, cmap):
-    """Get array as input, generate plot and save it as image in png format."""
+    """Convert a DataArray to a base64-encoded PNG image.
+
+    Parameters
+    ----------
+    data_array : xarray.DataArray
+        2D data array to plot as an image.
+    cmap : str
+        Colormap name to use for the plot.
+
+    Returns
+    -------
+    str
+        Base64-encoded string of the PNG image.
+
+    """
     fig, ax = plt.subplots(figsize=(6, 6), dpi=600)
     data_array.plot(ax=ax, cmap=cmap, add_colorbar=False, add_labels=False)
     ax.set_axis_off()
@@ -264,7 +445,26 @@ def array_to_img(data_array, cmap):
 
 
 def plot_earthquake(geocoded_ds, step):
-    """Plot earthquake having as input geo coded dataset."""
+    """Create a Folium map with a downsampled interferogram overlay.
+
+    Parameters
+    ----------
+    geocoded_ds : xarray.Dataset
+        Dataset containing the interferogram. Expected to have 'band_data'
+        variable with band=1 and 'x'/'y' coordinates.
+    step : int
+        Step size for downsampling the interferogram before plotting.
+
+    Returns
+    -------
+    folium.Map
+        Interactive Folium map with:
+        - ESRI World Imagery basemap
+        - ESRI place labels overlay
+        - Interferogram overlay clipped to data bounds
+        - Layer control for toggling overlays
+
+    """
     igf_data = geocoded_ds.sel(band=1).band_data
     igf_data_subset = igf_data.isel(x=slice(0, -1, step), y=slice(0, -1, step))
 
