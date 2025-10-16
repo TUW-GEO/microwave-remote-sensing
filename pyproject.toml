@@ -8,7 +8,7 @@ name = "mrs"
 version = "0.1.0"
 description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "aiohttp",
     "bokeh",
@@ -38,6 +38,9 @@ dependencies = [
     "xarray",
     "zarr<3.0",
     "python-gitlab",
+    "pydantic>=2.12.2",
+    "pydantic-extra-types>=2.10.6",
+    "pandas-stubs>=2.3.2.250926",
 ]
 classifiers = [
     "Intended Audience :: Science/Research",
@@ -78,21 +81,14 @@ target-version = "py313"
 # unsafe-fixes = true
 
 [tool.ruff.lint]
-select = ["ALL"]  # Subsets could also be used if that is too much
+select = ["ALL"]
 ignore = [
-    "ANN",
-    # "ANN401", # any-type (in func args)
     "D203",   # incorrect-blank-line-before-class
     "D213",   # multi-line-summary-second-line (opposite to D212)
     "PGH",    # pygrep hooks are ignored
     "TD002",  # missing-todo-author
     "TD003",  # missing-todo-link
     "T201",   # print (should not be used)
-    "COM812", # missing-trailing-comma
-    "EXE002", # shebang-missing-executable-file
-    "PLR0913", # too-many-arguments
-    "D103", # undocumented-public-function
-
 ]
 fixable = ["ALL"]
 unfixable = []
