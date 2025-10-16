@@ -351,7 +351,7 @@ window.Quarto = {
 <p><img src="https://eox.at/images/eodcaas-mosaic-data-cube-kopp.png" class="img-fluid"></p>
 <p><em>Figure 1: Stacking of arrays to form datacubes (source: https://eox.at)</em>.</p>
 <p>In this notebook we will study two different SAR products. SAR data from the Advanced Land Observing Satellite (Alos-2), which is a Japanese platform with an L-band sensor from the Japan Aerospace Exploration Agency (JAXA), and C-band data from the Copernicus Sentinel-1 mission. It is our goal to compare C- with L-band, so we need to somehow stack these arrays.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.parse</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> partial</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -969,7 +969,7 @@ if (window.Jupyter !== undefined) {
 <section id="loading-data" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="loading-data"><span class="header-section-number">4.1</span> Loading Data</h2>
 <p>Before loading the data into memory we will first look at the area covered by the Sentinel-1 dataset on a map. This way we can select a region of interest for our hypothetical study. We will extract and transform the bounds of the data to longitude and latitude.</p>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> xr.open_mfdataset(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    make_gitlab_urls(<span class="st">"sentinel-1"</span>),</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    engine<span class="op">=</span><span class="st">"rasterio"</span>,</span>
@@ -1163,7 +1163,7 @@ if (window.Jupyter !== undefined) {
 <p><em>Figure 2: Map of study area. Red rectangle is the area covered by the Sentinel-1 raster. Blue rectangle is the area of interest.</em></p>
 <p>On the map we have drawn rectangles of the area covered by the images and of our selected study area. To prevent loading too much data we will now only load the data as defined by the blue rectangle on the <code>folium</code> map.</p>
 <p>The Sentinel-1 data is now stored on disk as separate two-dimensional GeoTIFF files with a certain timestamp. The following <code>s1_preprocess</code> function allows to load all files in one go as a spatiotemporal datacube. Basically, the preprocessing function helps reading the timestamp from the file and adds this as a new dimension to the array. The latter allows a concatenation procedure where all files are joined along the new time dimension. In addition by providing <code>area_of_interest.bounds</code> to the parameter <code>bbox</code> we will only load the data of the previously defined area of interest.</p>
-<div id="5" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> s1_preprocess(x, bbox, scale):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Preprocess file.</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1200,7 +1200,7 @@ if (window.Jupyter !== undefined) {
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">*</span> scale</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We load the data again with <code>open_mfdataset</code> and by providing the preprocess function, including the bounds of the area of interest and the scaling factor, as follows:</p>
-<div id="7" class="cell" data-execution_count="4">
+<div id="7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>partial_ <span class="op">=</span> partial(s1_preprocess, bbox<span class="op">=</span>area_of_interest.bounds, scale<span class="op">=</span><span class="fl">0.01</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>s1_ds <span class="op">=</span> xr.open_mfdataset(</span>
@@ -1225,7 +1225,7 @@ if (window.Jupyter !== undefined) {
 <section id="unlocking-geospatial-information" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="unlocking-geospatial-information"><span class="header-section-number">4.2</span> Unlocking Geospatial Information</h2>
 <p>To enable further stacking of ALOS-2 and Sentinel-1 data we need to know some more information about the raster. Hence we define the following function <code>print_raster</code> to get the projection (CRS), resolution, and region (bounds). The function leverages the functionality of <code>rioxarray</code>; a package for rasters.</p>
-<div id="9" class="cell" data-execution_count="5">
+<div id="9" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_raster(raster, name):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Print Raster Metadata.</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1259,7 +1259,7 @@ CRS: EPSG:27704
 <p>Now we will proceed with loading the ALOS-2 L-band data in much the same fashion as for Sentinel-1. Again timeslices are stored separately as individual GeoTIFFS and they need to be concatenated along the time dimension. We use a slightly different preprocessing function <code>alos_preprocess</code> for this purpose. The most notable difference of this function is the inclusion of a scaling factor for the 16-bit digital numbers (DN):</p>
 <p><span class="math display">\[\gamma^0_T = 10 * log_{10}(\text{DN}^2) - 83.0 \,dB\]</span></p>
 <p>to correctly convert the integers to <span class="math inline">\(\gamma^0_T\)</span> in the dB range.</p>
-<div id="11" class="cell" data-execution_count="6">
+<div id="11" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> alos_preprocess(x, bbox):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Preprocess file.</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1293,7 +1293,7 @@ CRS: EPSG:27704
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">*</span> np.log10(x<span class="op">**</span><span class="dv">2</span>) <span class="op">-</span> <span class="fl">83.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we load the data with the <code>open_mfdataset</code> function of <code>xarray</code> and we provide the preprocessing function (see above), which includes the selection of the bounds of an area of interest and the extraction of time stamps from the file name.</p>
-<div id="13" class="cell" data-execution_count="7">
+<div id="13" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>area_of_interest <span class="op">=</span> affinity.scale(area_of_interest, xfact<span class="op">=</span><span class="fl">1.7</span>, yfact<span class="op">=</span><span class="fl">1.7</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>partial_ <span class="op">=</span> partial(alos_preprocess, bbox<span class="op">=</span>area_of_interest.bounds)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1316,7 +1316,7 @@ CRS: EPSG:27704
 </div>
 </div>
 <p>Also, for this dataset we will look at the metadata in order to compare it with Sentinel-1.</p>
-<div id="15" class="cell" data-execution_count="8">
+<div id="15" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>print_raster(alos_ds, <span class="st">"ALOS-2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ALOS-2 Raster: 
@@ -1331,7 +1331,7 @@ CRS: EPSG:32632
 <section id="reprojecting" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="reprojecting"><span class="header-section-number">4.3</span> Reprojecting</h2>
 <p>The ALOS-2 is projected on an UTM grid. We would therefore like to reproject this data to match the projection of Sentinel-1. Furthermore, we will upsample the data to match the Sentinel-1 sampling. The <code>rioxarray</code> package has a very convenient method that can do this all in one go:<code>reproject_match</code>. For continuous data it is best to use a bilinear resampling strategy. As always you have to consider again that we deal with values in the dB range, so we need to convert to the linear scale before bilinear resampling.</p>
-<div id="17" class="cell" data-execution_count="9">
+<div id="17" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>alos_ds_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (alos_ds <span class="op">/</span> <span class="dv">10</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alos_ds_lin <span class="op">=</span> alos_ds_lin.rio.reproject_match(</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    s1_ds,</span>
@@ -1340,7 +1340,7 @@ CRS: EPSG:32632
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>alos_ds <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> np.log10(alos_ds_lin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We will overwrite the coordinate values of ALOS-2 with those of Sentinel-1. If we would not do this last step, small errors in how the numbers are stored would prevent stacking of the rasters.</p>
-<div id="19" class="cell" data-execution_count="10">
+<div id="19" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>alos_ds <span class="op">=</span> alos_ds.assign_coords(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    {</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>: s1_ds.x.data,</span>
@@ -1349,7 +1349,7 @@ CRS: EPSG:32632
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Lastly, we will turn the <code>xarray.DataSet</code> to an <code>xarray.DataArray</code> where a new dimension will constitute the sensor for measurement (satellite + polarization).</p>
-<div id="21" class="cell" data-execution_count="11">
+<div id="21" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>s1_da <span class="op">=</span> s1_ds.to_array(dim<span class="op">=</span><span class="st">"sensor"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>alos_da <span class="op">=</span> alos_ds.to_array(dim<span class="op">=</span><span class="st">"sensor"</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>s1_da</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1895,7 +1895,7 @@ Coordinates:
 <section id="stacking-of-multiple-arrays" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="stacking-of-multiple-arrays"><span class="header-section-number">4.4</span> Stacking of Multiple Arrays</h2>
 <p>Now we are finally ready to stack Sentinel-1 C-band and ALOS-2 L-band arrays with the function <code>concat</code> of <code>xarray</code>. Now we can use the newly defined <code>"sensor"</code> dimension to concatenate the two arrays.</p>
-<div id="23" class="cell" data-execution_count="12">
+<div id="23" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fused_da <span class="op">=</span> xr.concat([s1_da, alos_da], dim<span class="op">=</span><span class="st">"sensor"</span>).rename(<span class="st">"gam0"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fused_da</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -2444,11 +2444,11 @@ Coordinates:
 </div>
 </div>
 <p>The measurements for both satellites don’t occur at the same time. Hence the cube is now padded with 2-D arrays entirely filled with NaN (Not A Number) for some time slices. As we have learned in notebook 2 we can use the <code>resample</code> method to make temporally coherent timeslices for each month. To deal with the dB scale backscatter values as well as the low number of observations per month we use a median of the samples. As taking the median only sorts the samples according to the sample quantiles we do not have to convert the observations to the linear scale.</p>
-<div id="25" class="cell" data-execution_count="13">
+<div id="25" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fused_da <span class="op">=</span> fused_da.resample(time<span class="op">=</span><span class="st">"ME"</span>, skipna<span class="op">=</span><span class="va">True</span>).median().compute()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can plot each of the variables: “ALOS-2” and “Sentinel-1” to check our results.</p>
-<div id="27" class="cell" data-execution_count="14">
+<div id="27" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fused_da.hvplot.image(robust<span class="op">=</span><span class="va">True</span>, data_aspect<span class="op">=</span><span class="dv">1</span>, cmap<span class="op">=</span><span class="st">"Greys_r"</span>, rasterize<span class="op">=</span><span class="va">True</span>).opts(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    frame_height<span class="op">=</span><span class="dv">600</span>, aspect<span class="op">=</span><span class="st">"equal"</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
