@@ -36,6 +36,7 @@ runs:
         restore-keys: ${{ runner.os }}-jupyter
 
     - name: Execute Jupyter Cells
+      shell: bash
       run: quarto render --execute
 
     - name: Render Quarto Project
