@@ -35,6 +35,9 @@ runs:
         key: ${{ runner.os }}-jupyter
         restore-keys: ${{ runner.os }}-jupyter
 
+    - name: Execute Jupyter Cells
+      run: quarto render --execute
+
     - name: Render Quarto Project
       uses: quarto-dev/quarto-actions/render@v2
       env:
