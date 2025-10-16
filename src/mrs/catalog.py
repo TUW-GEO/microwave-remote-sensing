@@ -17,8 +17,13 @@ REPO_API = "api/v4/projects/1264/repository/files"
 REPO_RAW = "public_projects/microwave-remote-sensing/-/raw"
 
 
-def get_intake_url(root: str = ROOT):
-    """Create URL for intake catalog.
+class SensorOptions(StrEnum):
+    """Supported Sensor Options."""
+
+    ALOS2 = "alos-2"
+    SENTINEL1 = "sentinel-1"
+
+
 def get_intake_url(
     root: str = ROOT,
     branch: str = "main",
