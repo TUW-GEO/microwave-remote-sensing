@@ -3,7 +3,7 @@ SHELL = /bin/bash
 .PHONY: help clean teardown
 
 CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
-CONDA_ENV_DIR = ./.conda_envs/microwave-remote-sensing
+CONDA_ENV_DIR = $(CURDIR)/.conda_envs/microwave-remote-sensing
 KERNEL_DIR = $(shell jupyter --data-dir)/kernels/microwave-remote-sensing
 
 help:

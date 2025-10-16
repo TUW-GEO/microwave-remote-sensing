@@ -16,6 +16,7 @@ dependencies:
   - intake-xarray
   - jupyter
   - jupyter_bokeh
+  - jupyter-cache
   - mamba
   - matplotlib
   - nodejs
