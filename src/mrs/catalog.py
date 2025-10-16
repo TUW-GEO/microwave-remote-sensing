@@ -70,7 +70,7 @@ def make_gitlab_urls(sensor: SensorOptions | str):
     """
     gl = gitlab.Gitlab(ROOT)
     gl_project = gl.projects.get(1264)
-    root = f"{ROOT}/{REPO_API}"
+    root = f"{ROOT}/{REPO_API}/"
     end = "/raw?ref=main&lfs=true"
     return [
         root + urllib.parse.quote_plus(gitlab_file["path"]) + end
