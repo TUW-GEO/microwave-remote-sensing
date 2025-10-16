@@ -14,7 +14,7 @@
     "href": "index.html#starting-jupyterhub",
     "title": "JupyerHub Guide",
     "section": "Starting JupyterHub",
-    "text": "Starting JupyterHub\nIn TUWEL, click on the JupyterHub icon , which redirects you to your own JupyterLab user environment. You should then select the Server for the Desktop Notebook from the Microwave Remote Sensing course. Be patient - this can take a couple of minutes.\n\n\n\nPlease note that all screenshots in this guide refer to the lecture 120.030 Microwave Remote Sensing (2024W), even if a few things are different for you, the overall functionality and interface remain the same.",
+    "text": "Starting JupyterHub\nIn TUWEL, click on the JupyterHub icon , which redirects you to your own JupyterLab user environment. You should then select the image for the 120.030 Microwave Remote Sensing 2025W: Science Notebook. Be patient - this can take a couple of minutes.\n\n\n\nPlease note that all screenshots in this guide refer to the lecture 120.030 Microwave Remote Sensing (2025W), even if a few things are different for you, the overall functionality and interface remain the same.",
     "crumbs": [
       "JupyterHub Guide"
     ]
@@ -24,27 +24,7 @@
     "href": "index.html#exploring-jupyterlab",
     "title": "JupyerHub Guide",
     "section": "Exploring JupyterLab",
-    "text": "Exploring JupyterLab\nWhen you start your server for the first time, your point of entry will be this starting page:\n\n\n\nIn the center, you have the Launcher where you can create Python or other files, play around with Jupyter Notebooks, store intermediate data. You can also open a Python console, a terminal, a text file, and many more. On the left, you can see your home directory where you have the folders lectures and shared. There might be other folders as well, but don’t be concerned about them.\n\n\nAfter some intense coding and analysis, it can happen that you have many terminal and notebook tabs open. However, simply closing them does not quit the processes and running kernels in the background. Therefore, we recommend that you tidy up your running processes after some time, which can be done as marked by the top-left circle. As an overview, the number of running kernels and terminals are always shown at the bottom-left corner.",
-    "crumbs": [
-      "JupyterHub Guide"
-    ]
-  },
-  {
-    "objectID": "index.html#setup-of-exercise-environment",
-    "href": "index.html#setup-of-exercise-environment",
-    "title": "JupyerHub Guide",
-    "section": "Setup of Exercise Environment",
-    "text": "Setup of Exercise Environment\nTo use the Notebooks from the course, the following steps need to be taken:\n\nNavigate to the folder ~/shared/120.030-2024W/ where you should find a Makefile and a README.md.\n\n\n\n\n\nAt this level, you should open a Terminal using the Launcher and run the command\nmake notebooks\nWait until the installation is finished - this can take a couple of minutes.\nThe notebooks and an environment, where the important packages and all their dependencies are included, have been installed for you.\nIt might be necessary to re-login to the JupyterHub to see it coming into effect.\nNow you should see a folder named microwave-remote-sensing containing the notebooks and additional kernels in the Launcher of JupyterLab.\n\n\n\n\n\nSelect the kernel mrs-env kernel for execution of the code blocks in the notebook.\n\n\n\n\n \n\n\n\n\n\n\nIn case you could not select the correct server and could not find the folder from step one, you might be in the wrong server. You can change your server by selecting\nFile -&gt; Hub Control Panel\nand clicking on Stop My Server.\n\n\n\nThen press Start My Server and you should be able to select the “Desktop Notebook” for the “120.030-2024W: 120.030 Microwave Remote Sensing” course.",
-    "crumbs": [
-      "JupyterHub Guide"
-    ]
-  },
-  {
-    "objectID": "index.html#removing-exercise-environment",
-    "href": "index.html#removing-exercise-environment",
-    "title": "JupyerHub Guide",
-    "section": "Removing Exercise Environment",
-    "text": "Removing Exercise Environment\nTo remove the exercise notebooks as well as the Jupyter kernel Launch a terminal from ~/shared/120.030-2024W/ and type:\nmake delete",
+    "text": "Exploring JupyterLab\nWhen you start your server for the first time, your point of entry will be this starting page:\n\n\n\nIn the center, you have the Launcher where you can create Python or other files, play around with Jupyter Notebooks, store intermediate data. You can also open a Python console, a terminal, a text file, and many more. On the left, you can see your home directory where you have the folders microwave-remote-sensing, lectures and shared. There might be other folders as well, but don’t be concerned about them. The folder microwave-remote-sensing contains the course materials.\n\n\nAfter some intense coding and analysis, it can happen that you have many terminal and notebook tabs open. However, simply closing them does not quit the processes and running kernels in the background. Therefore, we recommend that you tidy up your running processes after some time, which can be done as marked by the top-left circle. As an overview, the number of running kernels and terminals are always shown at the bottom-left corner.",
     "crumbs": [
       "JupyterHub Guide"
     ]
