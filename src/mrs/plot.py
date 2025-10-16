@@ -1,51 +1,96 @@
 """Functions for plotting."""
 
 import base64
+from collections.abc import Iterable
 from functools import partial
 from io import BytesIO
 
 import folium
-import holoviews as hv
-import matplotlib.patches as mpatches
+import holoviews as hv  # type: ignore[import-untyped]
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import rioxarray  # noqa: F401
-import seaborn as sns
-from holoviews.streams import RangeXY
+import seaborn as sns  # type: ignore[import-untyped]
+from holoviews.streams import RangeXY  # type: ignore[import-untyped]
+from matplotlib.colors import Colormap, ListedColormap, Normalize
+from matplotlib.patches import Patch
+from seaborn.palettes import _ColorPalette  # type: ignore[import-untyped]
+from xarray import DataArray, Dataset
 
-hv.extension("bokeh")
-land_cover = {"\xa0\xa0\xa0 Complete Land Cover": 1}
-rangexy = RangeXY()
-hist_opts = hv.opts.Histogram(width=350, height=555)
-cmap_hls = sns.hls_palette(as_cmap=True)
-cmap_hls_hex = sns.color_palette("hls", n_colors=256).as_hex()
+from mrs.catalog import CorineColorCollection, CorineColorMapping
+
+hv.extension("bokeh")  # type: ignore[too-many-positional-arguments]
+COMPLETE_LAND_COVER = "\xa0\xa0\xa0 Complete Land Cover"
+LAND_COVER: dict[str, int] = {COMPLETE_LAND_COVER: 1}
+RANGEXY = RangeXY()
+HIST_OPTS = hv.opts.Histogram(width=350, height=555)
+CMAP_HLS: ListedColormap = sns.hls_palette(as_cmap=True)
+CMAP_HLS_HEX: _ColorPalette = sns.color_palette("hls", n_colors=256).as_hex()
 
 
-def handles_(color_mapping, present_landcover_codes):
+# A bunch of Supersets for type hinting purposes...
+
+
+class DatasetHasLandCoverSig0(Dataset):  # noqa: D101
+    land_cover: DataArray
+    sig0: DataArray
+
+
+class DatasetHasIntensity(Dataset):  # noqa: D101
+    intensity: DataArray
+
+
+class DatasetHasIntensityPhase(Dataset):  # noqa: D101
+    intensity: DataArray
+    phase: DataArray
+
+
+class DatasetHasBandData(Dataset):  # noqa: D101
+    band_data: DataArray
+
+
+class DatasetHasTopoPhase(Dataset):  # noqa: D101
+    topo: DataArray
+    Phase: DataArray
+
+
+def _handles(
+    colors: list[CorineColorMapping],
+    valid_codes: Iterable[int],
+) -> list[Patch]:
     """Generate matplotlib legend handles for present land cover codes.
 
     Parameters
     ----------
-    color_mapping : dict
+    colors : list[CorineColorMapping]
         Maps land cover IDs to dicts with 'color', 'value', and 'label'.
-    present_landcover_codes : iterable
+    valid_codes: Iterable[int]
         Land cover codes to include in the legend.
 
     Returns
     -------
-    list of matplotlib.patches.Patch
+    list[mpl.patches.Patch]
         Legend handles for the specified land cover types.
 
     """
     return [
-        mpatches.Patch(
-            color=info["color"], label=(f"{info['value']} - " + (info["label"]))
+        Patch(
+            color=info["color"].as_hex(),
+            label=(f"{info['value']} - " + (info["label"])),
         )
-        for info in color_mapping.values()
-        if info["value"] in present_landcover_codes
+        for info in colors
+        if info["value"] in valid_codes
     ]
 
 
-def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes):
+def plot_corine_data(
+    cor_da: DataArray,
+    cmap: Colormap,
+    norm: Normalize,
+    color_mapping: CorineColorCollection,
+    present_landcover_codes: Iterable[int],
+) -> None:
     """Plot CORINE land cover data with a legend.
 
     Parameters
@@ -69,10 +114,13 @@ def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes)
 
     """
     cor_da.plot(
-        figsize=(10, 10), cmap=cmap, norm=norm, add_colorbar=False
-    ).axes.set_aspect("equal")
+        figsize=(10, 10),
+        cmap=cmap,
+        norm=norm,
+        add_colorbar=False,
+    ).axes.set_aspect("equal")  # type: ignore[call-arg]
 
-    handles = handles_(color_mapping, present_landcover_codes)
+    handles = _handles(color_mapping.items, present_landcover_codes)
     plt.legend(
         handles=handles,
         bbox_to_anchor=(1.01, 1),
@@ -83,7 +131,7 @@ def plot_corine_data(cor_da, cmap, norm, color_mapping, present_landcover_codes)
     plt.title("CORINE Land Cover (EPSG:27704)")
 
 
-def bin_edges_(robust_min, robust_max):
+def _bin_edges(robust_min: float, robust_max: float) -> list[float]:
     """Generate bin edges with 0.5 intervals between robust min and max values.
 
     Parameters
@@ -106,7 +154,13 @@ def bin_edges_(robust_min, robust_max):
     ]
 
 
-def load_image(time, land_cover, x_range, y_range, var_ds=None):
+def load_image(
+    time: pd.Timestamp,
+    land_cover: str,
+    x_range: np.ndarray,
+    y_range: np.ndarray,
+    var_ds: DatasetHasLandCoverSig0,
+) -> hv.Image:
     """Use for Callback Function Landcover.
 
     Parameters
@@ -127,7 +181,7 @@ def load_image(time, land_cover, x_range, y_range, var_ds=None):
     holoviews.Image
 
     """
-    if land_cover == "\xa0\xa0\xa0 Complete Land Cover":
+    if land_cover == COMPLETE_LAND_COVER:
         sig0_selected_ds = var_ds.sig0.sel(time=time)
 
     else:
@@ -144,7 +198,7 @@ def load_image(time, land_cover, x_range, y_range, var_ds=None):
     return hv.Image(img)
 
 
-def image_opts_(var_ds):
+def image_opts_(var_ds: Dataset) -> hv.opts.Image:
     """Create Holoviews image options based on robust intensity range.
 
     Parameters
@@ -173,7 +227,11 @@ def image_opts_(var_ds):
     )
 
 
-def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
+def plot_variability_over_time(
+    color_mapping: dict[int, CorineColorMapping],
+    var_ds: DatasetHasLandCoverSig0,
+    present_landcover_codes: Iterable[int],
+) -> hv.DynamicMap:
     """Plot temporal variability of backscatter across land cover types.
 
     Parameters
@@ -192,24 +250,27 @@ def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
         with corresponding histograms.
 
     """
-    robust_min = var_ds.sig0.quantile(0.02).item()
-    robust_max = var_ds.sig0.quantile(0.98).item()
+    robust_min: float = var_ds.sig0.quantile(0.02).item()
+    robust_max: float = var_ds.sig0.quantile(0.98).item()
 
-    bin_edges = bin_edges_(robust_min, robust_max)
+    bin_edges = _bin_edges(robust_min, robust_max)
 
+    land_cover = LAND_COVER
     land_cover.update(
         {
             f"{int(value): 02} {color_mapping[value]['label']}": int(value)
             for value in present_landcover_codes
-        }
+        },
     )
-    time = var_ds.sig0["time"].values
+    time = var_ds.sig0["time"].values  # noqa: PD011
 
     load_image_partial = partial(load_image, var_ds=var_ds)
 
     dmap = (
         hv.DynamicMap(
-            load_image_partial, kdims=["Time", "Landcover"], streams=[rangexy]
+            load_image_partial,
+            kdims=["Time", "Landcover"],
+            streams=[RANGEXY],
         )
         .redim.values(Time=time, Landcover=land_cover)
         .hist(normed=True, bins=bin_edges)
@@ -217,10 +278,10 @@ def plot_variability_over_time(color_mapping, var_ds, present_landcover_codes):
 
     image_opts = image_opts_(var_ds)
 
-    return dmap.opts(image_opts, hist_opts)
+    return dmap.opts(image_opts, HIST_OPTS)
 
 
-def plot_slc_all(datasets):
+def plot_slc_all(datasets: list[DatasetHasIntensity]) -> None:
     """Plot multiple Single Look Complex (SLC) intensity datasets side by side.
 
     Parameters
@@ -237,18 +298,17 @@ def plot_slc_all(datasets):
     """
     fig, ax = plt.subplots(1, 3, figsize=(15, 7), sharey=True)
 
-    val_range = dict(vmin=0, vmax=255, cmap="gray")  # noqa C408
+    val_range: dict[str, int | str] = {"vmin": 0, "vmax": 255, "cmap": "gray"}
 
     for i, ds in enumerate(datasets):
-        im = ds.intensity.plot(ax=ax[i], add_colorbar=False, **val_range)
+        im = ds.intensity.plot(ax=ax[i], add_colorbar=False, **val_range)  # type: ignore[arg-type]
         ax[i].tick_params(axis="both", which="major")
 
-    cbar = fig.colorbar(im, ax=ax, orientation="horizontal", shrink=0.9, pad=0.2)  # noqa F841
-
+    fig.colorbar(im, ax=ax, orientation="horizontal", shrink=0.9, pad=0.2)
     plt.show()
 
 
-def plot_slc_iw2(iw2_ds):
+def plot_slc_iw2(iw2_ds: DatasetHasIntensityPhase) -> None:
     """Plot intensity and phase measurements for the IW2 subswath.
 
     Parameters
@@ -264,18 +324,18 @@ def plot_slc_iw2(iw2_ds):
         - Right: Phase (using `cmap_hls` colormap)
 
     """
-    fig, axes = plt.subplots(1, 2, figsize=(15, 6))  # noqa RUF059
+    _fig, axes = plt.subplots(1, 2, figsize=(15, 6))
 
-    iw2_ds.intensity.plot(ax=axes[0], cmap="gray", robust=True)
+    iw2_ds.intensity.plot(ax=axes[0], cmap="gray", robust=True)  # type: ignore[call-arg]
     axes[0].set_title("Intensity Measurement of IW2")
 
-    iw2_ds.phase.plot(ax=axes[1], cmap=cmap_hls)
+    iw2_ds.phase.plot(ax=axes[1], cmap=CMAP_HLS)  # type: ignore[call-arg]
     axes[1].set_title("Phase Measurement of IW2")
 
     plt.tight_layout()
 
 
-def plot_coregistering(coregistered_ds):
+def plot_coregistering(coregistered_ds: DatasetHasBandData) -> None:
     """Plot master and slave phase measurements from a coregistered dataset.
 
     Parameters
@@ -292,17 +352,17 @@ def plot_coregistering(coregistered_ds):
         - Right: Phase (using `cmap_hls` colormap)
 
     """
-    fig, axes = plt.subplots(1, 2, figsize=(18, 8))  # noqa RUF059
-    coregistered_ds.band_data.sel(band=1).plot(ax=axes[0], cmap="gray", robust=True)
+    _fig, axes = plt.subplots(1, 2, figsize=(18, 8))
+    coregistered_ds.band_data.sel(band=1).plot(ax=axes[0], cmap="gray", robust=True)  # type: ignore[call-arg]
     axes[0].set_title("Master Phase Measurement - 28 Jun 2019")
 
-    coregistered_ds.band_data.sel(band=2).plot(ax=axes[1], cmap="gray", robust=True)
+    coregistered_ds.band_data.sel(band=2).plot(ax=axes[1], cmap="gray", robust=True)  # type: ignore[call-arg]
     axes[1].set_title("Slave Phase Measurement - 10 Jul 2019")
 
     plt.tight_layout()
 
 
-def plot_interferogram(interferogram_ds):
+def plot_interferogram(interferogram_ds: DatasetHasBandData) -> hv.Layout:
     """Plot interferogram and coherence data side-by-side.
 
     Parameters
@@ -329,7 +389,7 @@ def plot_interferogram(interferogram_ds):
     igf_plot = igf_da.hvplot.image(
         x="x",
         y="y",
-        cmap=cmap_hls_hex,
+        cmap=CMAP_HLS_HEX,
         width=600,
         height=600,
         dynamic=False,
@@ -347,7 +407,10 @@ def plot_interferogram(interferogram_ds):
     return (igf_plot + coh_plot).opts(shared_axes=True)
 
 
-def plot_topographic_phase_removal(interferogram_ds, topo_ds):
+def plot_topographic_phase_removal(
+    interferogram_ds: DatasetHasBandData,
+    topo_ds: DatasetHasTopoPhase,
+) -> None:
     """Plot interferogram before and after topographic phase removal.
 
     Parameters
@@ -368,21 +431,21 @@ def plot_topographic_phase_removal(interferogram_ds, topo_ds):
     """
     igf_da = interferogram_ds.sel(band=1).band_data
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))  # noqa RUF059
+    _fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
-    igf_da.plot(ax=axes[0], cmap=cmap_hls)
+    igf_da.plot(ax=axes[0], cmap=CMAP_HLS)  # type: ignore[call-arg]
     axes[0].set_title("Interferogram With Topographic Phase")
 
-    topo_ds.topo.plot(ax=axes[1], cmap="gist_earth")
+    topo_ds.topo.plot(ax=axes[1], cmap="gist_earth")  # type: ignore[call-arg]
     axes[1].set_title("Topography")
 
-    topo_ds.Phase.plot(ax=axes[2], cmap=cmap_hls)
+    topo_ds.Phase.plot(ax=axes[2], cmap=CMAP_HLS)  # type: ignore[call-arg]
     axes[2].set_title("Interferogram Without Topographic Phase")
 
     plt.tight_layout()
 
 
-def plot_igf_coh(geocoded_ds, step):
+def plot_igf_coh(geocoded_ds: DatasetHasBandData, step: int) -> hv.Layout:
     """Plot downsampled interferogram and coherence data.
 
     Parameters
@@ -405,13 +468,23 @@ def plot_igf_coh(geocoded_ds, step):
     coh_da = geocoded_ds.sel(band=2).band_data
 
     igf_plot = igf_data.isel(x=slice(0, -1, step), y=slice(0, -1, step)).hvplot.image(
-        x="x", y="y", cmap=cmap_hls_hex, width=600, height=600, dynamic=False
+        x="x",
+        y="y",
+        cmap=CMAP_HLS_HEX,
+        width=600,
+        height=600,
+        dynamic=False,
     )
 
     coh_plot = (
         coh_da.isel(x=slice(0, -1, step), y=slice(0, -1, step))
         .hvplot.image(
-            x="x", y="y", cmap="viridis", width=600, height=600, dynamic=False
+            x="x",
+            y="y",
+            cmap="viridis",
+            width=600,
+            height=600,
+            dynamic=False,
         )
         .opts(clim=(0, 1))
     )
@@ -419,7 +492,7 @@ def plot_igf_coh(geocoded_ds, step):
     return (igf_plot + coh_plot).opts(shared_axes=True)
 
 
-def array_to_img(data_array, cmap):
+def array_to_img(data_array: DataArray, cmap: ListedColormap) -> str:
     """Convert a DataArray to a base64-encoded PNG image.
 
     Parameters
@@ -436,7 +509,7 @@ def array_to_img(data_array, cmap):
 
     """
     fig, ax = plt.subplots(figsize=(6, 6), dpi=600)
-    data_array.plot(ax=ax, cmap=cmap, add_colorbar=False, add_labels=False)
+    data_array.plot(ax=ax, cmap=cmap, add_colorbar=False, add_labels=False)  # type: ignore[call-arg]
     ax.set_axis_off()
     buf = BytesIO()
     plt.savefig(buf, format="png", bbox_inches="tight", pad_inches=0, transparent=True)
@@ -444,7 +517,7 @@ def array_to_img(data_array, cmap):
     return base64.b64encode(buf.getvalue()).decode("utf-8")
 
 
-def plot_earthquake(geocoded_ds, step):
+def plot_earthquake(geocoded_ds: DatasetHasBandData, step: int) -> folium.Map:
     """Create a Folium map with a downsampled interferogram overlay.
 
     Parameters
@@ -468,7 +541,7 @@ def plot_earthquake(geocoded_ds, step):
     igf_data = geocoded_ds.sel(band=1).band_data
     igf_data_subset = igf_data.isel(x=slice(0, -1, step), y=slice(0, -1, step))
 
-    igf_image = array_to_img(igf_data_subset, cmap=cmap_hls)
+    igf_image = array_to_img(igf_data_subset, cmap=CMAP_HLS)
     bounds = [
         [float(igf_data["y"].min()), float(igf_data["x"].min())],
         [float(igf_data["y"].max()), float(igf_data["x"].max())],
@@ -497,7 +570,7 @@ def plot_earthquake(geocoded_ds, step):
         overlay=True,
     ).add_to(m)
 
-    folium.raster_layers.ImageOverlay(
+    folium.raster_layers.ImageOverlay(  # type: ignore[unresolved-attribute]
         image=f"data:image/png;base64,{igf_image}",
         bounds=bounds,
         opacity=0.65,
