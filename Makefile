@@ -37,7 +37,6 @@ environment: $(CONDA_ENV_DIR)
 $(KERNEL_DIR): $(CONDA_ENV_DIR)
 	$(CONDA_ACTIVATE) $^
 	python -m ipykernel install --user --name microwave-remote-sensing --display-name microwave-remote-sensing
-	pre-commit install
 	conda deactivate
 
 kernel: $(KERNEL_DIR)
