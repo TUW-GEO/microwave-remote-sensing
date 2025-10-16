@@ -26,7 +26,7 @@ class SensorOptions(StrEnum):
 
 def get_intake_url(
     root: str = ROOT,
-    branch: str = "main",
+    branch: str = "tuwel",
     repo: str = REPO_RAW,
     *,
     verbose: bool = True,
