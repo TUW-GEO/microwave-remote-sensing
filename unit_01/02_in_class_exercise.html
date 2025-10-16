@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -122,6 +122,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 background: #006699;
       }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -338,7 +341,7 @@ window.Quarto = {
 \]</span> <span class="math display">\[
 [\text{dB}] \longleftrightarrow [\text{m}^2 \cdot \text{m}^{-2}]
 \]</span></p>
-<div id="1" class="cell">
+<div id="1" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> odc.stac</span>
@@ -357,7 +360,7 @@ window.Quarto = {
 <section id="search-for-some-data" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="search-for-some-data"><span class="header-section-number">2.2</span> Search for some Data</h2>
 <p>Now, we start by loading data from Sentinel-1 from the EODC STAC Catalogue. We do this in the same way as in the previous notebook “Discover and Read SAR Data”.</p>
-<div id="3" class="cell">
+<div id="3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>latmin, latmax <span class="op">=</span> <span class="dv">48</span>, <span class="fl">48.5</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>lonmin, lonmax <span class="op">=</span> <span class="dv">16</span>, <span class="dv">17</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bounds <span class="op">=</span> (lonmin, latmin, lonmax, latmax)</span>
@@ -376,81 +379,653 @@ window.Quarto = {
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(items), <span class="st">"scenes found"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>60 scenes found</code></pre>
 </div>
-<div id="4" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"VV"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc.stac.stac_load(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    items,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    bands<span class="op">=</span>bands,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounds,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    chunks<span class="op">=</span>{<span class="st">"time"</span>: <span class="dv">5</span>, <span class="st">"x"</span>: <span class="dv">1000</span>, <span class="st">"y"</span>: <span class="dv">1000</span>},</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>nodata <span class="op">=</span> items[<span class="dv">0</span>].assets[<span class="st">"VV"</span>].extra_fields[<span class="st">"raster:bands"</span>][<span class="dv">0</span>][<span class="st">"nodata"</span>]</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> items[<span class="dv">0</span>].assets[<span class="st">"VV"</span>].extra_fields[<span class="st">"raster:bands"</span>][<span class="dv">0</span>][<span class="st">"scale"</span>]</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> (sig0_dc.where(sig0_dc <span class="op">!=</span> nodata) <span class="op">/</span> scale).VV</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>sig0_dc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="4" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"VV"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc.stac.stac_load(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    items,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    bands<span class="op">=</span>bands,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounds,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    chunks<span class="op">=</span>{<span class="st">"time"</span>: <span class="dv">5</span>, <span class="st">"x"</span>: <span class="dv">1000</span>, <span class="st">"y"</span>: <span class="dv">1000</span>},</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>nodata <span class="op">=</span> items[<span class="dv">0</span>].assets[<span class="st">"VV"</span>].extra_fields[<span class="st">"raster:bands"</span>][<span class="dv">0</span>][<span class="st">"nodata"</span>]</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> items[<span class="dv">0</span>].assets[<span class="st">"VV"</span>].extra_fields[<span class="st">"raster:bands"</span>][<span class="dv">0</span>][<span class="st">"scale"</span>]</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> (sig0_dc.where(sig0_dc <span class="op">!=</span> nodata) <span class="op">/</span> scale).VV</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>sig0_dc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in notebooks */
+
+:root {
+  --xr-font-color0: var(
+    --jp-content-font-color0,
+    var(--pst-color-text-base rgba(0, 0, 0, 1))
+  );
+  --xr-font-color2: var(
+    --jp-content-font-color2,
+    var(--pst-color-text-base, rgba(0, 0, 0, 0.54))
+  );
+  --xr-font-color3: var(
+    --jp-content-font-color3,
+    var(--pst-color-text-base, rgba(0, 0, 0, 0.38))
+  );
+  --xr-border-color: var(
+    --jp-border-color2,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 10))
+  );
+  --xr-disabled-color: var(
+    --jp-layout-color3,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 40))
+  );
+  --xr-background-color: var(
+    --jp-layout-color0,
+    var(--pst-color-on-background, white)
+  );
+  --xr-background-color-row-even: var(
+    --jp-layout-color1,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 5))
+  );
+  --xr-background-color-row-odd: var(
+    --jp-layout-color2,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 15))
+  );
+}
+
+html[theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"],
+body.vscode-dark {
+  --xr-font-color0: var(
+    --jp-content-font-color0,
+    var(--pst-color-text-base, rgba(255, 255, 255, 1))
+  );
+  --xr-font-color2: var(
+    --jp-content-font-color2,
+    var(--pst-color-text-base, rgba(255, 255, 255, 0.54))
+  );
+  --xr-font-color3: var(
+    --jp-content-font-color3,
+    var(--pst-color-text-base, rgba(255, 255, 255, 0.38))
+  );
+  --xr-border-color: var(
+    --jp-border-color2,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 10))
+  );
+  --xr-disabled-color: var(
+    --jp-layout-color3,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 40))
+  );
+  --xr-background-color: var(
+    --jp-layout-color0,
+    var(--pst-color-on-background, #111111)
+  );
+  --xr-background-color-row-even: var(
+    --jp-layout-color1,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 5))
+  );
+  --xr-background-color-row-odd: var(
+    --jp-layout-color2,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 15))
+  );
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-obj-name,
+.xr-group-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-group-name::before {
+  content: "📁";
+  padding-right: 0.3em;
+}
+
+.xr-group-name,
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 0 20px 0 20px;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: inline-block;
+  opacity: 0;
+  height: 0;
+  margin: 0;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+  border: 2px solid transparent !important;
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:focus + label {
+  border: 2px solid var(--xr-font-color0) !important;
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: "►";
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: "▼";
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-group-box {
+  display: inline-grid;
+  grid-template-columns: 0px 20px auto;
+  width: 100%;
+}
+
+.xr-group-box-vline {
+  grid-column-start: 1;
+  border-right: 0.2em solid;
+  border-color: var(--xr-border-color);
+  width: 0px;
+}
+
+.xr-group-box-hline {
+  grid-column-start: 2;
+  grid-row-start: 1;
+  height: 1em;
+  width: 20px;
+  border-bottom: 0.2em solid;
+  border-color: var(--xr-border-color);
+}
+
+.xr-group-box-contents {
+  grid-column-start: 3;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: "(";
+}
+
+.xr-dim-list:after {
+  content: ")";
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ",";
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  border-color: var(--xr-background-color-row-odd);
+  margin-bottom: 0;
+  padding-top: 2px;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+  border-color: var(--xr-background-color-row-even);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  border-top: 2px dotted var(--xr-background-color);
+  padding-bottom: 20px !important;
+  padding-top: 10px !important;
+}
+
+.xr-var-attrs-in + label,
+.xr-var-data-in + label,
+.xr-index-data-in + label {
+  padding: 0 1px;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-data > pre,
+.xr-index-data > pre,
+.xr-var-data > table > tbody > tr {
+  background-color: transparent !important;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.xr-var-attrs-in:checked + label > .xr-icon-file-text2,
+.xr-var-data-in:checked + label > .xr-icon-database,
+.xr-index-data-in:checked + label > .xr-icon-database {
+  color: var(--xr-font-color0);
+  filter: drop-shadow(1px 1px 5px var(--xr-font-color2));
+  stroke-width: 0.8px;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'VV' (time: 60, y: 3150, x: 3978)&gt; Size: 3GB
+dask.array&lt;truediv, shape=(60, 3150, 3978), dtype=float32, chunksize=(5, 1000, 1000), chunktype=numpy.ndarray&gt;
+Coordinates:
+  * time         (time) datetime64[ns] 480B 2022-07-02T05:18:03 ... 2022-07-3...
+  * y            (y) float64 25kB 1.653e+06 1.653e+06 ... 1.59e+06 1.59e+06
+  * x            (x) float64 32kB 5.241e+06 5.241e+06 ... 5.32e+06 5.32e+06
+    spatial_ref  int32 4B 27704</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-obj-name">'VV'</div><ul class="xr-dim-list"><li><span class="xr-has-index">time</span>: 60</li><li><span class="xr-has-index">y</span>: 3150</li><li><span class="xr-has-index">x</span>: 3978</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-7b2e4178-d241-43d7-b95a-856506644bc4" class="xr-array-in" type="checkbox" checked=""><label for="section-7b2e4178-d241-43d7-b95a-856506644bc4" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>dask.array&lt;chunksize=(5, 1000, 1000), meta=np.ndarray&gt;</span></div><div class="xr-array-data">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<td></td>
+<th data-quarto-table-cell-role="th">Array</th>
+<th data-quarto-table-cell-role="th">Chunk</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Bytes</th>
+<td>2.80 GiB</td>
+<td>19.07 MiB</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Shape</th>
+<td>(60, 3150, 3978)</td>
+<td>(5, 1000, 1000)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Dask graph</th>
+<td colspan="2">192 chunks in 7 graph layers</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Data type</th>
+<td colspan="2">float32 numpy.ndarray</td>
+</tr>
+</tbody>
+</table></td>
+<td><svg width="196" height="161" style="stroke:rgb(0,0,0);stroke-width:1">
+<!-- Horizontal lines --> <line x1="10" y1="0" x2="26" y2="16" style="stroke-width:2"></line> <line x1="10" y1="30" x2="26" y2="46"></line> <line x1="10" y1="60" x2="26" y2="76"></line> <line x1="10" y1="90" x2="26" y2="106"></line> <line x1="10" y1="95" x2="26" y2="111" style="stroke-width:2"></line> <!-- Vertical lines --> <line x1="10" y1="0" x2="10" y2="95" style="stroke-width:2"></line> <line x1="11" y1="1" x2="11" y2="96"></line> <line x1="12" y1="2" x2="12" y2="97"></line> <line x1="14" y1="4" x2="14" y2="99"></line> <line x1="15" y1="5" x2="15" y2="100"></line> <line x1="16" y1="6" x2="16" y2="101"></line> <line x1="18" y1="8" x2="18" y2="103"></line> <line x1="19" y1="9" x2="19" y2="104"></line> <line x1="20" y1="10" x2="20" y2="105"></line> <line x1="22" y1="12" x2="22" y2="107"></line> <line x1="23" y1="13" x2="23" y2="108"></line> <line x1="24" y1="14" x2="24" y2="109"></line> <line x1="26" y1="16" x2="26" y2="111" style="stroke-width:2"></line> <!-- Colored Rectangle --> <polygon points="10.0,0.0 26.169034614390597,16.169034614390597 26.169034614390597,111.19165904877975 10.0,95.02262443438916" style="fill:#ECB172A0;stroke-width:0"></polygon> <!-- Horizontal lines --> <line x1="10" y1="0" x2="130" y2="0" style="stroke-width:2"></line> <line x1="11" y1="1" x2="131" y2="1"></line> <line x1="12" y1="2" x2="132" y2="2"></line> <line x1="14" y1="4" x2="134" y2="4"></line> <line x1="15" y1="5" x2="135" y2="5"></line> <line x1="16" y1="6" x2="136" y2="6"></line> <line x1="18" y1="8" x2="138" y2="8"></line> <line x1="19" y1="9" x2="139" y2="9"></line> <line x1="20" y1="10" x2="140" y2="10"></line> <line x1="22" y1="12" x2="142" y2="12"></line> <line x1="23" y1="13" x2="143" y2="13"></line> <line x1="24" y1="14" x2="144" y2="14"></line> <line x1="26" y1="16" x2="146" y2="16" style="stroke-width:2"></line> <!-- Vertical lines --> <line x1="10" y1="0" x2="26" y2="16" style="stroke-width:2"></line> <line x1="40" y1="0" x2="56" y2="16"></line> <line x1="70" y1="0" x2="86" y2="16"></line> <line x1="100" y1="0" x2="116" y2="16"></line> <line x1="130" y1="0" x2="146" y2="16" style="stroke-width:2"></line> <!-- Colored Rectangle --> <polygon points="10.0,0.0 130.0,0.0 146.1690346143906,16.169034614390597 26.169034614390597,16.169034614390597" style="fill:#ECB172A0;stroke-width:0"></polygon> <!-- Horizontal lines --> <line x1="26" y1="16" x2="146" y2="16" style="stroke-width:2"></line> <line x1="26" y1="46" x2="146" y2="46"></line> <line x1="26" y1="76" x2="146" y2="76"></line> <line x1="26" y1="106" x2="146" y2="106"></line> <line x1="26" y1="111" x2="146" y2="111" style="stroke-width:2"></line> <!-- Vertical lines --> <line x1="26" y1="16" x2="26" y2="111" style="stroke-width:2"></line> <line x1="56" y1="16" x2="56" y2="111"></line> <line x1="86" y1="16" x2="86" y2="111"></line> <line x1="116" y1="16" x2="116" y2="111"></line> <line x1="146" y1="16" x2="146" y2="111" style="stroke-width:2"></line> <!-- Colored Rectangle --> <polygon points="26.169034614390597,16.169034614390597 146.1690346143906,16.169034614390597 146.1690346143906,111.19165904877975 26.169034614390597,111.19165904877975" style="fill:#ECB172A0;stroke-width:0"></polygon> <!-- Text --> <text x="86.169035" y="131.191659" font-size="1.0rem" font-weight="100" text-anchor="middle">3978</text> <text x="166.169035" y="63.680347" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(-90,166.169035,63.680347)">3150</text> <text x="8.084517" y="123.107142" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(45,8.084517,123.107142)">60</text>
+</svg></td>
+</tr>
+</tbody>
+</table>
+</div></div></li><li class="xr-section-item"><input id="section-dab21810-a3ed-41e3-a2f9-475bba840d4f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-dab21810-a3ed-41e3-a2f9-475bba840d4f" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">time</span></div><div class="xr-var-dims">(time)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2022-07-02T05:18:03 ... 2022-07-...</div><input id="attrs-3624ecd9-5833-415a-a21b-78f4c77fa339" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3624ecd9-5833-415a-a21b-78f4c77fa339" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e7b40fd4-3636-4776-8ad1-77f61249a890" class="xr-var-data-in" type="checkbox"><label for="data-e7b40fd4-3636-4776-8ad1-77f61249a890" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2022-07-02T05:18:03.000000000', '2022-07-02T05:18:28.000000000',
+       '2022-07-02T05:18:53.000000000', '2022-07-04T05:01:44.000000000',
+       '2022-07-04T05:02:09.000000000', '2022-07-04T05:02:34.000000000',
+       '2022-07-05T16:50:50.000000000', '2022-07-05T16:51:15.000000000',
+       '2022-07-05T16:51:40.000000000', '2022-07-07T16:34:45.000000000',
+       '2022-07-07T16:35:10.000000000', '2022-07-07T16:35:35.000000000',
+       '2022-07-09T05:09:52.000000000', '2022-07-09T05:10:17.000000000',
+       '2022-07-09T05:10:42.000000000', '2022-07-10T16:59:00.000000000',
+       '2022-07-10T16:59:25.000000000', '2022-07-10T16:59:50.000000000',
+       '2022-07-11T04:53:33.000000000', '2022-07-11T04:53:58.000000000',
+       '2022-07-11T04:54:23.000000000', '2022-07-12T16:42:47.000000000',
+       '2022-07-12T16:43:12.000000000', '2022-07-12T16:43:37.000000000',
+       '2022-07-14T05:18:03.000000000', '2022-07-14T05:18:28.000000000',
+       '2022-07-14T05:18:53.000000000', '2022-07-16T05:01:45.000000000',
+       '2022-07-16T05:02:10.000000000', '2022-07-16T05:02:35.000000000',
+       '2022-07-17T16:50:51.000000000', '2022-07-17T16:51:16.000000000',
+       '2022-07-17T16:51:41.000000000', '2022-07-19T16:34:46.000000000',
+       '2022-07-19T16:35:11.000000000', '2022-07-19T16:35:36.000000000',
+       '2022-07-21T05:09:52.000000000', '2022-07-21T05:10:17.000000000',
+       '2022-07-21T05:10:42.000000000', '2022-07-22T16:59:01.000000000',
+       '2022-07-22T16:59:26.000000000', '2022-07-22T16:59:51.000000000',
+       '2022-07-23T04:53:34.000000000', '2022-07-23T04:53:59.000000000',
+       '2022-07-23T04:54:24.000000000', '2022-07-24T16:42:48.000000000',
+       '2022-07-24T16:43:13.000000000', '2022-07-24T16:43:38.000000000',
+       '2022-07-26T05:18:04.000000000', '2022-07-26T05:18:29.000000000',
+       '2022-07-26T05:18:54.000000000', '2022-07-28T05:01:45.000000000',
+       '2022-07-28T05:02:10.000000000', '2022-07-28T05:02:35.000000000',
+       '2022-07-29T16:50:51.000000000', '2022-07-29T16:51:16.000000000',
+       '2022-07-29T16:51:41.000000000', '2022-07-31T16:34:46.000000000',
+       '2022-07-31T16:35:11.000000000', '2022-07-31T16:35:36.000000000'],
+      dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.653e+06 1.653e+06 ... 1.59e+06</div><input id="attrs-8c380ac3-9e2f-492b-b0ab-c1bb02e672f6" class="xr-var-attrs-in" type="checkbox"><label for="attrs-8c380ac3-9e2f-492b-b0ab-c1bb02e672f6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-93e32086-892a-4c41-b83b-5e80054af02e" class="xr-var-data-in" type="checkbox"><label for="data-93e32086-892a-4c41-b83b-5e80054af02e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>-20.0</dd><dt><span>crs :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]]]</dd></dl></div><div class="xr-var-data"><pre>array([1653150., 1653130., 1653110., ..., 1590210., 1590190., 1590170.],
+      shape=(3150,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">5.241e+06 5.241e+06 ... 5.32e+06</div><input id="attrs-f9f7389c-de24-4a66-a03c-1c4b599a575f" class="xr-var-attrs-in" type="checkbox"><label for="attrs-f9f7389c-de24-4a66-a03c-1c4b599a575f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e1c5b465-502d-4faa-a154-4663773a1511" class="xr-var-data-in" type="checkbox"><label for="data-e1c5b465-502d-4faa-a154-4663773a1511" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>20.0</dd><dt><span>crs :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]]]</dd></dl></div><div class="xr-var-data"><pre>array([5240690., 5240710., 5240730., ..., 5320190., 5320210., 5320230.],
+      shape=(3978,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int32</div><div class="xr-var-preview xr-preview">27704</div><input id="attrs-107d9aee-8cd0-4acc-b1f4-d2b5c9da211c" class="xr-var-attrs-in" type="checkbox"><label for="attrs-107d9aee-8cd0-4acc-b1f4-d2b5c9da211c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-050c546d-4eb1-45f3-b4cb-2f1216c37e3a" class="xr-var-data-in" type="checkbox"><label for="data-050c546d-4eb1-45f3-b4cb-2f1216c37e3a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>spatial_ref :</span></dt><dd>PROJCRS["Azimuthal_Equidistant",BASEGEOGCRS["WGS 84",DATUM["World Geodetic System 1984",ELLIPSOID["WGS 84",6378137,298.257223563,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4326]],CONVERSION["unnamed",METHOD["Azimuthal Equidistant",ID["EPSG",1125]],PARAMETER["Latitude of natural origin",53,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",24,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["False easting",5837287.81977,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",2121415.69617,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]</dd><dt><span>crs_wkt :</span></dt><dd>PROJCRS["Azimuthal_Equidistant",BASEGEOGCRS["WGS 84",DATUM["World Geodetic System 1984",ELLIPSOID["WGS 84",6378137,298.257223563,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4326]],CONVERSION["unnamed",METHOD["Azimuthal Equidistant",ID["EPSG",1125]],PARAMETER["Latitude of natural origin",53,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",24,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["False easting",5837287.81977,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",2121415.69617,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>projected_crs_name :</span></dt><dd>Azimuthal_Equidistant</dd><dt><span>grid_mapping_name :</span></dt><dd>azimuthal_equidistant</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>53.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>24.0</dd><dt><span>false_easting :</span></dt><dd>5837287.81977</dd><dt><span>false_northing :</span></dt><dd>2121415.69617</dd><dt><span>GeoTransform :</span></dt><dd>5240680 20 0 1653160 0 -20</dd></dl></div><div class="xr-var-data"><pre>array(27704, dtype=int32)</pre></div></li></ul></div></li></ul></div></div>
+</div>
 </div>
 </section>
 <section id="comparison-of-the-data-in-db-and-linear-scale" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="comparison-of-the-data-in-db-and-linear-scale"><span class="header-section-number">2.3</span> Comparison of the Data in dB and Linear Scale</h2>
 <p>In the next two cells we will select a subset of the data. This is done to reduce the amount of data we are working with. The precise workflow is not important for now, since the theory is explained after the cells. They are just here to show the data we are working with.</p>
-<div id="6" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> sig0_dc.sel(time<span class="op">=</span><span class="bu">slice</span>(<span class="st">"2022-07-01"</span>, <span class="st">"2022-07-07"</span>))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> subset.dropna(<span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> sig0_dc.sel(time<span class="op">=</span><span class="bu">slice</span>(<span class="st">"2022-07-01"</span>, <span class="st">"2022-07-07"</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> subset.dropna(<span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now plot the data.</p>
-<div id="8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;jupyter&quot;,&quot;value&quot;:{&quot;source_hidden&quot;:true}}">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> subset.isel(time<span class="op">=</span><span class="dv">0</span>, x<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">500</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">500</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>aoi_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (aoi <span class="op">/</span> <span class="dv">10</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">8</span>))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># upper left</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ax_ul <span class="op">=</span> ax[<span class="dv">0</span>, <span class="dv">0</span>]</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>aoi.plot.imshow(robust<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax_ul, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ax_ul.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ax_ul.axes.set_aspect(<span class="st">"equal"</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># upper middle</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>ax_um <span class="op">=</span> ax[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>aoi.plot.imshow(robust<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax_um, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>ax_um.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">not robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>ax_um.axes.set_aspect(<span class="st">"equal"</span>)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># upper right</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>ax_ur <span class="op">=</span> ax[<span class="dv">0</span>, <span class="dv">2</span>]</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>aoi.plot.hist(bins<span class="op">=</span><span class="dv">50</span>, ax<span class="op">=</span>ax_ur, edgecolor<span class="op">=</span><span class="st">"black"</span>)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ax_ur.set_xlabel(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs">"</span>)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>ax_ur.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs"> distribution"</span>)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>ax_ur.set_ylabel(<span class="st">"n (number of pixels)"</span>)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co"># lower left</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>ax_ll <span class="op">=</span> ax[<span class="dv">1</span>, <span class="dv">0</span>]</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>aoi_lin.plot.imshow(robust<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax_ll, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>ax_ll.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>ax_ll.axes.set_aspect(<span class="st">"equal"</span>)</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># lower middle</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>ax_lm <span class="op">=</span> ax[<span class="dv">1</span>, <span class="dv">1</span>]</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>aoi_lin.plot.imshow(robust<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax_lm, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>ax_lm.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">not robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>ax_lm.axes.set_aspect(<span class="st">"equal"</span>)</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co"># lower right</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>ax_lr <span class="op">=</span> ax[<span class="dv">1</span>, <span class="dv">2</span>]</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>aoi_lin.plot.hist(bins<span class="op">=</span><span class="dv">50</span>, ax<span class="op">=</span>ax_lr, edgecolor<span class="op">=</span><span class="st">"black"</span>)</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>ax_lr.set_xlabel(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs">"</span>)</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>ax_lr.set_ylabel(<span class="st">"n (number of pixels)"</span>)</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>ax_lr.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs"> distribution"</span>)</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> (</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"Sentinel-1 backscatter </span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> comparison"</span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r" in linear and logarithmic domain"</span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>fig.suptitle(title, horizontalalignment<span class="op">=</span><span class="st">"center"</span>)</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;jupyter&quot;,&quot;value&quot;:{&quot;source_hidden&quot;:true}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> subset.isel(time<span class="op">=</span><span class="dv">0</span>, x<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">500</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">500</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>aoi_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (aoi <span class="op">/</span> <span class="dv">10</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">8</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># upper left</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>ax_ul <span class="op">=</span> ax[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>aoi.plot.imshow(robust<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax_ul, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ax_ul.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>ax_ul.axes.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># upper middle</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>ax_um <span class="op">=</span> ax[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>aoi.plot.imshow(robust<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax_um, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>ax_um.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">not robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>ax_um.axes.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># upper right</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>ax_ur <span class="op">=</span> ax[<span class="dv">0</span>, <span class="dv">2</span>]</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>aoi.plot.hist(bins<span class="op">=</span><span class="dv">50</span>, ax<span class="op">=</span>ax_ur, edgecolor<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>ax_ur.set_xlabel(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs">"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>ax_ur.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$dB$]</span><span class="vs"> distribution"</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>ax_ur.set_ylabel(<span class="st">"n (number of pixels)"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># lower left</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>ax_ll <span class="op">=</span> ax[<span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>aoi_lin.plot.imshow(robust<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax_ll, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>ax_ll.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>ax_ll.axes.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># lower middle</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>ax_lm <span class="op">=</span> ax[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>aoi_lin.plot.imshow(robust<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax_lm, cmap<span class="op">=</span><span class="st">"Greys_r"</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>ax_lm.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs"> </span><span class="kw">(</span><span class="vs">not robust plot</span><span class="kw">)</span><span class="vs">"</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>ax_lm.axes.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co"># lower right</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>ax_lr <span class="op">=</span> ax[<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>aoi_lin.plot.hist(bins<span class="op">=</span><span class="dv">50</span>, ax<span class="op">=</span>ax_lr, edgecolor<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>ax_lr.set_xlabel(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs">"</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>ax_lr.set_ylabel(<span class="st">"n (number of pixels)"</span>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>ax_lr.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$m^2 </span><span class="er">\</span><span class="pp">cdot m^{-2}$]</span><span class="vs"> distribution"</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> (</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"Sentinel-1 backscatter </span><span class="dv">$\s</span><span class="vs">igma</span><span class="dv">^</span><span class="vs">0</span><span class="dv">$</span><span class="vs"> comparison"</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r" in linear and logarithmic domain"</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>fig.suptitle(title, horizontalalignment<span class="op">=</span><span class="st">"center"</span>)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_in_class_exercise_files/figure-html/cell-6-output-1.png" width="1333" height="754" class="figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <p><em>Figure 1: Visually comparing <span class="math inline">\(\sigma^0\)</span> on a logarithmic and linear scale (left column). In addition, the benefit of using the robust plotting method is shown (middle column). The robust argument uses the 2<sup>nd</sup> and 98<sup>th</sup> percentiles of the data to compute the color limits to eliminate washing out the plot due to data outliers.</em></p>
 <p>In the plot above you can see the difference between the two scales. The values in dB are more evenly distributed and are therefore easier to plot. The values in linear scale are more spread out and are therefore harder to interpret. This is why we use the dB scale for plotting/visualization.</p>
@@ -465,50 +1040,61 @@ D =  10  \cdot \log_{10} (I) = 10 \cdot \log_{10} (e) \cdot \ln (I)\longrightarr
 I = e^{\frac{D}{10\cdot \log_{10}(e)}} = 10^{\frac{D}{10}} \longrightarrow [m^2m^{-2}]
 \]</span> You can find these formulas in the script for <code>Microwave Remote Sensing</code> on <code>page 136 (equation 6.40)</code>.</p>
 <p>Now let’s implement the conversion in Python.</p>
-<div id="10" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lin2db(val: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converts value from linear to dB units.</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    :param val: Value in linear units.</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :type val: float|int</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Value in dB.</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :rtype: float</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">*</span> np.log10(val)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> db2lin(val: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converts value from dB to linear units.</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">    :param val: Value in dB.</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    :type val: float|int</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Value in linear units.</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">    :rtype: float</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">**</span> (val <span class="op">/</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="10" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lin2db(val: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converts value from linear to dB units.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">    :param val: Value in linear units.</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :type val: float|int</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Value in dB.</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :rtype: float</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">*</span> np.log10(val)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> db2lin(val: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converts value from dB to linear units.</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">    :param val: Value in dB.</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">    :type val: float|int</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Value in linear units.</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">    :rtype: float</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">**</span> (val <span class="op">/</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>When performing mathematical operations with SAR data it is important to be aware, that adding values in the logarithmic scale doesn’t work in the same way as adding regular (linear) values. This is because in the logarithmic scale, each unit step represents an equal multiplication. This means that an addition of two values in the logarithmic scale equals a multiplication of the values in the linear scale. Vice versa, a subtraction in a logarithmic scale equals a division in a linear scale. Let’s have a look at an example, where we add two values, once without the conversion to linear scale and once with the conversion to linear scale.</p>
-<div id="12" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logarithmic addition</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Values in linear and decibel units</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>val1_db, val2_db <span class="op">=</span> <span class="dv">10</span>, <span class="dv">12</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Logarithmic addition</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sum_db <span class="op">=</span> val1_db <span class="op">+</span> val2_db</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Logarithmic Addition:"</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Logarithmic values: </span><span class="ch">\t</span><span class="sc">{</span>val1_db<span class="sc">: &lt;5}</span><span class="ss">, </span><span class="sc">{</span>val2_db<span class="sc">: &lt;5}</span><span class="ss"> [dB]"</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Logarithmic sum: </span><span class="ch">\t</span><span class="sc">{</span>val1_db<span class="sc">}</span><span class="ss"> + </span><span class="sc">{</span>val2_db<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>sum_db<span class="sc">: &lt;5}</span><span class="ss"> [dB]"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear addition</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>val1_lin, val2_lin <span class="op">=</span> db2lin(val1_db), db2lin(val2_db)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>sum_lin <span class="op">=</span> val1_lin <span class="op">+</span> val2_lin</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Linear Addition:"</span>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"""Linear values: </span><span class="ch">\t\t</span><span class="sc">{</span>val1_lin<span class="sc">: &lt;5}</span><span class="ss">, </span><span class="sc">{</span>val2_lin<span class="sc">: &lt;5.2f}</span><span class="ss"> [lin]</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">\t\t\t</span><span class="ss">(converted from dB)"""</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Linear sum: </span><span class="ch">\t\t</span><span class="sc">{</span>val1_lin<span class="sc">}</span><span class="ss"> + </span><span class="sc">{</span>val2_lin<span class="sc">: .2f}</span><span class="ss"> = </span><span class="sc">{</span>sum_lin<span class="sc">: .2f}</span><span class="ss"> [lin]"</span>)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\t\t\t</span><span class="ss">= </span><span class="sc">{</span>lin2db(sum_lin)<span class="sc">: .2f}</span><span class="ss"> [dB]"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="12" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logarithmic addition</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Values in linear and decibel units</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>val1_db, val2_db <span class="op">=</span> <span class="dv">10</span>, <span class="dv">12</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Logarithmic addition</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sum_db <span class="op">=</span> val1_db <span class="op">+</span> val2_db</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Logarithmic Addition:"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Logarithmic values: </span><span class="ch">\t</span><span class="sc">{</span>val1_db<span class="sc">: &lt;5}</span><span class="ss">, </span><span class="sc">{</span>val2_db<span class="sc">: &lt;5}</span><span class="ss"> [dB]"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Logarithmic sum: </span><span class="ch">\t</span><span class="sc">{</span>val1_db<span class="sc">}</span><span class="ss"> + </span><span class="sc">{</span>val2_db<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>sum_db<span class="sc">: &lt;5}</span><span class="ss"> [dB]"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear addition</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>val1_lin, val2_lin <span class="op">=</span> db2lin(val1_db), db2lin(val2_db)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>sum_lin <span class="op">=</span> val1_lin <span class="op">+</span> val2_lin</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Linear Addition:"</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"""Linear values: </span><span class="ch">\t\t</span><span class="sc">{</span>val1_lin<span class="sc">: &lt;5}</span><span class="ss">, </span><span class="sc">{</span>val2_lin<span class="sc">: &lt;5.2f}</span><span class="ss"> [lin]</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">\t\t\t</span><span class="ss">(converted from dB)"""</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Linear sum: </span><span class="ch">\t\t</span><span class="sc">{</span>val1_lin<span class="sc">}</span><span class="ss"> + </span><span class="sc">{</span>val2_lin<span class="sc">: .2f}</span><span class="ss"> = </span><span class="sc">{</span>sum_lin<span class="sc">: .2f}</span><span class="ss"> [lin]"</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\t\t\t</span><span class="ss">= </span><span class="sc">{</span>lin2db(sum_lin)<span class="sc">: .2f}</span><span class="ss"> [dB]"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Logarithmic Addition:
+Logarithmic values:     10   , 12    [dB]
+Logarithmic sum:    10 + 12 = 22    [dB]
+
+Linear Addition:
+Linear values:      10.0 , 15.85 [lin]
+                (converted from dB)
+Linear sum:         10.0 +  15.85 =  25.85 [lin]
+            =  14.12 [dB]</code></pre>
+</div>
 </div>
 <p>As you can see, the values in dB and in linear scale differ quite a bit. In the example above, the values differ by a factor of around 6 when looked at in linear scale.</p>
 <p>Now that we have some data, we will have a look at some practical examples where we will convert the data to linear scale. When we try to calculate the average <span class="math inline">\(\sigma^0\)</span> value across the scene, we need to do this by converting the data to linear scale first and then calculating the average and converting it back to dB.</p>
@@ -516,42 +1102,580 @@ I = e^{\frac{D}{10\cdot \log_{10}(e)}} = 10^{\frac{D}{10}} \longrightarrow [m^2m
 <section id="creating-a-monthly-mosaic" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="creating-a-monthly-mosaic"><span class="header-section-number">2.5</span> Creating a Monthly Mosaic</h2>
 <p>So in the beginning we have lazily loaded data for an area across a whole year. We therefore have around 700 images. We will now essentially compress the data of each month into one timestamp. This is done by using the <code>resampling</code> method together with an operation method like <code>mean</code> that includes summation. Since the data is in dB we need to convert it to linear scale first, then we can resample the data and convert it back to dB.</p>
-<div id="14" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to linear scale and calculate monthly means</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversion by calculating with the xarray Object</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sig0_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (sig0_dc <span class="op">/</span> <span class="dv">10</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample to monthly means. Time accepts intervals identical to the pandas</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># resample function. 'D' for days, 'W' for weeks, 'ME' for months.</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>sig0_lin_monthly <span class="op">=</span> sig0_lin.resample(time<span class="op">=</span><span class="st">"1ME"</span>).mean()</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert back to dB scale</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversion by applying a function</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>sig0_monthly <span class="op">=</span> lin2db(sig0_lin_monthly)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>sig0_monthly</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="14" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to linear scale and calculate monthly means</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversion by calculating with the xarray Object</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sig0_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (sig0_dc <span class="op">/</span> <span class="dv">10</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample to monthly means. Time accepts intervals identical to the pandas</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># resample function. 'D' for days, 'W' for weeks, 'ME' for months.</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>sig0_lin_monthly <span class="op">=</span> sig0_lin.resample(time<span class="op">=</span><span class="st">"1ME"</span>).mean()</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert back to dB scale</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversion by applying a function</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>sig0_monthly <span class="op">=</span> lin2db(sig0_lin_monthly)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>sig0_monthly</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in notebooks */
+
+:root {
+  --xr-font-color0: var(
+    --jp-content-font-color0,
+    var(--pst-color-text-base rgba(0, 0, 0, 1))
+  );
+  --xr-font-color2: var(
+    --jp-content-font-color2,
+    var(--pst-color-text-base, rgba(0, 0, 0, 0.54))
+  );
+  --xr-font-color3: var(
+    --jp-content-font-color3,
+    var(--pst-color-text-base, rgba(0, 0, 0, 0.38))
+  );
+  --xr-border-color: var(
+    --jp-border-color2,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 10))
+  );
+  --xr-disabled-color: var(
+    --jp-layout-color3,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 40))
+  );
+  --xr-background-color: var(
+    --jp-layout-color0,
+    var(--pst-color-on-background, white)
+  );
+  --xr-background-color-row-even: var(
+    --jp-layout-color1,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 5))
+  );
+  --xr-background-color-row-odd: var(
+    --jp-layout-color2,
+    hsl(from var(--pst-color-on-background, white) h s calc(l - 15))
+  );
+}
+
+html[theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"],
+body.vscode-dark {
+  --xr-font-color0: var(
+    --jp-content-font-color0,
+    var(--pst-color-text-base, rgba(255, 255, 255, 1))
+  );
+  --xr-font-color2: var(
+    --jp-content-font-color2,
+    var(--pst-color-text-base, rgba(255, 255, 255, 0.54))
+  );
+  --xr-font-color3: var(
+    --jp-content-font-color3,
+    var(--pst-color-text-base, rgba(255, 255, 255, 0.38))
+  );
+  --xr-border-color: var(
+    --jp-border-color2,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 10))
+  );
+  --xr-disabled-color: var(
+    --jp-layout-color3,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 40))
+  );
+  --xr-background-color: var(
+    --jp-layout-color0,
+    var(--pst-color-on-background, #111111)
+  );
+  --xr-background-color-row-even: var(
+    --jp-layout-color1,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 5))
+  );
+  --xr-background-color-row-odd: var(
+    --jp-layout-color2,
+    hsl(from var(--pst-color-on-background, #111111) h s calc(l + 15))
+  );
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-obj-name,
+.xr-group-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-group-name::before {
+  content: "📁";
+  padding-right: 0.3em;
+}
+
+.xr-group-name,
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 0 20px 0 20px;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: inline-block;
+  opacity: 0;
+  height: 0;
+  margin: 0;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+  border: 2px solid transparent !important;
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:focus + label {
+  border: 2px solid var(--xr-font-color0) !important;
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: "►";
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: "▼";
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-group-box {
+  display: inline-grid;
+  grid-template-columns: 0px 20px auto;
+  width: 100%;
+}
+
+.xr-group-box-vline {
+  grid-column-start: 1;
+  border-right: 0.2em solid;
+  border-color: var(--xr-border-color);
+  width: 0px;
+}
+
+.xr-group-box-hline {
+  grid-column-start: 2;
+  grid-row-start: 1;
+  height: 1em;
+  width: 20px;
+  border-bottom: 0.2em solid;
+  border-color: var(--xr-border-color);
+}
+
+.xr-group-box-contents {
+  grid-column-start: 3;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: "(";
+}
+
+.xr-dim-list:after {
+  content: ")";
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ",";
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  border-color: var(--xr-background-color-row-odd);
+  margin-bottom: 0;
+  padding-top: 2px;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+  border-color: var(--xr-background-color-row-even);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  border-top: 2px dotted var(--xr-background-color);
+  padding-bottom: 20px !important;
+  padding-top: 10px !important;
+}
+
+.xr-var-attrs-in + label,
+.xr-var-data-in + label,
+.xr-index-data-in + label {
+  padding: 0 1px;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-data > pre,
+.xr-index-data > pre,
+.xr-var-data > table > tbody > tr {
+  background-color: transparent !important;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.xr-var-attrs-in:checked + label > .xr-icon-file-text2,
+.xr-var-data-in:checked + label > .xr-icon-database,
+.xr-index-data-in:checked + label > .xr-icon-database {
+  color: var(--xr-font-color0);
+  filter: drop-shadow(1px 1px 5px var(--xr-font-color2));
+  stroke-width: 0.8px;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'VV' (time: 1, y: 3150, x: 3978)&gt; Size: 50MB
+dask.array&lt;mul, shape=(1, 3150, 3978), dtype=float32, chunksize=(1, 1000, 1000), chunktype=numpy.ndarray&gt;
+Coordinates:
+  * time         (time) datetime64[ns] 8B 2022-07-31
+  * y            (y) float64 25kB 1.653e+06 1.653e+06 ... 1.59e+06 1.59e+06
+  * x            (x) float64 32kB 5.241e+06 5.241e+06 ... 5.32e+06 5.32e+06
+    spatial_ref  int32 4B 27704</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-obj-name">'VV'</div><ul class="xr-dim-list"><li><span class="xr-has-index">time</span>: 1</li><li><span class="xr-has-index">y</span>: 3150</li><li><span class="xr-has-index">x</span>: 3978</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-2054d739-ecf0-42ca-967e-f896b8feeb0f" class="xr-array-in" type="checkbox" checked=""><label for="section-2054d739-ecf0-42ca-967e-f896b8feeb0f" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>dask.array&lt;chunksize=(1, 1000, 1000), meta=np.ndarray&gt;</span></div><div class="xr-array-data">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<td></td>
+<th data-quarto-table-cell-role="th">Array</th>
+<th data-quarto-table-cell-role="th">Chunk</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Bytes</th>
+<td>47.80 MiB</td>
+<td>3.81 MiB</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Shape</th>
+<td>(1, 3150, 3978)</td>
+<td>(1, 1000, 1000)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Dask graph</th>
+<td colspan="2">16 chunks in 15 graph layers</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Data type</th>
+<td colspan="2">float32 numpy.ndarray</td>
+</tr>
+</tbody>
+</table></td>
+<td><svg width="194" height="159" style="stroke:rgb(0,0,0);stroke-width:1">
+<!-- Horizontal lines --> <line x1="10" y1="0" x2="24" y2="14" style="stroke-width:2"></line> <line x1="10" y1="30" x2="24" y2="45"></line> <line x1="10" y1="60" x2="24" y2="75"></line> <line x1="10" y1="90" x2="24" y2="105"></line> <line x1="10" y1="95" x2="24" y2="109" style="stroke-width:2"></line> <!-- Vertical lines --> <line x1="10" y1="0" x2="10" y2="95" style="stroke-width:2"></line> <line x1="24" y1="14" x2="24" y2="109" style="stroke-width:2"></line> <!-- Colored Rectangle --> <polygon points="10.0,0.0 24.9485979497544,14.948597949754403 24.9485979497544,109.97122238414356 10.0,95.02262443438916" style="fill:#ECB172A0;stroke-width:0"></polygon> <!-- Horizontal lines --> <line x1="10" y1="0" x2="130" y2="0" style="stroke-width:2"></line> <line x1="24" y1="14" x2="144" y2="14" style="stroke-width:2"></line> <!-- Vertical lines --> <line x1="10" y1="0" x2="24" y2="14" style="stroke-width:2"></line> <line x1="40" y1="0" x2="55" y2="14"></line> <line x1="70" y1="0" x2="85" y2="14"></line> <line x1="100" y1="0" x2="115" y2="14"></line> <line x1="130" y1="0" x2="144" y2="14" style="stroke-width:2"></line> <!-- Colored Rectangle --> <polygon points="10.0,0.0 130.0,0.0 144.9485979497544,14.948597949754403 24.9485979497544,14.948597949754403" style="fill:#ECB172A0;stroke-width:0"></polygon> <!-- Horizontal lines --> <line x1="24" y1="14" x2="144" y2="14" style="stroke-width:2"></line> <line x1="24" y1="45" x2="144" y2="45"></line> <line x1="24" y1="75" x2="144" y2="75"></line> <line x1="24" y1="105" x2="144" y2="105"></line> <line x1="24" y1="109" x2="144" y2="109" style="stroke-width:2"></line> <!-- Vertical lines --> <line x1="24" y1="14" x2="24" y2="109" style="stroke-width:2"></line> <line x1="55" y1="14" x2="55" y2="109"></line> <line x1="85" y1="14" x2="85" y2="109"></line> <line x1="115" y1="14" x2="115" y2="109"></line> <line x1="144" y1="14" x2="144" y2="109" style="stroke-width:2"></line> <!-- Colored Rectangle --> <polygon points="24.9485979497544,14.948597949754403 144.9485979497544,14.948597949754403 144.9485979497544,109.97122238414356 24.9485979497544,109.97122238414356" style="fill:#ECB172A0;stroke-width:0"></polygon> <!-- Text --> <text x="84.948598" y="129.971222" font-size="1.0rem" font-weight="100" text-anchor="middle">3978</text> <text x="164.948598" y="62.459910" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(-90,164.948598,62.459910)">3150</text> <text x="7.474299" y="122.496923" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(45,7.474299,122.496923)">1</text>
+</svg></td>
+</tr>
+</tbody>
+</table>
+</div></div></li><li class="xr-section-item"><input id="section-363f69bc-48ab-44fc-b1d5-b8d0b2ee1e52" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-363f69bc-48ab-44fc-b1d5-b8d0b2ee1e52" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">time</span></div><div class="xr-var-dims">(time)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2022-07-31</div><input id="attrs-63b07148-532c-49cd-bb2a-3bb312aeae8c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-63b07148-532c-49cd-bb2a-3bb312aeae8c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-db436bb8-ceba-4297-856a-4a53898e3b68" class="xr-var-data-in" type="checkbox"><label for="data-db436bb8-ceba-4297-856a-4a53898e3b68" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2022-07-31T00:00:00.000000000'], dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.653e+06 1.653e+06 ... 1.59e+06</div><input id="attrs-1471d132-ad98-4d27-b713-56e6d702e48b" class="xr-var-attrs-in" type="checkbox"><label for="attrs-1471d132-ad98-4d27-b713-56e6d702e48b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-be489f4a-da49-4036-b5c7-8a1250507ea7" class="xr-var-data-in" type="checkbox"><label for="data-be489f4a-da49-4036-b5c7-8a1250507ea7" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>-20.0</dd><dt><span>crs :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]]]</dd></dl></div><div class="xr-var-data"><pre>array([1653150., 1653130., 1653110., ..., 1590210., 1590190., 1590170.],
+      shape=(3150,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">5.241e+06 5.241e+06 ... 5.32e+06</div><input id="attrs-28889633-96b4-4946-930c-b3581520d947" class="xr-var-attrs-in" type="checkbox"><label for="attrs-28889633-96b4-4946-930c-b3581520d947" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-308a4492-a718-40c3-89ae-ec5c163ad977" class="xr-var-data-in" type="checkbox"><label for="data-308a4492-a718-40c3-89ae-ec5c163ad977" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>20.0</dd><dt><span>crs :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]]]</dd></dl></div><div class="xr-var-data"><pre>array([5240690., 5240710., 5240730., ..., 5320190., 5320210., 5320230.],
+      shape=(3978,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int32</div><div class="xr-var-preview xr-preview">27704</div><input id="attrs-78245ac0-dbeb-496b-980c-865f25b7a7bd" class="xr-var-attrs-in" type="checkbox"><label for="attrs-78245ac0-dbeb-496b-980c-865f25b7a7bd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3dc29bdf-158a-4aa8-a0e3-d429019baa8b" class="xr-var-data-in" type="checkbox"><label for="data-3dc29bdf-158a-4aa8-a0e3-d429019baa8b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>spatial_ref :</span></dt><dd>PROJCRS["Azimuthal_Equidistant",BASEGEOGCRS["WGS 84",DATUM["World Geodetic System 1984",ELLIPSOID["WGS 84",6378137,298.257223563,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4326]],CONVERSION["unnamed",METHOD["Azimuthal Equidistant",ID["EPSG",1125]],PARAMETER["Latitude of natural origin",53,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",24,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["False easting",5837287.81977,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",2121415.69617,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]</dd><dt><span>crs_wkt :</span></dt><dd>PROJCRS["Azimuthal_Equidistant",BASEGEOGCRS["WGS 84",DATUM["World Geodetic System 1984",ELLIPSOID["WGS 84",6378137,298.257223563,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4326]],CONVERSION["unnamed",METHOD["Azimuthal Equidistant",ID["EPSG",1125]],PARAMETER["Latitude of natural origin",53,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",24,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["False easting",5837287.81977,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",2121415.69617,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>projected_crs_name :</span></dt><dd>Azimuthal_Equidistant</dd><dt><span>grid_mapping_name :</span></dt><dd>azimuthal_equidistant</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>53.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>24.0</dd><dt><span>false_easting :</span></dt><dd>5837287.81977</dd><dt><span>false_northing :</span></dt><dd>2121415.69617</dd><dt><span>GeoTransform :</span></dt><dd>5240680 20 0 1653160 0 -20</dd></dl></div><div class="xr-var-data"><pre>array(27704, dtype=int32)</pre></div></li></ul></div></li></ul></div></div>
+</div>
 </div>
 <p>The dataset has now only 12 timestamps, one for each month. Next, we want to calculate the average <span class="math inline">\(\sigma^0\)</span> value across a subset of the scene for one month. We will do this again by converting the data to linear scale first and then calculating the average and converting it back to dB.</p>
-<div id="16" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets take a data array with db values</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>db_array <span class="op">=</span> (</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    sig0_monthly.sel(time<span class="op">=</span><span class="st">"2022-07-30"</span>, method<span class="op">=</span><span class="st">"nearest"</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    .isel(x<span class="op">=</span><span class="bu">slice</span>(<span class="dv">300</span>, <span class="dv">400</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="dv">500</span>, <span class="dv">600</span>))</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    .compute()</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the linear values</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>lin_array <span class="op">=</span> db2lin(db_array)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="16" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets take a data array with db values</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>db_array <span class="op">=</span> (</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    sig0_monthly.sel(time<span class="op">=</span><span class="st">"2022-07-30"</span>, method<span class="op">=</span><span class="st">"nearest"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    .isel(x<span class="op">=</span><span class="bu">slice</span>(<span class="dv">300</span>, <span class="dv">400</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="dv">500</span>, <span class="dv">600</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    .compute()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the linear values</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>lin_array <span class="op">=</span> db2lin(db_array)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="17" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the average backscatter value in linear units across the whole scene</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lin_mean <span class="op">=</span> lin_array.mean()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average backscatter value in linear units: </span><span class="sc">{</span>lin_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ss">"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>db_from_lin_mean <span class="op">=</span> lin2db(lin_mean)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"That value in dB: </span><span class="sc">{</span>db_from_lin_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the average backscatter value in dB across the whole scene</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>db_mean <span class="op">=</span> db_array.mean()</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average backscatter value in dB: </span><span class="sc">{</span>db_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="17" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the average backscatter value in linear units across the whole scene</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>lin_mean <span class="op">=</span> lin_array.mean()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average backscatter value in linear units: </span><span class="sc">{</span>lin_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ss">"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>db_from_lin_mean <span class="op">=</span> lin2db(lin_mean)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"That value in dB: </span><span class="sc">{</span>db_from_lin_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the average backscatter value in dB across the whole scene</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>db_mean <span class="op">=</span> db_array.mean()</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average backscatter value in dB: </span><span class="sc">{</span>db_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average backscatter value in linear units:  0.114
+That value in dB: -9.424
+
+Average backscatter value in dB: -10.392</code></pre>
+</div>
 </div>
 <p>As you can see in the example, the mean values across the scene are different in dB and linear scale. Therefore, it is important to be aware in which scale the data is stored to perform the correct type of mathematical operation or always convert the data to linear scale before doing any calculations.</p>
 
