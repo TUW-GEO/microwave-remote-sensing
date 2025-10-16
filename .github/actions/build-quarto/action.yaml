@@ -38,8 +38,3 @@ runs:
     - name: Execute Jupyter Cells
       shell: bash
       run: quarto render --execute
-
-    - name: Render Quarto Project
-      uses: quarto-dev/quarto-actions/render@v2
-      env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
