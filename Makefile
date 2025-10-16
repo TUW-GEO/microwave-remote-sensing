@@ -1,15 +1,10 @@
 .ONESHELL:
 SHELL = /bin/bash
-.PHONY: help clean environment kernel teardown
-
-YML = environment.yml
-REQ = $(basename $(notdir $(YML)))
-BASENAME = $(CURDIR)
+.PHONY: help clean teardown
 
 CONDA_ACTIVATE = source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
-PREFIX = $(BASENAME)/.conda_envs
-CONDA_ENV_DIR := $(foreach i,$(REQ),$(PREFIX)/$(i))
-KERNEL_DIR := $(foreach i,$(REQ),$(shell jupyter --data-dir)/kernels/$(i))
+CONDA_ENV_DIR = ./.conda_envs/microwave-remote-sensing
+KERNEL_DIR = $(shell jupyter --data-dir)/kernels/microwave-remote-sensing
 
 help:
 	@echo "Makefile for setting up environment, kernel, and pulling notebooks"
@@ -26,27 +21,24 @@ clean:
 	rm --force --recursive .ipynb_checkpoints/ **/.ipynb_checkpoints/ _book/ \
 		_freeze/ .quarto/
 
-teardown:
-	$(foreach f, $(REQ), \
-		$(CONDA_ACTIVATE) $(f); \
-		jupyter kernelspec uninstall -y $(f); \
-		conda deactivate; \
-		conda remove -n $(f) --all -y ; \
-		conda deactivate; )
+teardown: $(CONDA_ENV_DIR)
+	$(CONDA_ACTIVATE) $^
+	jupyter kernelspec uninstall -y microwave-remote-sensing
+	conda deactivate
+	conda remove -p $^ --all -y
+	conda deactivate
 
-$(CONDA_ENV_DIR): $(YML)
-	$(foreach f, $^, \
-		conda env create --file $(f) \
-			--prefix $(PREFIX)/$(basename $(notdir $(f))); )
+$(CONDA_ENV_DIR): ./environment.yml
+	conda env create --file $^ --prefix $@ -y
 
 environment: $(CONDA_ENV_DIR)
 	@echo -e "conda environments are ready."
 
 $(KERNEL_DIR): $(CONDA_ENV_DIR)
-	$(foreach f, $(REQ), \
-		$(CONDA_ACTIVATE) $(f); \
-		python -m ipykernel install --user --name $(f) --display-name $(f); \
-		conda deactivate; )
+	$(CONDA_ACTIVATE) $^
+	python -m ipykernel install --user --name microwave-remote-sensing --display-name microwave-remote-sensing
+	pre-commit install
+	conda deactivate
 
 kernel: $(KERNEL_DIR)
 	@echo -e "conda jupyter kernel is ready."
