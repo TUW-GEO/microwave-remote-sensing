@@ -12,6 +12,19 @@ import xarray as xr
 
 @contextlib.contextmanager
 def suppress_output():
+    """Suppress stdout and stderr temporarily with a context manager.
+
+    This manager redirects all standard output and standard error to
+    ``os.devnull`` for the duration of the ``with`` block. The original
+    streams are guaranteed to be restored when the block exits, even if
+    errors occur.
+
+    Yields
+    ------
+    None
+        Provides the context for the ``with`` statement; does not return a value.
+
+    """
     with Path.open(os.devnull, "w") as devnull:
         old_stdout = os.dup(1)
         old_stderr = os.dup(2)
@@ -103,4 +116,25 @@ def unwrap_array(  # noqa D417
 
 
 def subsetting(ds, x0: int = 0, y0: int = 0, dx: int = 500, dy: int = 500):
+    """Extract a rectangular subset from an xarray object.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset or xarray.DataArray
+        The data object to subset.
+    x0 : int, default 0
+        Starting index along the 'x' dimension.
+    y0 : int, default 0
+        Starting index along the 'y' dimension.
+    dx : int, default 500
+        The size (number of pixels) of the subset along the 'x' dimension.
+    dy : int, default 500
+        The size (number of pixels) of the subset along the 'y' dimension.
+
+    Returns
+    -------
+    xarray.Dataset or xarray.DataArray
+        A new object containing only the data within the specified slice.
+
+    """
     return ds.isel(x=slice(x0, x0 + dx), y=slice(y0, y0 + dy))
