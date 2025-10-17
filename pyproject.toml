@@ -8,7 +8,7 @@ name = "mrs"
 version = "0.1.0"
 description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
     "aiohttp",
     "bokeh",
