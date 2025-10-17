@@ -4,6 +4,7 @@ import base64
 from functools import partial
 from io import BytesIO
 
+import cmcrameri as cmc  # noqa: F401
 import folium
 import holoviews as hv
 import matplotlib.patches as mpatches
@@ -11,6 +12,7 @@ import matplotlib.pyplot as plt
 import rioxarray  # noqa: F401
 import seaborn as sns
 from holoviews.streams import RangeXY
+from matplotlib import patches
 
 hv.extension("bokeh")
 land_cover = {"\xa0\xa0\xa0 Complete Land Cover": 1}
@@ -506,3 +508,297 @@ def plot_earthquake(geocoded_ds, step):
     folium.LayerControl().add_to(m)
 
     return m
+
+
+def plot_interferogram_map(ds, mask, cmap_cyc):
+    """Plot a wrapped phase interferogram image.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset or xarray.DataArray
+        Dataset containing the 'phase' data to plot.
+    mask : xarray.DataArray or array-like
+        Boolean mask. Pixels where mask is False are hidden.
+    cmap_cyc : matplotlib.colors.Colormap or str
+        A cyclic colormap for the wrapped phase.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    fig, axs = plt.subplots(figsize=(6, 6))  # noqa RUF059
+
+    (
+        ds.phase.where(mask)
+        .plot.imshow(cmap=cmap_cyc, zorder=1)
+        .axes.set_title("Phase Interferogram Image (Wrapped)")
+    )
+    plt.show()
+
+
+def plot_compare_wrapped_unwrapped_completewrapped(
+    subset, cmap_cyc, ds, mask, x0, y0, dx, dy
+):
+    """Compare a subset's wrapped/unwrapped phase with its location in the full image.
+
+    Creates a three-panel plot: the wrapped phase of a subset, its unwrapped phase,
+    and the complete wrapped phase image with a rectangle indicating the subset's
+    position.
+
+    Parameters
+    ----------
+    subset : xarray.Dataset or xarray.DataArray
+        The subset of the data, containing 'phase' and 'unwrapped' variables.
+    cmap_cyc : matplotlib.colors.Colormap or str
+        Cyclic colormap for the wrapped phase plots.
+    ds : xarray.Dataset or xarray.DataArray
+        The full dataset from which the subset was taken.
+    mask : xarray.DataArray or array-like
+        Boolean mask to apply to the full image plot.
+    x0, y0 : int
+        Top-left corner index of the subset in the full dataset's coordinates.
+    dx, dy : int
+        Width and height of the subset in number of pixels.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    fig, axs = plt.subplots(1, 3, figsize=(14, 4))  # noqa RUF059
+
+    # Wrapped Phase
+    (
+        subset.phase.plot.imshow(cmap=cmap_cyc, ax=axs[0]).axes.set_title(
+            "Wrapped Phase of the Subset"
+        )
+    )
+
+    # Unwrapped Phase
+    (
+        subset.unwrapped.plot.imshow(
+            cmap=cmap_cyc, ax=axs[1], vmin=-80, vmax=80
+        ).axes.set_title("Unwrapped Phase of the Subset")
+    )
+
+    # Subset inside the complete image
+    (
+        ds.phase.where(mask)
+        .plot.imshow(cmap=cmap_cyc, zorder=1, ax=axs[2])
+        .axes.set_title("Complete Wrapped Phase Image")
+    )
+
+    x_start = ds.phase.coords["x"][x0].item()
+    y_start = ds.phase.coords["y"][y0].item()
+    x_end = ds.phase.coords["x"][x0 + dx].item()
+    y_end = ds.phase.coords["y"][y0 + dy].item()
+
+    rect = patches.Rectangle(
+        (x_start, y_start),
+        x_end - x_start,
+        y_end - y_start,
+        linewidth=1,
+        edgecolor="r",
+        facecolor="red",
+        alpha=0.5,
+        label="Subset",
+    )
+
+    # Add the rectangle to the plot
+    axs[2].add_patch(rect)
+    axs[2].legend()
+    plt.tight_layout()
+
+
+def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
+    """Compare unwrapped phase with and without a coherence threshold mask.
+
+    Creates a two-panel plot showing the effect of applying a coherence-based
+    mask to the unwrapped phase data.
+
+    Parameters
+    ----------
+    subset : xarray.Dataset or xarray.DataArray
+        The data subset containing 'unwrapped_coh' (phase with mask applied)
+        and 'unwrapped' (phase without mask) variables.
+    cmap_cyc : matplotlib.colors.Colormap or str
+        Colormap for the phase plots.
+    threshold1 : float
+        The coherence threshold that was applied to generate the
+        'unwrapped_coh' data.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    fig, axs = plt.subplots(1, 2, figsize=(13, 5))  # noqa RUF059
+    (
+        subset.unwrapped_coh.plot.imshow(
+            cmap=cmap_cyc, ax=axs[0], vmin=-80, vmax=80
+        ).axes.set_title(f"Unwrapped Phase with Coherence Threshold {threshold1}")
+    )
+
+    (
+        subset.unwrapped.plot.imshow(
+            cmap=cmap_cyc, ax=axs[1], vmin=-80, vmax=80
+        ).axes.set_title("Unwrapped Phase without Coherence Threshold")
+    )
+
+    plt.show()
+
+
+def plot_different_coherence_thresholds(
+    subset_unwrapped_coherence, subset_unwrapped_coherence_another_threshold, cmap_cyc
+):
+    """Compare the results of applying two different coherence thresholds.
+
+    Creates a two-panel plot to visually compare the unwrapped phase after
+    masking with two different coherence thresholds.
+
+    Parameters
+    ----------
+    subset_unwrapped_coherence : xarray.Dataset or xarray.DataArray
+        The data processed with a coherence threshold of 0.3.
+        Must contain an 'unwrapped_coh' variable.
+    subset_unwrapped_coherence_another_threshold : xarray.Dataset or xarray.DataArray
+        The data processed with a coherence threshold of 0.5.
+        Must contain an 'unwrapped_coh' variable.
+    cmap_cyc : matplotlib.colors.Colormap or str
+        Colormap for the phase plots.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    fig, axs = plt.subplots(1, 2, figsize=(13, 5))  # noqa RUF059
+    (
+        subset_unwrapped_coherence_another_threshold.unwrapped_coh.plot.imshow(
+            cmap=cmap_cyc, ax=axs[0], vmin=-80, vmax=80
+        ).axes.set_title("Coherence Threshold 0.5")
+    )
+
+    (
+        subset_unwrapped_coherence.unwrapped_coh.plot.imshow(
+            cmap=cmap_cyc, ax=axs[1], vmin=-80, vmax=80
+        ).axes.set_title("Coherence Threshold 0.3")
+    )
+    plt.show()
+
+
+def plot_displacement_map(subset, cmap_disp, title):
+    """Plot a displacement map.
+
+    Displays a 2D displacement map with a colorbar and a title.
+
+    Parameters
+    ----------
+    subset : xarray.Dataset or xarray.DataArray
+        The displacement data to be plotted.
+    cmap_disp : matplotlib.colors.Colormap or str
+        Colormap to use for the displacement map.
+    title : str
+        The title for the plot.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    (
+        subset.plot.imshow(
+            cmap=cmap_disp, cbar_kwargs={"label": "Meters [m]"}
+        ).axes.set_title(title)
+    )
+    plt.show()
+
+
+def plot_coarsened_image(lowres, cmap_cyc):
+    """Plot a coarsened (low-resolution) unwrapped phase map of the entire scene.
+
+    Parameters
+    ----------
+    lowres : xarray.Dataset or xarray.DataArray
+        The coarsened dataset containing the 'unwrapped' phase variable.
+    cmap_cyc : matplotlib.colors.Colormap or str
+        Cyclic colormap for the phase plot.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    (
+        lowres.unwrapped.plot.imshow(cmap=cmap_cyc).axes.set_title(
+            "Unwrapped Phase entire scene (coarsened)"
+        )
+    )
+    plt.show()
+
+
+def plot_summary(subset, disp_subset, lowres, lowres_disp, cmap_cyc, cmap_disp):
+    """Create a summary plot showing phase and displacement results.
+
+    Generates a 2x2 grid of plots comparing a subset and the full, coarsened
+    scene. The top row shows the wrapped phase, and the bottom row shows the
+    corresponding displacement maps.
+
+    Parameters
+    ----------
+    subset : xarray.Dataset or xarray.DataArray
+        The subset of the data containing a 'unwrapped_coh' variable.
+    disp_subset : xarray.Dataset or xarray.DataArray
+        The displacement map for the subset.
+    lowres : xarray.Dataset or xarray.DataArray
+        The coarsened (low-resolution) full dataset containing a
+        'unwrapped' variable.
+    lowres_disp : xarray.Dataset or xarray.DataArray
+        The displacement map for the coarsened full scene.
+    cmap_cyc : matplotlib.colors.Colormap or str
+        Cyclic colormap for the phase plots.
+    cmap_disp : matplotlib.colors.Colormap or str
+        Colormap for the displacement plots.
+
+    Returns
+    -------
+    None
+        Displays the plot and does not return a value.
+
+    """
+    fig, axs = plt.subplots(2, 2, figsize=(12, 10))  # noqa RUF059
+    ax = axs.ravel()
+
+    (
+        subset.unwrapped_coh.plot.imshow(
+            cmap=cmap_cyc, ax=ax[0], vmin=-80, vmax=80
+        ).axes.set_title("Unwrapped Phase of the subset with Coherence Threshold 0.3")
+    )
+
+    (
+        disp_subset.plot.imshow(
+            cmap=cmap_disp, ax=ax[1], cbar_kwargs={"label": "Meters [m]"}
+        ).axes.set_title("Displacement Map of the Subset")
+    )
+
+    (
+        lowres.unwrapped.plot.imshow(cmap=cmap_cyc, ax=ax[2]).axes.set_title(
+            "Unwrapped Phase of the entire scene with "
+            "Coherence Threshold 0.3 (coarsened)"
+        )
+    )
+
+    (
+        lowres_disp.plot.imshow(
+            cmap=cmap_disp, ax=ax[3], cbar_kwargs={"label": "Meters [m]"}
+        ).axes.set_title("Displacement Map entire scene (coarse resolution)")
+    )
+
+    plt.tight_layout()
