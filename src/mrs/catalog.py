@@ -11,6 +11,9 @@ import urllib.parse
 from enum import StrEnum  # type: ignore[unresolved-import]
 
 import gitlab
+from pydantic import BaseModel, Field
+from pydantic_extra_types.color import Color
+from typing_extensions import TypedDict
 
 ROOT = "https://git.geo.tuwien.ac.at"
 REPO_API = "api/v4/projects/1264/repository/files"
@@ -22,6 +25,24 @@ class SensorOptions(StrEnum):
 
     ALOS2 = "alos-2"
     SENTINEL1 = "sentinel-1"
+
+
+class CorineColorMapping(TypedDict):
+    """Data Model of the expected Corine Color Mapping."""
+
+    value: int
+    color: Color
+    label: str
+
+
+class CorineColorCollection(BaseModel):
+    """Data Model of the expected Corine Color Mapping Collection."""
+
+    items: list[CorineColorMapping] = Field(alias="land_cover")
+
+    def to_dict(self) -> dict[int, CorineColorMapping]:
+        """Convert to dictionary."""
+        return {item["value"]: item for item in self.items}
 
 
 def get_intake_url(
@@ -55,7 +76,7 @@ def get_intake_url(
     return intake_path
 
 
-def make_gitlab_urls(sensor: SensorOptions | str):
+def make_gitlab_urls(sensor: SensorOptions | str) -> list[str]:
     """Create URL to Alos and Sentinel filed on GitLab.
 
     Parameters
@@ -65,7 +86,7 @@ def make_gitlab_urls(sensor: SensorOptions | str):
 
     Returns
     -------
-        URL : str
+        URL : list[str]
 
     """
     gl = gitlab.Gitlab(ROOT)
