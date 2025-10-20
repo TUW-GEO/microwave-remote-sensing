@@ -35,7 +35,7 @@ class _CorineColorMapping(TypedDict):
     label: str
 
 
-class _CorineColorCollection(BaseModel):
+class CorineColorCollection(BaseModel):
     """Data Model of the expected Corine Color Mapping Collection."""
 
     items: list[_CorineColorMapping] = Field(alias="land_cover")

@@ -20,7 +20,7 @@ from matplotlib.patches import Patch
 from seaborn.palettes import _ColorPalette  # type: ignore[import-untyped]
 from xarray import DataArray, Dataset
 
-from mrs.catalog import _CorineColorCollection, _CorineColorMapping
+from mrs.catalog import CorineColorCollection, _CorineColorMapping
 
 hv.extension("bokeh")  # type: ignore[too-many-positional-arguments]
 COMPLETE_LAND_COVER = "\xa0\xa0\xa0 Complete Land Cover"
@@ -109,7 +109,7 @@ def plot_corine_data(
     cor_da: DataArray,
     cmap: Colormap,
     norm: Normalize,
-    color_mapping: _CorineColorCollection,
+    color_mapping: CorineColorCollection,
     present_landcover_codes: Iterable[int],
 ) -> None:
     """Plot CORINE land cover data with a legend.

@@ -41,7 +41,7 @@ def suppress_output():  # noqa: ANN201
             os.close(old_stderr)
 
 
-# TODO: Remove complexity from the function
+# TODO: Remove complexity from the function  # noqa: FIX002
 def unwrap_array(  # noqa: D417, PLR0913
     data: xr.DataArray,
     complex_var: str = "cmplx",
@@ -97,7 +97,7 @@ def unwrap_array(  # noqa: D417, PLR0913
     data_arr = data_arr.where(mask)
 
     if coherence is None:
-        # TODO: Resolve type-checker complaints
+        # TODO: Resolve type-checker complaints  # noqa: FIX002
         coherence: np.ndarray = np.ones_like(data_arr.real)  # type: ignore[no-redef]
 
     # Unwrap the phase (already in complex form)
