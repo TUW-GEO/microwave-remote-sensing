@@ -20,14 +20,14 @@ REPO_API = "api/v4/projects/1264/repository/files"
 REPO_RAW = "public_projects/microwave-remote-sensing/-/raw"
 
 
-class SensorOptions(StrEnum):
+class _SensorOptions(StrEnum):
     """Supported Sensor Options."""
 
     ALOS2 = "alos-2"
     SENTINEL1 = "sentinel-1"
 
 
-class CorineColorMapping(TypedDict):
+class _CorineColorMapping(TypedDict):
     """Data Model of the expected Corine Color Mapping."""
 
     value: int
@@ -35,12 +35,12 @@ class CorineColorMapping(TypedDict):
     label: str
 
 
-class CorineColorCollection(BaseModel):
+class _CorineColorCollection(BaseModel):
     """Data Model of the expected Corine Color Mapping Collection."""
 
-    items: list[CorineColorMapping] = Field(alias="land_cover")
+    items: list[_CorineColorMapping] = Field(alias="land_cover")
 
-    def to_dict(self) -> dict[int, CorineColorMapping]:
+    def to_dict(self) -> dict[int, _CorineColorMapping]:
         """Convert to dictionary."""
         return {item["value"]: item for item in self.items}
 
@@ -76,7 +76,7 @@ def get_intake_url(
     return intake_path
 
 
-def make_gitlab_urls(sensor: SensorOptions | str) -> list[str]:
+def make_gitlab_urls(sensor: _SensorOptions | str) -> list[str]:
     """Create URL to Alos and Sentinel filed on GitLab.
 
     Parameters
@@ -89,14 +89,14 @@ def make_gitlab_urls(sensor: SensorOptions | str) -> list[str]:
         URL : list[str]
 
     """
-    gl = gitlab.Gitlab(ROOT)
-    gl_project = gl.projects.get(1264)
+    gl = gitlab.Gitlab(url=ROOT)
+    gl_project = gl.projects.get(id=1264)
     root = f"{ROOT}/{REPO_API}/"
     end = "/raw?ref=main&lfs=true"
     return [
         root + urllib.parse.quote_plus(gitlab_file["path"]) + end
         for gitlab_file in gl_project.repository_tree(
-            sensor,
+            path=sensor,
             ref="main",
             recursive=True,
             iterator=True,
