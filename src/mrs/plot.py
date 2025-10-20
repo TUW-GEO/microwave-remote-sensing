@@ -4,23 +4,23 @@ import base64
 from collections.abc import Iterable
 from functools import partial
 from io import BytesIO
+from typing import Self  # type: ignore[unresolved-import]
 
-import cmcrameri as cmc  # noqa: F401
 import folium
 import holoviews as hv  # type: ignore[import-untyped]
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import rioxarray  # noqa: F401
-import seaborn as sns
-from holoviews.streams import RangeXY
+import seaborn as sns  # type: ignore[import-untyped]
+from holoviews.streams import RangeXY  # type: ignore[import-untyped]
 from matplotlib import patches
 from matplotlib.colors import Colormap, ListedColormap, Normalize
 from matplotlib.patches import Patch
 from seaborn.palettes import _ColorPalette  # type: ignore[import-untyped]
 from xarray import DataArray, Dataset
 
-from mrs.catalog import CorineColorCollection, CorineColorMapping
+from mrs.catalog import _CorineColorCollection, _CorineColorMapping
 
 hv.extension("bokeh")  # type: ignore[too-many-positional-arguments]
 COMPLETE_LAND_COVER = "\xa0\xa0\xa0 Complete Land Cover"
@@ -34,31 +34,50 @@ CMAP_HLS_HEX: _ColorPalette = sns.color_palette("hls", n_colors=256).as_hex()
 # A bunch of Supersets for type hinting purposes...
 
 
-class DatasetHasLandCoverSig0(Dataset):  # noqa: D101
+class _DatasetHasLandCoverSig0(Dataset):
+    __slots__ = ("dataset",)
     land_cover: DataArray
     sig0: DataArray
 
 
-class DatasetHasIntensity(Dataset):  # noqa: D101
+class _DatasetHasIntensity(Dataset):
+    __slots__ = ("dataset",)
     intensity: DataArray
 
 
-class DatasetHasIntensityPhase(Dataset):  # noqa: D101
+class _DatasetHasIntensityPhase(Dataset):
+    __slots__ = ("dataset",)
     intensity: DataArray
     phase: DataArray
 
 
-class DatasetHasBandData(Dataset):  # noqa: D101
+class _DatasetHasBandData(Dataset):
+    __slots__ = ("dataset",)
     band_data: DataArray
 
 
-class DatasetHasTopoPhase(Dataset):  # noqa: D101
+class _DatasetHasTopoPhase(Dataset):
+    __slots__ = ("dataset",)
     topo: DataArray
     Phase: DataArray
 
 
+class _DatasetHasPhase(Dataset):
+    __slots__ = ("dataset",)
+    phase: DataArray
+    imag: Self
+    real: Self
+
+
+class _DatasetHasUnwrapped(Dataset):
+    __slots__ = ("dataset",)
+    unwrapped: DataArray
+    phase: DataArray
+    unwrapped_coh: DataArray
+
+
 def _handles(
-    colors: list[CorineColorMapping],
+    colors: list[_CorineColorMapping],
     valid_codes: Iterable[int],
 ) -> list[Patch]:
     """Generate matplotlib legend handles for present land cover codes.
@@ -90,7 +109,7 @@ def plot_corine_data(
     cor_da: DataArray,
     cmap: Colormap,
     norm: Normalize,
-    color_mapping: CorineColorCollection,
+    color_mapping: _CorineColorCollection,
     present_landcover_codes: Iterable[int],
 ) -> None:
     """Plot CORINE land cover data with a legend.
@@ -161,7 +180,7 @@ def load_image(
     land_cover: str,
     x_range: np.ndarray,
     y_range: np.ndarray,
-    var_ds: DatasetHasLandCoverSig0,
+    var_ds: _DatasetHasLandCoverSig0,
 ) -> hv.Image:
     """Use for Callback Function Landcover.
 
@@ -230,8 +249,8 @@ def image_opts_(var_ds: Dataset) -> hv.opts.Image:
 
 
 def plot_variability_over_time(
-    color_mapping: dict[int, CorineColorMapping],
-    var_ds: DatasetHasLandCoverSig0,
+    color_mapping: dict[int, _CorineColorMapping],
+    var_ds: _DatasetHasLandCoverSig0,
     present_landcover_codes: Iterable[int],
 ) -> hv.DynamicMap:
     """Plot temporal variability of backscatter across land cover types.
@@ -283,7 +302,7 @@ def plot_variability_over_time(
     return dmap.opts(image_opts, HIST_OPTS)
 
 
-def plot_slc_all(datasets: list[DatasetHasIntensity]) -> None:
+def plot_slc_all(datasets: list[_DatasetHasIntensity]) -> None:
     """Plot multiple Single Look Complex (SLC) intensity datasets side by side.
 
     Parameters
@@ -310,7 +329,7 @@ def plot_slc_all(datasets: list[DatasetHasIntensity]) -> None:
     plt.show()
 
 
-def plot_slc_iw2(iw2_ds: DatasetHasIntensityPhase) -> None:
+def plot_slc_iw2(iw2_ds: _DatasetHasIntensityPhase) -> None:
     """Plot intensity and phase measurements for the IW2 subswath.
 
     Parameters
@@ -337,7 +356,7 @@ def plot_slc_iw2(iw2_ds: DatasetHasIntensityPhase) -> None:
     plt.tight_layout()
 
 
-def plot_coregistering(coregistered_ds: DatasetHasBandData) -> None:
+def plot_coregistering(coregistered_ds: _DatasetHasBandData) -> None:
     """Plot master and slave phase measurements from a coregistered dataset.
 
     Parameters
@@ -364,7 +383,7 @@ def plot_coregistering(coregistered_ds: DatasetHasBandData) -> None:
     plt.tight_layout()
 
 
-def plot_interferogram(interferogram_ds: DatasetHasBandData) -> hv.Layout:
+def plot_interferogram(interferogram_ds: _DatasetHasBandData) -> hv.Layout:
     """Plot interferogram and coherence data side-by-side.
 
     Parameters
@@ -410,8 +429,8 @@ def plot_interferogram(interferogram_ds: DatasetHasBandData) -> hv.Layout:
 
 
 def plot_topographic_phase_removal(
-    interferogram_ds: DatasetHasBandData,
-    topo_ds: DatasetHasTopoPhase,
+    interferogram_ds: _DatasetHasBandData,
+    topo_ds: _DatasetHasTopoPhase,
 ) -> None:
     """Plot interferogram before and after topographic phase removal.
 
@@ -447,7 +466,7 @@ def plot_topographic_phase_removal(
     plt.tight_layout()
 
 
-def plot_igf_coh(geocoded_ds: DatasetHasBandData, step: int) -> hv.Layout:
+def plot_igf_coh(geocoded_ds: _DatasetHasBandData, step: int) -> hv.Layout:
     """Plot downsampled interferogram and coherence data.
 
     Parameters
@@ -519,7 +538,7 @@ def array_to_img(data_array: DataArray, cmap: ListedColormap) -> str:
     return base64.b64encode(buf.getvalue()).decode("utf-8")
 
 
-def plot_earthquake(geocoded_ds: DatasetHasBandData, step: int) -> folium.Map:
+def plot_earthquake(geocoded_ds: _DatasetHasBandData, step: int) -> folium.Map:
     """Create a Folium map with a downsampled interferogram overlay.
 
     Parameters
@@ -583,7 +602,11 @@ def plot_earthquake(geocoded_ds: DatasetHasBandData, step: int) -> folium.Map:
     return m
 
 
-def plot_interferogram_map(ds, mask, cmap_cyc):
+def plot_interferogram_map(
+    ds: _DatasetHasPhase,
+    mask: DataArray,
+    cmap_cyc: Colormap,
+) -> None:
     """Plot a wrapped phase interferogram image.
 
     Parameters
@@ -601,26 +624,24 @@ def plot_interferogram_map(ds, mask, cmap_cyc):
         Displays the plot and does not return a value.
 
     """
-    fig, axs = plt.subplots(figsize=(6, 6))  # noqa RUF059
+    _fig, axs = plt.subplots(figsize=(6, 6))
 
     (
         ds.phase.where(mask)
-        .plot.imshow(cmap=cmap_cyc, zorder=1)
+        .plot.imshow(cmap=cmap_cyc, zorder=1, ax=axs)
         .axes.set_title("Phase Interferogram Image (Wrapped)")
     )
     plt.show()
 
 
-def plot_compare_wrapped_unwrapped_completewrapped(
-    subset,
-    cmap_cyc,
-    ds,
-    mask,
-    x0,
-    y0,
-    dx,
-    dy,
-):
+def plot_compare_wrapped_unwrapped_completewrapped(  # noqa: PLR0913
+    subset: _DatasetHasUnwrapped,
+    cmap_cyc: Colormap | str,
+    ds: _DatasetHasPhase,
+    mask: DataArray,
+    p0: tuple[int, int],
+    dxy: tuple[int, int],
+) -> None:
     """Compare a subset's wrapped/unwrapped phase with its location in the full image.
 
     Creates a three-panel plot: the wrapped phase of a subset, its unwrapped phase,
@@ -637,9 +658,9 @@ def plot_compare_wrapped_unwrapped_completewrapped(
         The full dataset from which the subset was taken.
     mask : xarray.DataArray or array-like
         Boolean mask to apply to the full image plot.
-    x0, y0 : int
-        Top-left corner index of the subset in the full dataset's coordinates.
-    dx, dy : int
+    p0 : tuple[int,int]
+        Top-left corner index (x,y) of the subset in the full dataset's coordinates.
+    dxy : tuple[int, int]
         Width and height of the subset in number of pixels.
 
     Returns
@@ -648,7 +669,7 @@ def plot_compare_wrapped_unwrapped_completewrapped(
         Displays the plot and does not return a value.
 
     """
-    fig, axs = plt.subplots(1, 3, figsize=(14, 4))  # noqa RUF059
+    _fig, axs = plt.subplots(1, 3, figsize=(14, 4))
 
     # Wrapped Phase
     (
@@ -673,7 +694,8 @@ def plot_compare_wrapped_unwrapped_completewrapped(
         .plot.imshow(cmap=cmap_cyc, zorder=1, ax=axs[2])
         .axes.set_title("Complete Wrapped Phase Image")
     )
-
+    x0, y0 = p0
+    dx, dy = dxy
     x_start = ds.phase.coords["x"][x0].item()
     y_start = ds.phase.coords["y"][y0].item()
     x_end = ds.phase.coords["x"][x0 + dx].item()
@@ -696,7 +718,11 @@ def plot_compare_wrapped_unwrapped_completewrapped(
     plt.tight_layout()
 
 
-def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
+def plot_compare_coherence_mask_presence(
+    subset: _DatasetHasUnwrapped,
+    cmap_cyc: Colormap | str,
+    threshold: float,
+) -> None:
     """Compare unwrapped phase with and without a coherence threshold mask.
 
     Creates a two-panel plot showing the effect of applying a coherence-based
@@ -709,7 +735,7 @@ def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
         and 'unwrapped' (phase without mask) variables.
     cmap_cyc : matplotlib.colors.Colormap or str
         Colormap for the phase plots.
-    threshold1 : float
+    threshold : float
         The coherence threshold that was applied to generate the
         'unwrapped_coh' data.
 
@@ -719,14 +745,14 @@ def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
         Displays the plot and does not return a value.
 
     """
-    fig, axs = plt.subplots(1, 2, figsize=(13, 5))  # noqa RUF059
+    _fig, axs = plt.subplots(1, 2, figsize=(13, 5))
     (
         subset.unwrapped_coh.plot.imshow(
             cmap=cmap_cyc,
             ax=axs[0],
             vmin=-80,
             vmax=80,
-        ).axes.set_title(f"Unwrapped Phase with Coherence Threshold {threshold1}")
+        ).axes.set_title(f"Unwrapped Phase with Coherence Threshold {threshold}")
     )
 
     (
@@ -742,10 +768,12 @@ def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
 
 
 def plot_different_coherence_thresholds(
-    subset_unwrapped_coherence,
-    subset_unwrapped_coherence_another_threshold,
-    cmap_cyc,
-):
+    ds_coh: _DatasetHasUnwrapped,
+    ds_coh_2: _DatasetHasUnwrapped,
+    cmap_cyc: Colormap | str,
+    vmin: int = -80,
+    vmax: int = 80,
+) -> None:
     """Compare the results of applying two different coherence thresholds.
 
     Creates a two-panel plot to visually compare the unwrapped phase after
@@ -753,14 +781,18 @@ def plot_different_coherence_thresholds(
 
     Parameters
     ----------
-    subset_unwrapped_coherence : xarray.Dataset or xarray.DataArray
+    ds_coh : xarray.Dataset or xarray.DataArray
         The data processed with a coherence threshold of 0.3.
         Must contain an 'unwrapped_coh' variable.
-    subset_unwrapped_coherence_another_threshold : xarray.Dataset or xarray.DataArray
+    ds_coh_2 : xarray.Dataset or xarray.DataArray
         The data processed with a coherence threshold of 0.5.
         Must contain an 'unwrapped_coh' variable.
     cmap_cyc : matplotlib.colors.Colormap or str
         Colormap for the phase plots.
+    vmin : int
+        The minimum value in both plots. (default -80)
+    vmax : int
+        The maximum value in both plots. (default 80)
 
     Returns
     -------
@@ -768,35 +800,39 @@ def plot_different_coherence_thresholds(
         Displays the plot and does not return a value.
 
     """
-    fig, axs = plt.subplots(1, 2, figsize=(13, 5))  # noqa RUF059
+    _fig, axs = plt.subplots(1, 2, figsize=(13, 5))
     (
-        subset_unwrapped_coherence_another_threshold.unwrapped_coh.plot.imshow(
+        ds_coh_2.unwrapped_coh.plot.imshow(
             cmap=cmap_cyc,
             ax=axs[0],
-            vmin=-80,
-            vmax=80,
+            vmin=vmin,
+            vmax=vmax,
         ).axes.set_title("Coherence Threshold 0.5")
     )
 
     (
-        subset_unwrapped_coherence.unwrapped_coh.plot.imshow(
+        ds_coh.unwrapped_coh.plot.imshow(
             cmap=cmap_cyc,
             ax=axs[1],
-            vmin=-80,
-            vmax=80,
+            vmin=vmin,
+            vmax=vmax,
         ).axes.set_title("Coherence Threshold 0.3")
     )
     plt.show()
 
 
-def plot_displacement_map(subset, cmap_disp, title):
+def plot_displacement_map(
+    subset: DataArray,
+    cmap_disp: Colormap | str,
+    title: str,
+) -> None:
     """Plot a displacement map.
 
     Displays a 2D displacement map with a colorbar and a title.
 
     Parameters
     ----------
-    subset : xarray.Dataset or xarray.DataArray
+    subset : xarray.DataArray
         The displacement data to be plotted.
     cmap_disp : matplotlib.colors.Colormap or str
         Colormap to use for the displacement map.
@@ -818,7 +854,10 @@ def plot_displacement_map(subset, cmap_disp, title):
     plt.show()
 
 
-def plot_coarsened_image(lowres, cmap_cyc):
+def plot_coarsened_image(
+    lowres: _DatasetHasUnwrapped,
+    cmap_cyc: Colormap | str,
+) -> None:
     """Plot a coarsened (low-resolution) unwrapped phase map of the entire scene.
 
     Parameters
@@ -842,7 +881,14 @@ def plot_coarsened_image(lowres, cmap_cyc):
     plt.show()
 
 
-def plot_summary(subset, disp_subset, lowres, lowres_disp, cmap_cyc, cmap_disp):
+def plot_summary(  # noqa: PLR0913
+    subset: _DatasetHasUnwrapped,
+    subset_disp: DataArray,
+    lowres: _DatasetHasUnwrapped,
+    lowres_disp: DataArray,
+    cmap_cyc: Colormap | str,
+    cmap_disp: Colormap | str,
+) -> None:
     """Create a summary plot showing phase and displacement results.
 
     Generates a 2x2 grid of plots comparing a subset and the full, coarsened
@@ -853,7 +899,7 @@ def plot_summary(subset, disp_subset, lowres, lowres_disp, cmap_cyc, cmap_disp):
     ----------
     subset : xarray.Dataset or xarray.DataArray
         The subset of the data containing a 'unwrapped_coh' variable.
-    disp_subset : xarray.Dataset or xarray.DataArray
+    subset_disp : xarray.Dataset or xarray.DataArray
         The displacement map for the subset.
     lowres : xarray.Dataset or xarray.DataArray
         The coarsened (low-resolution) full dataset containing a
@@ -871,7 +917,7 @@ def plot_summary(subset, disp_subset, lowres, lowres_disp, cmap_cyc, cmap_disp):
         Displays the plot and does not return a value.
 
     """
-    fig, axs = plt.subplots(2, 2, figsize=(12, 10))  # noqa RUF059
+    _fig, axs = plt.subplots(2, 2, figsize=(12, 10))
     ax = axs.ravel()
 
     (
@@ -884,7 +930,7 @@ def plot_summary(subset, disp_subset, lowres, lowres_disp, cmap_cyc, cmap_disp):
     )
 
     (
-        disp_subset.plot.imshow(
+        subset_disp.plot.imshow(
             cmap=cmap_disp,
             ax=ax[1],
             cbar_kwargs={"label": "Meters [m]"},

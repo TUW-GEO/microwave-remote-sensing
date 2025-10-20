@@ -3,15 +3,15 @@
 import contextlib
 import os
 from pathlib import Path
+from typing import Literal, Never  # type: ignore[ty-not-there-yet]
 
-import cmcrameri as cmc  # noqa: F401
 import numpy as np
 import snaphu
 import xarray as xr
 
 
 @contextlib.contextmanager
-def suppress_output():
+def suppress_output():  # noqa: ANN201
     """Suppress stdout and stderr temporarily with a context manager.
 
     This manager redirects all standard output and standard error to
@@ -25,7 +25,7 @@ def suppress_output():
         Provides the context for the ``with`` statement; does not return a value.
 
     """
-    with Path.open(os.devnull, "w") as devnull:
+    with Path.open(os.devnull, "w") as devnull:  # type: ignore[no-overload-matching]
         old_stdout = os.dup(1)
         old_stderr = os.dup(2)
 
@@ -41,19 +41,20 @@ def suppress_output():
             os.close(old_stderr)
 
 
-def unwrap_array(  # noqa D417
+# TODO: Remove complexity from the function
+def unwrap_array(  # noqa: D417, PLR0913
     data: xr.DataArray,
     complex_var: str = "cmplx",
     ouput_var: str = "unwrapped",
-    mask: xr.DataArray = True,  # noqa FBT002
-    coherence: xr.DataArray = None,
+    mask: xr.DataArray | None = None,
+    coherence: xr.DataArray | None = None,
     mask_nodata_value: int = 0,
     coh_low_threshold: float | None = None,
     coh_high_threshold: float | None = None,
-    nlooks=1.0,
-    cost="smooth",
-    init="mcf",
-    **kwargs,
+    nlooks: float = 1.0,
+    cost: Literal["defo", "smooth"] = "smooth",
+    init: Literal["mcf", "mst"] = "mcf",
+    **kwargs: Never,
 ) -> xr.DataArray:
     """Unwraps the phase data using the snaphu algorithm.
 
@@ -67,6 +68,9 @@ def unwrap_array(  # noqa D417
     mask_nodata_value: Value of the no data pixels in the mask
     coh_low_threshold: Lower threshold for the coherence values
     coh_high_threshold: Higher threshold for the coherence values
+    nlooks: The number of looks
+    cost: Statistical cost mode
+    init: Algorithm used for initialization of unwrapped phase gradients.
 
     Returns
     -------
@@ -77,7 +81,7 @@ def unwrap_array(  # noqa D417
     data_arr = data[complex_var]
 
     # Create a mask for areas with no data
-    if mask:
+    if mask is None:
         mask = (data_arr.real != mask_nodata_value).astype(bool)
 
     # Apply coherence thresholds if provided
@@ -93,13 +97,14 @@ def unwrap_array(  # noqa D417
     data_arr = data_arr.where(mask)
 
     if coherence is None:
-        coherence = np.ones_like(data_arr.real)
+        # TODO: Resolve type-checker complaints
+        coherence: np.ndarray = np.ones_like(data_arr.real)  # type: ignore[no-redef]
 
     # Unwrap the phase (already in complex form)
     with suppress_output():
         unw, _ = snaphu.unwrap(
-            data_arr,
-            coherence,
+            igram=data_arr,
+            corr=coherence,  # type: ignore[arg-type]
             nlooks=nlooks,
             cost=cost,
             init=init,
@@ -115,7 +120,13 @@ def unwrap_array(  # noqa D417
     return data
 
 
-def subsetting(ds, x0: int = 0, y0: int = 0, dx: int = 500, dy: int = 500):
+def subsetting(
+    ds: xr.DataArray | xr.Dataset,
+    x0: int = 0,
+    y0: int = 0,
+    dx: int = 500,
+    dy: int = 500,
+) -> xr.DataArray | xr.Dataset:
     """Extract a rectangular subset from an xarray object.
 
     Parameters
