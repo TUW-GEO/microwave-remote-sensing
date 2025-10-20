@@ -15,6 +15,12 @@ import rioxarray  # noqa: F401
 import seaborn as sns
 from holoviews.streams import RangeXY
 from matplotlib import patches
+from matplotlib.colors import Colormap, ListedColormap, Normalize
+from matplotlib.patches import Patch
+from seaborn.palettes import _ColorPalette  # type: ignore[import-untyped]
+from xarray import DataArray, Dataset
+
+from mrs.catalog import CorineColorCollection, CorineColorMapping
 
 hv.extension("bokeh")  # type: ignore[too-many-positional-arguments]
 COMPLETE_LAND_COVER = "\xa0\xa0\xa0 Complete Land Cover"
@@ -606,7 +612,14 @@ def plot_interferogram_map(ds, mask, cmap_cyc):
 
 
 def plot_compare_wrapped_unwrapped_completewrapped(
-    subset, cmap_cyc, ds, mask, x0, y0, dx, dy
+    subset,
+    cmap_cyc,
+    ds,
+    mask,
+    x0,
+    y0,
+    dx,
+    dy,
 ):
     """Compare a subset's wrapped/unwrapped phase with its location in the full image.
 
@@ -640,14 +653,17 @@ def plot_compare_wrapped_unwrapped_completewrapped(
     # Wrapped Phase
     (
         subset.phase.plot.imshow(cmap=cmap_cyc, ax=axs[0]).axes.set_title(
-            "Wrapped Phase of the Subset"
+            "Wrapped Phase of the Subset",
         )
     )
 
     # Unwrapped Phase
     (
         subset.unwrapped.plot.imshow(
-            cmap=cmap_cyc, ax=axs[1], vmin=-80, vmax=80
+            cmap=cmap_cyc,
+            ax=axs[1],
+            vmin=-80,
+            vmax=80,
         ).axes.set_title("Unwrapped Phase of the Subset")
     )
 
@@ -706,13 +722,19 @@ def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
     fig, axs = plt.subplots(1, 2, figsize=(13, 5))  # noqa RUF059
     (
         subset.unwrapped_coh.plot.imshow(
-            cmap=cmap_cyc, ax=axs[0], vmin=-80, vmax=80
+            cmap=cmap_cyc,
+            ax=axs[0],
+            vmin=-80,
+            vmax=80,
         ).axes.set_title(f"Unwrapped Phase with Coherence Threshold {threshold1}")
     )
 
     (
         subset.unwrapped.plot.imshow(
-            cmap=cmap_cyc, ax=axs[1], vmin=-80, vmax=80
+            cmap=cmap_cyc,
+            ax=axs[1],
+            vmin=-80,
+            vmax=80,
         ).axes.set_title("Unwrapped Phase without Coherence Threshold")
     )
 
@@ -720,7 +742,9 @@ def plot_compare_coherence_mask_presence(subset, cmap_cyc, threshold1):
 
 
 def plot_different_coherence_thresholds(
-    subset_unwrapped_coherence, subset_unwrapped_coherence_another_threshold, cmap_cyc
+    subset_unwrapped_coherence,
+    subset_unwrapped_coherence_another_threshold,
+    cmap_cyc,
 ):
     """Compare the results of applying two different coherence thresholds.
 
@@ -747,13 +771,19 @@ def plot_different_coherence_thresholds(
     fig, axs = plt.subplots(1, 2, figsize=(13, 5))  # noqa RUF059
     (
         subset_unwrapped_coherence_another_threshold.unwrapped_coh.plot.imshow(
-            cmap=cmap_cyc, ax=axs[0], vmin=-80, vmax=80
+            cmap=cmap_cyc,
+            ax=axs[0],
+            vmin=-80,
+            vmax=80,
         ).axes.set_title("Coherence Threshold 0.5")
     )
 
     (
         subset_unwrapped_coherence.unwrapped_coh.plot.imshow(
-            cmap=cmap_cyc, ax=axs[1], vmin=-80, vmax=80
+            cmap=cmap_cyc,
+            ax=axs[1],
+            vmin=-80,
+            vmax=80,
         ).axes.set_title("Coherence Threshold 0.3")
     )
     plt.show()
@@ -781,7 +811,8 @@ def plot_displacement_map(subset, cmap_disp, title):
     """
     (
         subset.plot.imshow(
-            cmap=cmap_disp, cbar_kwargs={"label": "Meters [m]"}
+            cmap=cmap_disp,
+            cbar_kwargs={"label": "Meters [m]"},
         ).axes.set_title(title)
     )
     plt.show()
@@ -805,7 +836,7 @@ def plot_coarsened_image(lowres, cmap_cyc):
     """
     (
         lowres.unwrapped.plot.imshow(cmap=cmap_cyc).axes.set_title(
-            "Unwrapped Phase entire scene (coarsened)"
+            "Unwrapped Phase entire scene (coarsened)",
         )
     )
     plt.show()
@@ -845,26 +876,33 @@ def plot_summary(subset, disp_subset, lowres, lowres_disp, cmap_cyc, cmap_disp):
 
     (
         subset.unwrapped_coh.plot.imshow(
-            cmap=cmap_cyc, ax=ax[0], vmin=-80, vmax=80
+            cmap=cmap_cyc,
+            ax=ax[0],
+            vmin=-80,
+            vmax=80,
         ).axes.set_title("Unwrapped Phase of the subset with Coherence Threshold 0.3")
     )
 
     (
         disp_subset.plot.imshow(
-            cmap=cmap_disp, ax=ax[1], cbar_kwargs={"label": "Meters [m]"}
+            cmap=cmap_disp,
+            ax=ax[1],
+            cbar_kwargs={"label": "Meters [m]"},
         ).axes.set_title("Displacement Map of the Subset")
     )
 
     (
         lowres.unwrapped.plot.imshow(cmap=cmap_cyc, ax=ax[2]).axes.set_title(
             "Unwrapped Phase of the entire scene with "
-            "Coherence Threshold 0.3 (coarsened)"
+            "Coherence Threshold 0.3 (coarsened)",
         )
     )
 
     (
         lowres_disp.plot.imshow(
-            cmap=cmap_disp, ax=ax[3], cbar_kwargs={"label": "Meters [m]"}
+            cmap=cmap_disp,
+            ax=ax[3],
+            cbar_kwargs={"label": "Meters [m]"},
         ).axes.set_title("Displacement Map entire scene (coarse resolution)")
     )
 
