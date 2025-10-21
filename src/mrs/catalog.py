@@ -20,7 +20,9 @@ ROOT = "https://git.geo.tuwien.ac.at"
 REPO_API = "api/v4/projects/1264/repository/files"
 REPO_RAW = "public_projects/microwave-remote-sensing/-/raw"
 
-os.environ["CACHE_DEST"] = "/tmp/fsspec"  # noqa COM812
+os.environ["CACHE_DEST"] = (
+    "/home/jovyan/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing"
+)
 
 
 class _SensorOptions(StrEnum):
@@ -50,7 +52,7 @@ class CorineColorCollection(BaseModel):
 
 def get_intake_url(
     root: str = ROOT,
-    branch: str = "tuwel",
+    branch: str = "main",
     repo: str = REPO_RAW,
     *,
     verbose: bool = True,
