@@ -7,6 +7,7 @@ Returns
 
 """
 
+import os
 import urllib.parse
 from enum import StrEnum  # type: ignore[unresolved-import]
 
@@ -18,6 +19,8 @@ from typing_extensions import TypedDict
 ROOT = "https://git.geo.tuwien.ac.at"
 REPO_API = "api/v4/projects/1264/repository/files"
 REPO_RAW = "public_projects/microwave-remote-sensing/-/raw"
+
+os.environ["CACHE_DEST"] = "/tmp/fsspec"  # noqa COM812
 
 
 class _SensorOptions(StrEnum):
