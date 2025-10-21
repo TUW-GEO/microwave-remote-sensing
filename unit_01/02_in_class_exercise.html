@@ -341,7 +341,7 @@ window.Quarto = {
 \]</span> <span class="math display">\[
 [\text{dB}] \longleftrightarrow [\text{m}^2 \cdot \text{m}^{-2}]
 \]</span></p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> odc.stac</span>
@@ -360,7 +360,7 @@ window.Quarto = {
 <section id="search-for-some-data" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="search-for-some-data"><span class="header-section-number">2.2</span> Search for some Data</h2>
 <p>Now, we start by loading data from Sentinel-1 from the EODC STAC Catalogue. We do this in the same way as in the previous notebook “Discover and Read SAR Data”.</p>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>latmin, latmax <span class="op">=</span> <span class="dv">48</span>, <span class="fl">48.5</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>lonmin, lonmax <span class="op">=</span> <span class="dv">16</span>, <span class="dv">17</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bounds <span class="op">=</span> (lonmin, latmin, lonmax, latmax)</span>
@@ -383,7 +383,7 @@ window.Quarto = {
 <pre><code>60 scenes found</code></pre>
 </div>
 </div>
-<div id="4" class="cell" data-execution_count="3">
+<div id="4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"VV"</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc.stac.stac_load(</span>
@@ -965,12 +965,12 @@ Coordinates:
 <section id="comparison-of-the-data-in-db-and-linear-scale" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="comparison-of-the-data-in-db-and-linear-scale"><span class="header-section-number">2.3</span> Comparison of the Data in dB and Linear Scale</h2>
 <p>In the next two cells we will select a subset of the data. This is done to reduce the amount of data we are working with. The precise workflow is not important for now, since the theory is explained after the cells. They are just here to show the data we are working with.</p>
-<div id="6" class="cell" data-execution_count="4">
+<div id="6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> sig0_dc.sel(time<span class="op">=</span><span class="bu">slice</span>(<span class="st">"2022-07-01"</span>, <span class="st">"2022-07-07"</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> subset.dropna(<span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now plot the data.</p>
-<div id="8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;jupyter&quot;,&quot;value&quot;:{&quot;source_hidden&quot;:true}}" data-execution_count="5">
+<div id="8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;jupyter&quot;,&quot;value&quot;:{&quot;source_hidden&quot;:true}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> subset.isel(time<span class="op">=</span><span class="dv">0</span>, x<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">500</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="dv">0</span>, <span class="dv">500</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>aoi_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (aoi <span class="op">/</span> <span class="dv">10</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1040,7 +1040,7 @@ D =  10  \cdot \log_{10} (I) = 10 \cdot \log_{10} (e) \cdot \ln (I)\longrightarr
 I = e^{\frac{D}{10\cdot \log_{10}(e)}} = 10^{\frac{D}{10}} \longrightarrow [m^2m^{-2}]
 \]</span> You can find these formulas in the script for <code>Microwave Remote Sensing</code> on <code>page 136 (equation 6.40)</code>.</p>
 <p>Now let’s implement the conversion in Python.</p>
-<div id="10" class="cell" data-execution_count="6">
+<div id="10" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lin2db(val: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converts value from linear to dB units.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1063,7 +1063,7 @@ I = e^{\frac{D}{10\cdot \log_{10}(e)}} = 10^{\frac{D}{10}} \longrightarrow [m^2m
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">10</span> <span class="op">**</span> (val <span class="op">/</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>When performing mathematical operations with SAR data it is important to be aware, that adding values in the logarithmic scale doesn’t work in the same way as adding regular (linear) values. This is because in the logarithmic scale, each unit step represents an equal multiplication. This means that an addition of two values in the logarithmic scale equals a multiplication of the values in the linear scale. Vice versa, a subtraction in a logarithmic scale equals a division in a linear scale. Let’s have a look at an example, where we add two values, once without the conversion to linear scale and once with the conversion to linear scale.</p>
-<div id="12" class="cell" data-execution_count="7">
+<div id="12" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logarithmic addition</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Values in linear and decibel units</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>val1_db, val2_db <span class="op">=</span> <span class="dv">10</span>, <span class="dv">12</span></span>
@@ -1102,7 +1102,7 @@ Linear sum:         10.0 +  15.85 =  25.85 [lin]
 <section id="creating-a-monthly-mosaic" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="creating-a-monthly-mosaic"><span class="header-section-number">2.5</span> Creating a Monthly Mosaic</h2>
 <p>So in the beginning we have lazily loaded data for an area across a whole year. We therefore have around 700 images. We will now essentially compress the data of each month into one timestamp. This is done by using the <code>resampling</code> method together with an operation method like <code>mean</code> that includes summation. Since the data is in dB we need to convert it to linear scale first, then we can resample the data and convert it back to dB.</p>
-<div id="14" class="cell" data-execution_count="8">
+<div id="14" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to linear scale and calculate monthly means</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversion by calculating with the xarray Object</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sig0_lin <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (sig0_dc <span class="op">/</span> <span class="dv">10</span>)</span>
@@ -1649,7 +1649,7 @@ Coordinates:
 </div>
 </div>
 <p>The dataset has now only 12 timestamps, one for each month. Next, we want to calculate the average <span class="math inline">\(\sigma^0\)</span> value across a subset of the scene for one month. We will do this again by converting the data to linear scale first and then calculating the average and converting it back to dB.</p>
-<div id="16" class="cell" data-execution_count="9">
+<div id="16" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets take a data array with db values</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>db_array <span class="op">=</span> (</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    sig0_monthly.sel(time<span class="op">=</span><span class="st">"2022-07-30"</span>, method<span class="op">=</span><span class="st">"nearest"</span>)</span>
@@ -1660,7 +1660,7 @@ Coordinates:
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the linear values</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>lin_array <span class="op">=</span> db2lin(db_array)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="17" class="cell" data-execution_count="10">
+<div id="17" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the average backscatter value in linear units across the whole scene</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>lin_mean <span class="op">=</span> lin_array.mean()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average backscatter value in linear units: </span><span class="sc">{</span>lin_mean<span class="sc">.</span>values<span class="sc">: .3f}</span><span class="ss">"</span>)</span>

@@ -304,14 +304,14 @@ background: #006699;
 
 
 <p>This notebook demonstrates how to access radar data in a SpatioTemporal Asset Catalog (STAC) Catalog using the <code>pystac</code> library. In this example, we use Sentinel-1 data from the EODC (earth observation data and high performance computing service provider based in Vienna) STAC catalog. In the further process, we will learn how to query a STAC catalog, select specific items, and display the metadata and the actual image.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pystac_client</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> odc <span class="im">import</span> stac <span class="im">as</span> odc_stac</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="data-discovery" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="data-discovery"><span class="header-section-number">1.1</span> Data Discovery</h2>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>eodc_catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(<span class="st">"https://stac.eodc.eu/api/v1"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>eodc_catalog</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1271,7 +1271,7 @@ background: #006699;
 </div>
 <p>The URL <code>https://stac.eodc.eu/api/v1</code>, served over Hypertext Transfer Protocol (HTTP), is a STAC-compliant API endpoint (specific URL address where an API service is available) that leads to the EODC catalog. Besides EODC’s, other catalogs can be found on <a href="https://stacindex.org/catalogs">STAC Index</a>, such as United States Geological Survey (USGS) Landsat imagery, Sentinel Hub, Copernicus Data Space Ecosystem, and so on. Briefly spoken, STAC can be used to search, discover, and access metadata of these datasets with the same code. The EODC STAC catalog can be accessed on the web via this <a href="https://services.eodc.eu/browser/#/?.language=en">link</a> as well.</p>
 <p>Each STAC catalog, composed by different providers, has many collections. To get all collections of a catalog, we can print all of them and their ids, which are used to fetch them from the catalog.</p>
-<div id="5" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>collections <span class="op">=</span> eodc_catalog.get_collections()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># length of string of collection.id, for pretty print</span></span>
@@ -1339,7 +1339,7 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 </div>
 </div>
 <p>To get a specific collection from the catalog, we can use the <code>client.get_collection()</code> method and provide the collection name. We can then display its description, id, temporal and spatial extent, license, etc. In this notebook, we will work with the Sentinel-1 sigma naught 20m collection.</p>
-<div id="7" class="cell" data-execution_count="4">
+<div id="7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>colllection_id <span class="op">=</span> <span class="st">"SENTINEL1_SIG0_20M"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>collection <span class="op">=</span> eodc_catalog.get_collection(colllection_id)</span>
@@ -3059,21 +3059,21 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 </div>
 </div>
 <p>Each collection has multiple items. An item is one spatio-temporal instance in the collection, for instance a satellite image. If items are needed for a specific timeframe or for a specific region of interest, we can define this as a query.</p>
-<div id="9" class="cell" data-execution_count="5">
+<div id="9" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"2022-10-01/2022-10-07"</span>  <span class="co"># a closed range</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># time_range = "2022-01"  # whole month, same can be done for a year and a day</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># time_range = "2022-01-01/.."  # up to the current date, an open range</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># time_range = "2022-01-01T05:34:46"  # a specific time instance</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A spatial region of interest can be defined in different ways. One option is to define a simple bounding box:</p>
-<div id="11" class="cell" data-execution_count="6">
+<div id="11" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>latmin, latmax <span class="op">=</span> <span class="fl">46.3</span>, <span class="fl">49.3</span>  <span class="co"># South to North</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lonmin, lonmax <span class="op">=</span> <span class="fl">13.8</span>, <span class="fl">17.8</span>  <span class="co"># West to East</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bounding_box <span class="op">=</span> [lonmin, latmin, lonmax, latmax]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If the region of interest is not rectangular, we can also define a polygon:</p>
-<div id="13" class="cell" data-execution_count="7">
+<div id="13" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GEOJSON can be created on geojson.io</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This specific area of interest is a rectangle, but since it is</span></span>
@@ -3093,7 +3093,7 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Using our previously loaded STAC catalog, we can now search for items fullfilling our query. In this example we are using the bounding box. If we want to use an area of interest specified in the geojson format - one has to use the intersects parameter as documented in the comment below.</p>
-<div id="15" class="cell" data-execution_count="8">
+<div id="15" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>colllection_id,  <span class="co"># can also be a list of several collections</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box,  <span class="co"># search by bounding box</span></span>
@@ -3112,7 +3112,7 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 </div>
 </div>
 <p>Now, we can fetch a single item, in this case a Sentinel-1 image, from the query results. A good practice is to always check what metadata the data provider has stored on the item level. This can be done by looking into the item properties.</p>
-<div id="17" class="cell" data-execution_count="9">
+<div id="17" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> items_eodc[<span class="dv">0</span>]</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>item.properties</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -3152,7 +3152,7 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 </div>
 </div>
 <p>For now, let’s display only the vertical-vertical (VV) polarized band of the item and some information about the data.</p>
-<div id="19" class="cell" data-execution_count="10">
+<div id="19" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>item.assets[<span class="st">"VV"</span>].extra_fields.get(<span class="st">"raster:bands"</span>)[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>{'scale': 10,
@@ -3163,14 +3163,14 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 </div>
 </div>
 <p>In the EODC STAC catalog an item can conveniently be displayed using its thumbnail.</p>
-<div id="21" class="cell" data-execution_count="11">
+<div id="21" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>item.assets[<span class="st">"thumbnail"</span>].href</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>'https://data.eodc.eu/collections/SENTINEL1_SIG0_20M/V1M1R1/EQUI7_EU020M/E048N015T3/SIG0_20221007T170811__VV_A117_E048N015T3_EU020M_V1M1R1_S1AIWGRDH_TUWIEN.tif/thumbnail'</code></pre>
 </div>
 </div>
 <p>Now we will plot the data on a map using the thumbnail and the python package <a href="https://python-visualization.github.io/folium/latest/user_guide.html">folium</a>. This is an easy way to quickly check how the data found by a search query looks on a map.</p>
-<div id="23" class="cell" data-execution_count="12">
+<div id="23" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">map</span> <span class="op">=</span> folium.Map(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    location<span class="op">=</span>[(latmin <span class="op">+</span> latmax) <span class="op">/</span> <span class="dv">2</span>, (lonmin <span class="op">+</span> lonmax) <span class="op">/</span> <span class="dv">2</span>],</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    zoom_start<span class="op">=</span><span class="dv">7</span>,</span>
@@ -4755,7 +4755,7 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 <p>STAC can also be a useful tool for the discovery of data, however it only loads metadata. This saves memory, but if one would like to do further analysis, the data has to be loaded into memory or downloaded on disk.</p>
 <p>In the following, we will demonstrate this with the library <code>odc-stac</code>. Here we can define what data will loaded as <code>bands</code>; in this case VV sigma naught. Moreover we can resample the data by providing any coordinate reference system (CRS) and resolution as well as a method for resampling of continuos data (e.g.&nbsp;bilinear resampling). In the example below we use the EQUI7 Grid of Europe and a 20 meter sampling. This is the native format of sigma naught stored at EODC, so there will be no actual resampling. Note, also, that resampling is not advisable for this data, as it is provided on a logarithmic scale. More about this in the notebook “Backscattering Coefficients”.</p>
 <p><em>The chunks argument is an advancement method for performing parallel computations on the data. We will not cover this in further detail.</em></p>
-<div id="25" class="cell" data-execution_count="13">
+<div id="25" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"VV"</span>  <span class="co"># Vertical-vertical polarized</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>crs <span class="op">=</span> <span class="st">"EPSG:27704"</span>  <span class="co"># Coordinate Reference System: EQUI7 Grid of Europe</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="dv">20</span>  <span class="co"># 20 meter</span></span>
@@ -4771,7 +4771,7 @@ VEGETATION_CHANGE_AUSTRIA        : Vegetation-Change-Austria</code></pre>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s have a look at the VV polarized band of the dataset.</p>
-<div id="27" class="cell" data-execution_count="14">
+<div id="27" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sig0_dc.VV</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -5326,7 +5326,7 @@ Attributes:
 <p>As we can see, the data is stored as a <code>xarray</code> DataArray. Xarray is a convenient package for multidimensional labeled arrays, like temperature, humidity, pressure, different bands of satellite imagery, and so on. <a href="https://docs.xarray.dev/en/stable/index.html">The link</a> provides detailed documentation. In a later notebook we will explore some more of the functionality of <code>xarray</code>. As we can see in the coordinates, the data here consists of 21 time steps.</p>
 <p>In general, data from STAC is “lazily” loaded, which means that the structure of the DataArray is constructed, but the data is not loaded yet. It is loaded only at instance when it is needed, for example, for plotting, computations, and so on.</p>
 <p>Since the DataArray has currently a size of almost 18 GiB, we will subset it to the region of Vienna.</p>
-<div id="29" class="cell" data-execution_count="15">
+<div id="29" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bounding box covering the region of Vienna</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>latmin_smaller, latmax_smaller <span class="op">=</span> <span class="dv">48</span>, <span class="fl">48.4</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>lonmin_smaller, lonmax_smaller <span class="op">=</span> <span class="dv">16</span>, <span class="fl">16.5</span></span>
@@ -6928,7 +6928,7 @@ Attributes:
 </div>
 <p><em>Figure 2: Map of study area. Blue rectangle is the area covered by the discovered data. Red rectangle covers the selected data.</em></p>
 <p>Create a new dataset with the smaller bounding box covering the region of Vienna. We will leave out the arguments for resampling and directly use the native format as defined in the metadata.</p>
-<div id="31" class="cell" data-execution_count="16">
+<div id="31" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc_stac.load(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    items_eodc,</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    bands<span class="op">=</span>bands,</span>
@@ -6938,7 +6938,7 @@ Attributes:
 </div>
 <p>Due to the way the data is acquired and stored, some items include “no data” areas. In our case, no data has the value -9999, but this can vary from data provider to data provider. This information can usually be found in the metadata. Furthermore, to save memory, data is often stored as integer (e.g.&nbsp;25) and not in float (e.g.&nbsp;2.5) format. For this reason, the backscatter values are often multiplied by a scale factor, in this case factor 10.</p>
 <p>As Sentinel-1 satellites overpasses Austria every few days, only some time steps of the dataset will have physical data. As a final step, we will now decode the data and create a plot of two consecutive Sentinel-1 acquisitions of Vienna.</p>
-<div id="33" class="cell" data-execution_count="17">
+<div id="33" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve the scale factor and NoData value from the metadata. raster:bands is</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># a STAC raster extension</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> item.assets[<span class="st">"VV"</span>].extra_fields.get(<span class="st">"raster:bands"</span>)[<span class="dv">0</span>][<span class="st">"scale"</span>]</span>
@@ -6951,7 +6951,7 @@ Attributes:
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># (no satellite overpass)</span></span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.dropna(dim<span class="op">=</span><span class="st">"time"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="34" class="cell" data-execution_count="18">
+<div id="34" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sig0_dc.VV.plot(col<span class="op">=</span><span class="st">"time"</span>, robust<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"Greys_r"</span>, aspect<span class="op">=</span><span class="dv">1</span>, size<span class="op">=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>

@@ -344,7 +344,7 @@ window.Quarto = {
 <section id="loading-data" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="loading-data"><span class="header-section-number">9.1</span> Loading Data</h2>
 <p>The data is stored on the Jupyterhub server, so we need to load it using their respective paths. In this notebook we will use the resulting wrapped interferogram from notebook “Interferograms”, but we need to process it in the radar geometry in order to unwrap it (while in notebook “Interferograms” we end the whole process by performing the geocoding, just for better visualization purposes).</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cmcrameri <span class="im">as</span> cmc  <span class="co"># noqa: F401</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> intake</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -1056,7 +1056,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 
 </div>
 </div>
-<div id="2" class="cell" data-execution_count="2">
+<div id="2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> catalog.<span class="bu">complex</span>.read().compute()</span>
@@ -1065,7 +1065,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <pre><code>https://git.geo.tuwien.ac.at/public_projects/microwave-remote-sensing/-/raw/main/microwave-remote-sensing.yml</code></pre>
 </div>
 </div>
-<div id="3" class="cell" data-execution_count="3">
+<div id="3" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set cyclic and linear colormaps</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cmap_cyc <span class="op">=</span> sns.color_palette(<span class="st">"hls"</span>, as_cmap<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cmap_lin <span class="op">=</span> <span class="st">"cmc.roma_r"</span></span>
@@ -1075,7 +1075,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> ds.phase.where(ds.phase <span class="op">==</span> <span class="dv">0</span>, other<span class="op">=</span><span class="va">True</span>, drop<span class="op">=</span><span class="va">False</span>).astype(<span class="bu">bool</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s start by displaying the interferogram that needs to be unwrapped. Recall that due to the Slant Range geometry and the satellite acquisition pass (ascending, in our case), the image appears north/south flipped (with respect to the geocoded image)!</p>
-<div id="5" class="cell" data-execution_count="4">
+<div id="5" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Phase Interferogram Image</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plot_interferogram_map(ds<span class="op">=</span>ds, mask<span class="op">=</span>mask, cmap_cyc<span class="op">=</span>cmap_cyc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -1095,7 +1095,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <section id="unwrapping-on-a-subset" class="level3" data-number="9.2.1">
 <h3 data-number="9.2.1" class="anchored" data-anchor-id="unwrapping-on-a-subset"><span class="header-section-number">9.2.1</span> Unwrapping on a Subset</h3>
 <p>As the original image is too large to unwrap in a reasonable time, we will unwrap a subset of the image. In this case, we will unwrap an area of 500x500 pixels.</p>
-<div id="8" class="cell" data-execution_count="5">
+<div id="8" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a subset of the data</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dx, dy <span class="op">=</span> <span class="dv">500</span>, <span class="dv">500</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>x0, y0 <span class="op">=</span> <span class="dv">2800</span>, <span class="dv">1700</span></span>
@@ -1108,7 +1108,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> unwrap_array(subset, complex_var<span class="op">=</span><span class="st">"cmplx"</span>, ouput_var<span class="op">=</span><span class="st">"unwrapped"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now let’s compare the wrapped and unwrapped phase images.</p>
-<div id="10" class="cell" data-execution_count="6">
+<div id="10" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plot_compare_wrapped_unwrapped_completewrapped(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    subset<span class="op">=</span>subset,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    cmap_cyc<span class="op">=</span>cmap_cyc,</span>
@@ -1129,7 +1129,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <section id="unwrapping-with-coherence-mask" class="level3" data-number="9.2.2">
 <h3 data-number="9.2.2" class="anchored" data-anchor-id="unwrapping-with-coherence-mask"><span class="header-section-number">9.2.2</span> Unwrapping with coherence mask</h3>
 <p>Additionally, can we try to calculate the unwrapped image by excluding pixels which the coherence values are lower than a certain threshold. This is done by masking the coherence image with the threshold value and then unwrapping the phase image with the masked coherence image.</p>
-<div id="12" class="cell" data-execution_count="7">
+<div id="12" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>threshold1 <span class="op">=</span> <span class="fl">0.3</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>subset_unwrapped_coherence <span class="op">=</span> unwrap_array(</span>
@@ -1141,7 +1141,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s compare the unwrapped image with and without the coherence mask.</p>
-<div id="14" class="cell" data-execution_count="8">
+<div id="14" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_compare_coherence_mask_presence(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    subset<span class="op">=</span>subset_unwrapped_coherence,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    cmap_cyc<span class="op">=</span>cmap_cyc,</span>
@@ -1156,7 +1156,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 </div>
 </div>
 <p>Let’s see if another threshold value for the coherence mask gives better results.</p>
-<div id="16" class="cell" data-execution_count="9">
+<div id="16" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>threshold2 <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>subset_unwrapped_coherence_threshold2 <span class="op">=</span> unwrap_array(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    subset,</span>
@@ -1190,7 +1190,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <p>$ d = - _d $</p>
 <p>where: - <span class="math inline">\(\lambda = 0.056\)</span> for Sentinel-1 - <span class="math inline">\(\Delta \phi_d\)</span> is the unwrapped image</p>
 <p>This operation can be very useful for monitoring ground deformation.</p>
-<div id="18" class="cell" data-execution_count="10">
+<div id="18" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> displacement(unw: xr.DataArray, lambda_val: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.056</span>) <span class="op">-&gt;</span> xr.DataArray:</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Compute the displacement given the unwrapped phase."""</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> unw <span class="op">*</span> <span class="op">-</span>lambda_val <span class="op">/</span> (<span class="dv">4</span> <span class="op">*</span> np.pi)</span>
@@ -1199,7 +1199,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the displacement</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>disp_subset <span class="op">=</span> displacement(subset.unwrapped_coh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="19" class="cell" data-execution_count="11">
+<div id="19" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the displacement map</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plot_displacement_map(</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    subset<span class="op">=</span>disp_subset,</span>
@@ -1218,12 +1218,12 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <section id="coarsen-approach" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="coarsen-approach"><span class="header-section-number">9.4</span> Coarsen Approach</h2>
 <p>As the whole data is too large and the processing time already exceeds 20 minutes when using an image with 4000x4000 pixels, we can coarsen the image so that we can unwrap and compute the displacement for the whole scene.</p>
-<div id="21" class="cell" data-execution_count="12">
+<div id="21" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>kernel_size <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lowres <span class="op">=</span> ds.coarsen(x<span class="op">=</span>kernel_size, y<span class="op">=</span>kernel_size, boundary<span class="op">=</span><span class="st">"trim"</span>).median()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="22" class="cell" data-execution_count="13">
+<div id="22" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lowres <span class="op">=</span> unwrap_array(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    lowres,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    tile_overlap<span class="op">=</span><span class="dv">10</span>,</span>
@@ -1233,7 +1233,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can now plot the unwrapped image of the low resolution image.</p>
-<div id="24" class="cell" data-execution_count="14">
+<div id="24" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the unwrapped phase</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>plot_coarsened_image(lowres<span class="op">=</span>lowres, cmap_cyc<span class="op">=</span>cmap_cyc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -1245,7 +1245,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 </div>
 </div>
 <p>We can also now calculate the displacement map and compare them.</p>
-<div id="26" class="cell" data-execution_count="15">
+<div id="26" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>lowres_disp <span class="op">=</span> displacement(lowres.unwrapped)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the displacement map</span></span>
@@ -1263,7 +1263,7 @@ roTBs2RqAAAAAElFTkSuQmCC" style="height:25px; border-radius:12px; display: inlin
 </div>
 </div>
 <p>Plot a summary of the previous plots:</p>
-<div id="28" class="cell" data-execution_count="16">
+<div id="28" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot summary of previous plots</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>plot_summary(</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    subset<span class="op">=</span>subset,</span>
