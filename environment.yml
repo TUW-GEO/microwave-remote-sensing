@@ -12,6 +12,7 @@ dependencies:
   - intake
   - intake-xarray
   - jupyter
+  - jupyter-cache
   - jupyter_bokeh
   - mamba
   - matplotlib
@@ -20,8 +21,8 @@ dependencies:
   - pip
   - pyproj
   - pystac-client
-  - python<3.14
   - python-gitlab
+  - python<3.14
   - requests
   - rioxarray
   - scikit-image

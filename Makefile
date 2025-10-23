@@ -41,3 +41,6 @@ $(KERNEL_DIR): $(CONDA_ENV_DIR)
 
 kernel: $(KERNEL_DIR)
 	@echo -e "conda jupyter kernel is ready."
+
+activate:
+	$(CONDA_ACTIVATE)
