@@ -3,7 +3,9 @@ requires = ["uv_build >= 0.7.19, <0.9.0"]
 build-backend = "uv_build"
 
 [project]
-authors = [{ name = "Remote Sensing Group, TU Wien", email = "rs@tuwien.ac.at" }]
+authors = [
+    { name = "Remote Sensing Group, TU Wien", email = "rs@tuwien.ac.at" },
+]
 name = "mrs"
 version = "0.1.0"
 description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
@@ -30,7 +32,7 @@ classifiers = [
 
 [project.optional-dependencies]
 tuwel = [
-    "aiohttp"
+    "aiohttp",
     "cmcrameri",
     "dask",
     "datashader",
@@ -74,7 +76,7 @@ exclude = [
     "dist",
     "site-packages",
     "venv",
-    "*_homework_exercise.ipynb"
+    "*_homework_exercise.ipynb",
 ]
 line-length = 88
 indent-width = 4
@@ -84,12 +86,12 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    "D203",   # incorrect-blank-line-before-class
-    "D213",   # multi-line-summary-second-line (opposite to D212)
-    "PGH",    # pygrep hooks are ignored
-    "TD002",  # missing-todo-author
-    "TD003",  # missing-todo-link
-    "T201",   # print (should not be used)
+    "D203",  # incorrect-blank-line-before-class
+    "D213",  # multi-line-summary-second-line (opposite to D212)
+    "PGH",   # pygrep hooks are ignored
+    "TD002", # missing-todo-author
+    "TD003", # missing-todo-link
+    "T201",  # print (should not be used)
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -99,7 +101,7 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
-docstring-code-format = false  # maybe true? Should replace blackdoc
+docstring-code-format = false          # maybe true? Should replace blackdoc
 docstring-code-line-length = "dynamic"
 
 [tool.ruff.lint.isort]
