@@ -3,29 +3,25 @@ channels:
   - conda-forge
 dependencies:
   - aiohttp
-  - bokeh
   - cmcrameri
   - dask
   - datashader
   - folium
   - graphviz
-  - holoviews
-  - huggingface_hub
   - hvplot
   - intake
   - intake-xarray
   - jupyter
   - jupyter_bokeh
-  - jupyter-cache
   - mamba
   - matplotlib
   - nodejs
-  - numpy
   - odc-stac
   - pip
   - pyproj
   - pystac-client
-  - python=3.11
+  - python<3.14
+  - python-gitlab
   - requests
   - rioxarray
   - scikit-image
@@ -34,7 +30,5 @@ dependencies:
   - snaphu
   - xarray
   - zarr=2.18.4
-  - pre-commit
   - pip:
-      - python-gitlab
       - .
