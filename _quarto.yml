@@ -2,7 +2,6 @@ project:
   type: book
   pre-render:
     - make kernel
-    - make activate
 
 book:
   title: "JupyerHub Guide"
