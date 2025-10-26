@@ -50,7 +50,7 @@ class CorineColorCollection(BaseModel):
 
 def get_intake_url(
     root: str = ROOT,
-    branch: str = "dev-exs",
+    branch: str = "main",
     repo: str = REPO_RAW,
     *,
     verbose: bool = True,
