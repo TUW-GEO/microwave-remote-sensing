@@ -12,12 +12,17 @@ dependencies:
   - intake
   - intake-xarray
   - jupyter
+  - jupyter-cache
   - jupyter_bokeh
   - mamba
   - matplotlib
   - nodejs
   - odc-stac
+  - pandas-stubs>=2.3.2.250926
   - pip
+  - pre-commit
+  - pydantic>=2.12.2
+  - pydantic-extra-types>=2.10.6
   - pyproj
   - pystac-client
   - python-gitlab
