@@ -9,10 +9,10 @@ book:
     - index.qmd
     - part: "Unit 1"
       chapters:
-        - text: EO Data Discovery
-          file: unit_01/01_in_class_exercise.ipynb
-        - text: Unit Conversions
-          file: unit_01/02_in_class_exercise.ipynb
+        # - text: EO Data Discovery
+        #   file: unit_01/01_in_class_exercise.ipynb
+        # - text: Unit Conversions
+        #   file: unit_01/02_in_class_exercise.ipynb
         - text: Backscattering Coefficients
           file: unit_01/03_in_class_exercise.ipynb
     - part: "Unit 2"
@@ -31,6 +31,16 @@ book:
           file: unit_03/08_in_class_exercise.ipynb
         - text: Phase Unwrapping
           file: unit_03/09_in_class_exercise.ipynb
+  appendices:
+    - unit_01/01_homework_exercise.ipynb
+    - unit_01/02_homework_exercise.ipynb
+    - unit_01/03_homework_exercise.ipynb
+    - unit_02/04_homework_exercise.ipynb
+    - unit_02/05_homework_exercise.ipynb
+    - unit_02/06_homework_exercise.ipynb
+    - unit_03/07_homework_exercise.ipynb
+    - unit_03/08_homework_exercise.ipynb
+    - unit_03/09_homework_exercise.ipynb
   navbar:
     logo: images/tuw-geo-logo.svg
   sidebar:

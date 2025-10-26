@@ -3,44 +3,15 @@ requires = ["uv_build >= 0.7.19, <0.9.0"]
 build-backend = "uv_build"
 
 [project]
-authors = [{ name = "Remote Sensing Group, TU Wien", email = "rs@tuwien.ac.at" }]
+authors = [
+    { name = "Remote Sensing Group, TU Wien", email = "rs@tuwien.ac.at" },
+]
 name = "mrs"
 version = "0.1.0"
 description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "aiohttp",
-    "bokeh",
-    "cmcrameri",
-    "dask",
-    "datashader",
-    "folium",
-    "graphviz",
-    "holoviews",
-    "huggingface_hub",
-    "hvplot",
-    "intake",
-    "intake-xarray",
-    "jupyter",
-    "jupyter_bokeh",
-    "matplotlib",
-    "numpy",
-    "odc-stac",
-    "pyproj",
-    "pystac-client",
-    "requests",
-    "rioxarray",
-    "scikit-image",
-    "scipy",
-    "seaborn",
-    "snaphu",
-    "xarray",
-    "zarr<3.0",
-    "python-gitlab",
-    "pydantic>=2.12.2",
-    "pydantic-extra-types>=2.10.6",
-    "pandas-stubs>=2.3.2.250926",
 ]
 classifiers = [
     "Intended Audience :: Science/Research",
@@ -52,6 +23,33 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Operating System :: POSIX",
     "Natural Language :: English",
+]
+
+[project.optional-dependencies]
+tuwel = [
+    "aiohttp",
+    "cmcrameri",
+    "dask",
+    "datashader",
+    "folium",
+    "graphviz",
+    "hvplot",
+    "intake",
+    "intake-xarray",
+    "jupyter_bokeh",
+    "matplotlib",
+    "odc-stac",
+    "python-gitlab",
+    "pyproj",
+    "pystac-client",
+    "requests",
+    "rioxarray",
+    "scikit-image",
+    "scipy",
+    "seaborn",
+    "snaphu",
+    "xarray",
+    "zarr<3.0",
 ]
 
 [tool.ruff]
@@ -73,7 +71,7 @@ exclude = [
     "dist",
     "site-packages",
     "venv",
-    "*_homework_exercise.ipynb"
+    "*_homework_exercise.ipynb",
 ]
 line-length = 88
 indent-width = 4
@@ -83,12 +81,12 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    "D203",   # incorrect-blank-line-before-class
-    "D213",   # multi-line-summary-second-line (opposite to D212)
-    "PGH",    # pygrep hooks are ignored
-    "TD002",  # missing-todo-author
-    "TD003",  # missing-todo-link
-    "T201",   # print (should not be used)
+    "D203",  # incorrect-blank-line-before-class
+    "D213",  # multi-line-summary-second-line (opposite to D212)
+    "PGH",   # pygrep hooks are ignored
+    "TD002", # missing-todo-author
+    "TD003", # missing-todo-link
+    "T201",  # print (should not be used)
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -98,7 +96,7 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
-docstring-code-format = false  # maybe true? Should replace blackdoc
+docstring-code-format = false          # maybe true? Should replace blackdoc
 docstring-code-line-length = "dynamic"
 
 [tool.ruff.lint.isort]
