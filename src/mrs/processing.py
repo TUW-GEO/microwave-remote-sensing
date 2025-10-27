@@ -5,7 +5,9 @@ import os
 from pathlib import Path
 from typing import Literal, Never  # type: ignore[ty-not-there-yet]
 
+# remove unnecessary latter
 import numpy as np
+import numpy.typing as npt
 import snaphu
 import xarray as xr
 
@@ -149,3 +151,84 @@ def subsetting(
 
     """
     return ds.isel(x=slice(x0, x0 + dx), y=slice(y0, y0 + dy))
+
+
+def add_speckle(array: npt.ArrayLike, noise: float = 0.3) -> npt.ArrayLike:
+    """Add simulated Rayleigh speckle noise to an array.
+
+    Parameters
+    ----------
+    array : npt.ArrayLike
+        Input array to which speckle will be added.
+    noise : float, optional
+        Fraction of pixels to affect (0.0 to 1.0). Default is 0.3.
+
+    Returns
+    -------
+    npt.ArrayLike
+        The input array with speckle noise applied.
+
+    """
+    # Rayleigh speckle noise
+    total_pixels = array.shape[0] * array.shape[1]
+    speckled_pixels = int(total_pixels * noise)
+
+    # Randomly select pixels to add speckle
+    rng = np.random.default_rng()
+    speckled_indices = rng.choice(total_pixels, speckled_pixels, replace=False)
+
+    # Add speckle to the selected pixels
+    speckle_noise = rng.gumbel(scale=1.0, size=speckled_pixels)
+    array.ravel()[speckled_indices] *= speckle_noise
+    return array
+
+
+def convert_db_to_linear(ideal_data: np.array, speckled_data: np.array) -> np.array:
+    """Convert backscatter data from decibel (dB) to linear scale.
+
+    Parameters
+    ----------
+    ideal_data : np.ndarray
+        Ideal backscatter data in dB.
+    speckled_data : np.ndarray
+        Speckled backscatter data in dB.
+
+    Returns
+    -------
+    tuple of np.ndarray
+        A tuple containing:
+        - ideal_data_linear : Ideal data in linear units.
+        - speckled_data_linear : Speckled data in linear units.
+
+    """
+    # Convert dB to linear scale for speckle addition
+    ideal_data_linear = 10 ** (ideal_data / 10)
+    speckled_data_linear = 10 ** (speckled_data / 10)
+    return ideal_data_linear, speckled_data_linear
+
+
+def convert_linear_to_db(
+    ideal_data_linear: np.array,
+    speckled_data_linear: np.array,
+) -> np.array:
+    """Convert backscatter data from linear to decibel (dB) scale.
+
+    Parameters
+    ----------
+    ideal_data_linear : np.ndarray
+        Ideal backscatter data in linear units.
+    speckled_data_linear : np.ndarray
+        Speckled backscatter data in linear units.
+
+    Returns
+    -------
+    tuple of np.ndarray
+        A tuple containing:
+        - ideal_data_db : Ideal data in dB.
+        - speckled_data_db : Speckled data in dB.
+
+    """
+    # Convert back to dB scale
+    ideal_data_db = 10 * np.log10(ideal_data_linear)
+    speckled_data_db = 10 * np.log10(speckled_data_linear)
+    return ideal_data_db, speckled_data_db

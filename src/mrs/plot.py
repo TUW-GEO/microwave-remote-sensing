@@ -953,3 +953,259 @@ def plot_summary(  # noqa: PLR0913
     )
 
     plt.tight_layout()
+
+
+def add_histogram_to_axis(
+    ax: np.ndarray,
+    data: np.ndarray,
+    title: str,
+    max_freq: float,
+    bins: int = 25,
+) -> None:
+    """Plot histogram on given axis with fixed settings.
+
+    Parameters
+    ----------
+    ax : np.ndarray
+        Matplotlib axis to plot on.
+    data : np.ndarray
+        Flattened data to histogram.
+    title : str
+        Plot title.
+    max_freq : float
+        Maximum frequency for y-axis limit.
+    bins : int, optional
+        Number of bins (default 25).
+
+    """
+    ax.hist(data.ravel(), bins=bins, range=(-20, 0), color="gray", alpha=0.7)
+    ax.set_ylim(0, max_freq)
+    ax.set_title(title)
+    ax.set_xlabel("Backscatter (dB)")
+    ax.set_ylabel("Frequency")
+
+
+def plot_histograms_speckled_and_ideal_data(
+    ideal_data_db: np.ndarray,
+    speckled_data_db: np.ndarray,
+    speckle_fraction: float,
+) -> None:
+    """Plot ideal and speckled data with their histograms.
+
+    Creates a 2x2 subplot showing:
+    1. Ideal data image
+    2. Speckled data image
+    3. Histogram of ideal data
+    4. Histogram of speckled data
+
+    Parameters
+    ----------
+    ideal_data_db : np.ndarray
+        Ideal backscatter data in dB.
+    speckled_data_db : np.ndarray
+        Speckled version of the backscatter data.
+    speckle_fraction : float
+        Fraction of pixels affected by speckle (0-1).
+
+    Returns
+    -------
+    plt.Figure
+        The created figure containing all subplots.
+
+    """
+    bins = 25
+    common = {"bins": bins, "range": (-20, 0)}
+
+    hist_ideal, bins_ideal = np.histogram(ideal_data_db.ravel(), **common)  # noqa: RUF059
+    hist_speckled, bins_speckled = np.histogram(speckled_data_db.ravel(), **common)  # noqa: RUF059
+
+    # maximum frequency for normalization
+    max_freq = max(hist_ideal.max(), hist_speckled.max())
+    # Ideal data
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(16, 10))
+    pos = axs[0, 0].imshow(ideal_data_db, cmap="gray", vmin=-20, vmax=0)
+    axs[0, 0].set_title("Ideal Backscatter (Cornfield)")
+    fig.colorbar(pos, label="Backscatter (dB)", ax=axs[0, 0])
+
+    # Speckled data
+    plt.subplot(2, 2, 2)
+    pos2 = axs[0, 1].imshow(speckled_data_db, cmap="gray", vmin=-20, vmax=0)  # noqa: F841
+    axs[0, 1].set_title(
+        f"Speckled Backscatter ({int(speckle_fraction * 100)}% of Pixels)",
+    )
+    fig.colorbar(pos, label="Backscatter (dB)", ax=axs[0, 1])
+
+    # Histogram for ideal data
+    add_histogram_to_axis(
+        ax=axs[1, 0],
+        data=ideal_data_db,
+        title="Histogram of Ideal Backscatter",
+        max_freq=max_freq,
+    )
+
+    # Histogram for speckled data
+    add_histogram_to_axis(
+        ax=axs[1, 1],
+        data=speckled_data_db,
+        title=f"Histogram of Speckled Backscatter ({int(speckle_fraction * 100)}%)",
+        max_freq=max_freq,
+    )
+
+    plt.tight_layout()
+
+
+def load_image_landcover(  # noqa: PLR0913
+    var_ds: Dataset,
+    time: any | None,
+    land_cover: any,
+    x_range: DataArray,
+    y_range: DataArray,
+    filter_fun_spatial: any | None,
+) -> hv.Image:
+    """Load Landcover image.
+
+    Parameters
+    ----------
+    var_ds: Dataset
+        dataset type
+    time: any
+        time slice
+    land_cover: any
+        land cover type
+    x_range: array_like
+        longitude range
+    y_range: array_like
+        latitude range
+    filter_fun_spatial: any
+        filter type
+
+
+    Returns
+    -------
+    holoviews.Image
+
+    """
+    if time is not None:
+        var_ds = var_ds.sel(time=time)
+
+    if land_cover == "\xa0\xa0\xa0 Complete Land Cover":
+        sig0_selected_ds = var_ds.sig0
+    else:
+        land_cover_value = int(land_cover.split()[0])
+        mask_ds = var_ds.land_cover == land_cover_value
+        sig0_selected_ds = var_ds.sig0.where(mask_ds)
+
+    if filter_fun_spatial is not None:
+        sig0_np = filter_fun_spatial(sig0_selected_ds.to_numpy())
+    else:
+        sig0_np = sig0_selected_ds.to_numpy()
+
+    # Convert unfiltered data into Holoviews Image
+    img = hv.Dataset(
+        (sig0_selected_ds["x"], sig0_selected_ds["y"], sig0_np),
+        ["x", "y"],
+        "sig0",
+    )
+
+    if x_range and y_range:
+        img = img.select(x=x_range, y=y_range)
+
+    return hv.Image(img)
+
+
+def plot_variability(
+    var_ds: Dataset,
+    color_mapping: dict,
+    present_landcover_codes: list,
+    filter_fun_spatial: any | None,
+    filter_fun_temporal: any | None,
+) -> hv.core.layout:
+    """Create an interactive plot for backscatter data exploration.
+
+    Generates a DynamicMap showing an image of backscatter values alongside
+    a synchronized histogram. The plot supports dynamic selection of time
+    and landcover type via widgets.
+
+    Parameters
+    ----------
+    var_ds : xr.Dataset
+        Dataset containing backscatter data ('sig0' variable).
+    color_mapping : dict
+        Mapping of landcover codes to color and label information.
+    present_landcover_codes : list
+        List of landcover codes available in the data.
+    filter_fun_spatial : callable, optional
+        Function to spatially filter the dataset.
+    filter_fun_temporal : callable, optional
+        Function to temporally filter the dataset.
+
+    Returns
+    -------
+    holoviews.core.Layout
+        An interactive HoloViews DynamicMap with linked image and histogram.
+
+    """
+    robust_min = var_ds.sig0.quantile(0.02).item()
+    robust_max = var_ds.sig0.quantile(0.98).item()
+
+    bin_edges = [
+        i + j * 0.5
+        for i in range(int(robust_min) - 2, int(robust_max) + 2)
+        for j in range(2)
+    ]
+
+    land_cover = {"\xa0\xa0\xa0 Complete Land Cover": 1}
+    land_cover.update(
+        {
+            f"{int(value): 02} {color_mapping[value]['label']}": int(value)
+            for value in present_landcover_codes
+        },
+    )
+    time = var_ds.sig0["time"].to_numpy()
+
+    rangexy = RangeXY()
+
+    if filter_fun_temporal is not None:
+        var_ds = filter_fun_temporal(var_ds)
+        load_image_landcover_ = partial(
+            load_image_landcover,
+            var_ds=var_ds,
+            filter_fun_spatial=filter_fun_spatial,
+            time=None,
+        )
+        dmap = (
+            hv.DynamicMap(load_image_landcover_, kdims=["Landcover"], streams=[rangexy])
+            .redim.values(Landcover=land_cover)
+            .hist(normed=True, bins=bin_edges)
+        )
+
+    else:
+        load_image_landcover_ = partial(
+            load_image_landcover,
+            var_ds=var_ds,
+            filter_fun_spatial=filter_fun_spatial,
+        )
+        dmap = (
+            hv.DynamicMap(
+                load_image_landcover_,
+                kdims=["Time", "Landcover"],
+                streams=[rangexy],
+            )
+            .redim.values(Time=time, Landcover=land_cover)
+            .hist(normed=True, bins=bin_edges)
+        )
+
+    image_opts = hv.opts.Image(
+        cmap="Greys_r",
+        colorbar=True,
+        tools=["hover"],
+        clim=(robust_min, robust_max),
+        aspect="equal",
+        framewise=False,
+        frame_height=500,
+        frame_width=500,
+    )
+
+    hist_opts = hv.opts.Histogram(width=350, height=555)
+
+    return dmap.opts(image_opts, hist_opts)
