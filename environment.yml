@@ -30,6 +30,5 @@ dependencies:
   - snaphu
   - xarray
   - zarr=2.18.4
-  - holoviews
   - pip:
       - .
