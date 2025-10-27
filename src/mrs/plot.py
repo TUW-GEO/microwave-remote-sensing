@@ -1,10 +1,12 @@
 """Functions for plotting."""
 
 import base64
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from functools import partial
 from io import BytesIO
-from typing import Self  # type: ignore[unresolved-import]
+from typing import (
+    Self,  # type: ignore[unresolved-import]
+)
 
 import folium
 import holoviews as hv  # type: ignore[import-untyped]
@@ -1056,11 +1058,11 @@ def plot_histograms_speckled_and_ideal_data(
 
 def load_image_landcover(  # noqa: PLR0913
     var_ds: Dataset,
-    time: any | None,
+    time: None,
     land_cover: any,
     x_range: DataArray,
     y_range: DataArray,
-    filter_fun_spatial: any | None,
+    filter_fun_spatial: None,
 ) -> hv.Image:
     """Load Landcover image.
 
@@ -1117,8 +1119,8 @@ def plot_variability(
     var_ds: Dataset,
     color_mapping: dict,
     present_landcover_codes: list,
-    filter_fun_spatial: any | None,
-    filter_fun_temporal: any | None,
+    filter_fun_spatial: Callable[[Dataset], Dataset] | None = None,
+    filter_fun_temporal: Callable[[Dataset], Dataset] | None = None,
 ) -> hv.core.layout:
     """Create an interactive plot for backscatter data exploration.
 
