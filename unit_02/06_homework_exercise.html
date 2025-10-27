@@ -421,7 +421,12 @@ window.Quarto = {
 <section id="select-the-dates-of-interest" class="level2" data-number="F.3">
 <h2 data-number="F.3" class="anchored" data-anchor-id="select-the-dates-of-interest"><span class="header-section-number">F.3</span> Select the Dates of Interest</h2>
 <p>To create an RGB composite, we need to choose three distinct dates. It’s recommended to select dates that are spaced out to capture noticeable changes over time (e.g., first available date, second date as the middle date of the datacube time window, third date as the last availavable date). Pay attention to the season as well, as vegetation and other environmental factors often change significantly throughout the year.</p>
-<p>Here the <code>sel</code> method with nearest neighbor (<code>method="nearest"</code>) interpolation is used to choose the dates closest to the ones we specify.</p>
+<p>Tips:</p>
+<ul>
+<li>Select your dates from the <code>sig0_da</code> object and define them using the numpy <code>datetime64</code> data type.</li>
+<li>Use the <code>sel</code> method with nearest neighbor (<code>method=\"nearest\"</code>) interpolation method to obtain the resulting <code>sig0_rgb_da</code> object.</li>
+<li>Do not forget to use the <code>compute()</code> method (when you use the <code>sel</code> method) to finally load the result into memory.</li>
+</ul>
 <div id="5" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE ----------------------------------------------------------</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>first <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
@@ -429,9 +434,8 @@ window.Quarto = {
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>third <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE ----------------------------------------------------------</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>sig0_rgb_da <span class="op">=</span> sig0_da.sel(time<span class="op">=</span>[first, second, third], method<span class="op">=</span><span class="st">"nearest"</span>).<span class="op">\</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    compute()</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>sig0_rgb_da</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>sig0_rgb_da <span class="op">=</span> ... <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>sig0_rgb_da</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="map-the-backscatter-to-rgb-values" class="level3" data-number="F.3.1">
 <h3 data-number="F.3.1" class="anchored" data-anchor-id="map-the-backscatter-to-rgb-values"><span class="header-section-number">F.3.1</span> Map the backscatter to RGB values</h3>
