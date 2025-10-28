@@ -5,7 +5,6 @@ import os
 from pathlib import Path
 from typing import Literal, Never  # type: ignore[ty-not-there-yet]
 
-# remove unnecessary latter
 import numpy as np
 import numpy.typing as npt
 import snaphu
@@ -92,14 +91,15 @@ def unwrap_array(  # noqa: D417, PLR0913
             coh_mask: xr.DataArray = (
                 coh_low_threshold <= coherence <= coh_high_threshold
             ).astype(bool)
+            mask: xr.DataArray = mask & coh_mask  # type: ignore[operator, no-redef]
 
         if coh_low_threshold is not None:
             coh_mask: xr.DataArray = (coh_low_threshold <= coherence).astype(bool)  # type: ignore[no-redef]
+            mask: xr.DataArray = mask & coh_mask  # type: ignore[operator, no-redef]
 
         if coh_high_threshold is not None:
             coh_mask = (coherence <= coh_high_threshold).astype(bool)
-
-    mask: xr.DataArray = mask & coh_mask  # type: ignore[operator, no-redef]
+            mask: xr.DataArray = mask & coh_mask  # type: ignore[operator, no-redef]
 
     # Apply the mask to the data
     complex_array = complex_array.where(mask)
