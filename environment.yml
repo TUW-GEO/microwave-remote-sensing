@@ -2,6 +2,7 @@ name: microwave-remote-sensing
 channels:
   - conda-forge
 dependencies:
+  - dask # do not move this
   - jupyter
   - jupyter-cache
   - mamba
@@ -9,5 +10,6 @@ dependencies:
   - pip
   - python<3.14,>=3.12
   - uv
+  - zarr==2.18.4 # do not move this
   - pip:
       - .[tuwel]
