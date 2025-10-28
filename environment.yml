@@ -26,8 +26,9 @@ dependencies:
   - pyproj
   - pystac-client
   - python-gitlab
-  - python<3.14
+  - python<3.14,>=3.12
   - requests
+  - rich
   - rioxarray
   - scikit-image
   - scipy

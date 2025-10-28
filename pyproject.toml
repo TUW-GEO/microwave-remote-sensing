@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build >= 0.7.19, <0.9.0"]
+requires = ["uv_build>=0.9.5,<0.10.0"]
 build-backend = "uv_build"
 
 [project]
@@ -10,17 +10,16 @@ name = "mrs"
 version = "0.1.0"
 description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = [
-]
+requires-python = ">=3.12"
+dependencies = []
 classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: GIS",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: POSIX",
     "Natural Language :: English",
 ]
@@ -81,12 +80,13 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    "D203",  # incorrect-blank-line-before-class
-    "D213",  # multi-line-summary-second-line (opposite to D212)
-    "PGH",   # pygrep hooks are ignored
-    "TD002", # missing-todo-author
-    "TD003", # missing-todo-link
-    "T201",  # print (should not be used)
+    "D203",   # incorrect-blank-line-before-class
+    "D213",   # multi-line-summary-second-line (opposite to D212)
+    "PGH",    # pygrep hooks are ignored
+    "TD002",  # missing-todo-author
+    "TD003",  # missing-todo-link
+    "T201",   # print (should not be used)
+    "COM812", # missing-trailing-comma (not recommended with ruff fmt)
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -101,3 +101,6 @@ docstring-code-line-length = "dynamic"
 
 [tool.ruff.lint.isort]
 known-third-party = []
+
+[tool.ty.src]
+exclude = ["**/*_homework_exercise.ipynb"]
