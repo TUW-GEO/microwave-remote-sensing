@@ -45,7 +45,7 @@ def suppress_output():  # noqa: ANN201
 
 # TODO: Remove complexity from the function  # noqa: FIX002
 def unwrap_array(  # noqa: D417, PLR0913
-    data: xr.DataArray,
+    data: xr.Dataset,
     complex_var: str = "cmplx",
     ouput_var: str = "unwrapped",
     mask: xr.DataArray | None = None,
@@ -57,7 +57,7 @@ def unwrap_array(  # noqa: D417, PLR0913
     cost: Literal["defo", "smooth"] = "smooth",
     init: Literal["mcf", "mst"] = "mcf",
     **kwargs: Never,
-) -> xr.DataArray:
+) -> xr.Dataset:
     """Unwraps the phase data using the snaphu algorithm.
 
     Parameters
@@ -80,32 +80,38 @@ def unwrap_array(  # noqa: D417, PLR0913
 
     """
     # Get the complex data
-    data_arr = data[complex_var]
+    complex_array = data[complex_var]
 
     # Create a mask for areas with no data
     if mask is None:
-        mask = (data_arr.real != mask_nodata_value).astype(bool)
+        mask: xr.DataArray = (complex_array.real != mask_nodata_value).astype(bool)  # type: ignore[no-redef]
 
     # Apply coherence thresholds if provided
     if coherence is not None:
+        if coh_low_threshold is not None and coh_high_threshold is not None:
+            coh_mask: xr.DataArray = (
+                coh_low_threshold <= coherence <= coh_high_threshold
+            ).astype(bool)
+
         if coh_low_threshold is not None:
-            coh_mask = (coherence >= coh_low_threshold).astype(bool)
-            mask = mask & coh_mask
+            coh_mask: xr.DataArray = (coh_low_threshold <= coherence).astype(bool)  # type: ignore[no-redef]
+
         if coh_high_threshold is not None:
             coh_mask = (coherence <= coh_high_threshold).astype(bool)
-            mask = mask & coh_mask
+
+    mask: xr.DataArray = mask & coh_mask  # type: ignore[operator, no-redef]
 
     # Apply the mask to the data
-    data_arr = data_arr.where(mask)
+    complex_array = complex_array.where(mask)
 
     if coherence is None:
         # TODO: Resolve type-checker complaints  # noqa: FIX002
-        coherence: np.ndarray = np.ones_like(data_arr.real)  # type: ignore[no-redef]
+        coherence: np.ndarray = np.ones_like(complex_array.real)  # type: ignore[no-redef]
 
     # Unwrap the phase (already in complex form)
     with suppress_output():
         unw, _ = snaphu.unwrap(
-            igram=data_arr,
+            igram=complex_array,
             corr=coherence,  # type: ignore[arg-type]
             nlooks=nlooks,
             cost=cost,
@@ -123,17 +129,17 @@ def unwrap_array(  # noqa: D417, PLR0913
 
 
 def subsetting(
-    ds: xr.DataArray | xr.Dataset,
+    ds: xr.Dataset,
     x0: int = 0,
     y0: int = 0,
     dx: int = 500,
     dy: int = 500,
-) -> xr.DataArray | xr.Dataset:
+) -> xr.Dataset:
     """Extract a rectangular subset from an xarray object.
 
     Parameters
     ----------
-    ds : xarray.Dataset or xarray.DataArray
+    ds : xarray.Dataset
         The data object to subset.
     x0 : int, default 0
         Starting index along the 'x' dimension.
@@ -146,14 +152,14 @@ def subsetting(
 
     Returns
     -------
-    xarray.Dataset or xarray.DataArray
+    xarray.Dataset
         A new object containing only the data within the specified slice.
 
     """
     return ds.isel(x=slice(x0, x0 + dx), y=slice(y0, y0 + dy))
 
 
-def add_speckle(array: npt.ArrayLike, noise: float = 0.3) -> npt.ArrayLike:
+def add_speckle(array: npt.NDArray, noise: float = 0.3) -> npt.NDArray:
     """Add simulated Rayleigh speckle noise to an array.
 
     Parameters
@@ -183,7 +189,10 @@ def add_speckle(array: npt.ArrayLike, noise: float = 0.3) -> npt.ArrayLike:
     return array
 
 
-def convert_db_to_linear(ideal_data: np.array, speckled_data: np.array) -> np.array:
+def convert_db_to_linear(
+    ideal_data: npt.NDArray,
+    speckled_data: npt.NDArray,
+) -> tuple[npt.NDArray, npt.NDArray]:
     """Convert backscatter data from decibel (dB) to linear scale.
 
     Parameters
@@ -208,9 +217,9 @@ def convert_db_to_linear(ideal_data: np.array, speckled_data: np.array) -> np.ar
 
 
 def convert_linear_to_db(
-    ideal_data_linear: np.array,
-    speckled_data_linear: np.array,
-) -> np.array:
+    ideal_data_linear: npt.NDArray,
+    speckled_data_linear: npt.NDArray,
+) -> tuple[npt.NDArray, npt.NDArray]:
     """Convert backscatter data from linear to decibel (dB) scale.
 
     Parameters

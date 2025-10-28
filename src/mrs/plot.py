@@ -5,6 +5,7 @@ from collections.abc import Callable, Iterable
 from functools import partial
 from io import BytesIO
 from typing import (
+    Any,
     Self,  # type: ignore[unresolved-import]
 )
 
@@ -12,6 +13,7 @@ import folium
 import holoviews as hv  # type: ignore[import-untyped]
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import rioxarray  # noqa: F401
 import seaborn as sns  # type: ignore[import-untyped]
@@ -31,6 +33,9 @@ RANGEXY = RangeXY()
 HIST_OPTS = hv.opts.Histogram(width=350, height=555)
 CMAP_HLS: ListedColormap = sns.hls_palette(as_cmap=True)
 CMAP_HLS_HEX: _ColorPalette = sns.color_palette("hls", n_colors=256).as_hex()
+
+
+type ColorMapLike = Colormap | ListedColormap | list[str] | str
 
 
 # A bunch of Supersets for type hinting purposes...
@@ -109,7 +114,7 @@ def _handles(
 
 def plot_corine_data(
     cor_da: DataArray,
-    cmap: Colormap,
+    cmap: ColorMapLike,
     norm: Normalize,
     color_mapping: CorineColorCollection,
     present_landcover_codes: Iterable[int],
@@ -180,9 +185,9 @@ def _bin_edges(robust_min: float, robust_max: float) -> list[float]:
 def load_image(
     time: pd.Timestamp,
     land_cover: str,
-    x_range: np.ndarray,
-    y_range: np.ndarray,
-    var_ds: _DatasetHasLandCoverSig0,
+    x_range: npt.NDArray,
+    y_range: npt.NDArray,
+    var_ds: Dataset | _DatasetHasLandCoverSig0,
 ) -> hv.Image:
     """Use for Callback Function Landcover.
 
@@ -251,8 +256,8 @@ def image_opts_(var_ds: Dataset) -> hv.opts.Image:
 
 
 def plot_variability_over_time(
+    var_ds: Dataset | _DatasetHasLandCoverSig0,
     color_mapping: dict[int, _CorineColorMapping],
-    var_ds: _DatasetHasLandCoverSig0,
     present_landcover_codes: Iterable[int],
 ) -> hv.DynamicMap:
     """Plot temporal variability of backscatter across land cover types.
@@ -285,7 +290,7 @@ def plot_variability_over_time(
             for value in present_landcover_codes
         },
     )
-    time = var_ds.sig0["time"].values  # noqa: PD011
+    time = var_ds.sig0["time"].to_numpy()
 
     load_image_partial = partial(load_image, var_ds=var_ds)
 
@@ -304,7 +309,7 @@ def plot_variability_over_time(
     return dmap.opts(image_opts, HIST_OPTS)
 
 
-def plot_slc_all(datasets: list[_DatasetHasIntensity]) -> None:
+def plot_slc_all(datasets: list[Dataset | _DatasetHasIntensity]) -> None:
     """Plot multiple Single Look Complex (SLC) intensity datasets side by side.
 
     Parameters
@@ -331,7 +336,7 @@ def plot_slc_all(datasets: list[_DatasetHasIntensity]) -> None:
     plt.show()
 
 
-def plot_slc_iw2(iw2_ds: _DatasetHasIntensityPhase) -> None:
+def plot_slc_iw2(iw2_ds: Dataset | _DatasetHasIntensityPhase) -> None:
     """Plot intensity and phase measurements for the IW2 subswath.
 
     Parameters
@@ -358,7 +363,7 @@ def plot_slc_iw2(iw2_ds: _DatasetHasIntensityPhase) -> None:
     plt.tight_layout()
 
 
-def plot_coregistering(coregistered_ds: _DatasetHasBandData) -> None:
+def plot_coregistering(coregistered_ds: Dataset | _DatasetHasBandData) -> None:
     """Plot master and slave phase measurements from a coregistered dataset.
 
     Parameters
@@ -385,7 +390,7 @@ def plot_coregistering(coregistered_ds: _DatasetHasBandData) -> None:
     plt.tight_layout()
 
 
-def plot_interferogram(interferogram_ds: _DatasetHasBandData) -> hv.Layout:
+def plot_interferogram(interferogram_ds: Dataset | _DatasetHasBandData) -> hv.Layout:
     """Plot interferogram and coherence data side-by-side.
 
     Parameters
@@ -431,8 +436,8 @@ def plot_interferogram(interferogram_ds: _DatasetHasBandData) -> hv.Layout:
 
 
 def plot_topographic_phase_removal(
-    interferogram_ds: _DatasetHasBandData,
-    topo_ds: _DatasetHasTopoPhase,
+    interferogram_ds: Dataset | _DatasetHasBandData,
+    topo_ds: Dataset | _DatasetHasTopoPhase,
 ) -> None:
     """Plot interferogram before and after topographic phase removal.
 
@@ -468,7 +473,7 @@ def plot_topographic_phase_removal(
     plt.tight_layout()
 
 
-def plot_igf_coh(geocoded_ds: _DatasetHasBandData, step: int) -> hv.Layout:
+def plot_igf_coh(geocoded_ds: Dataset | _DatasetHasBandData, step: int) -> hv.Layout:
     """Plot downsampled interferogram and coherence data.
 
     Parameters
@@ -515,14 +520,14 @@ def plot_igf_coh(geocoded_ds: _DatasetHasBandData, step: int) -> hv.Layout:
     return (igf_plot + coh_plot).opts(shared_axes=True)
 
 
-def array_to_img(data_array: DataArray, cmap: ListedColormap) -> str:
+def array_to_img(data_array: DataArray, cmap: ColorMapLike) -> str:
     """Convert a DataArray to a base64-encoded PNG image.
 
     Parameters
     ----------
     data_array : xarray.DataArray
         2D data array to plot as an image.
-    cmap : str
+    cmap : ColorMapLike
         Colormap name to use for the plot.
 
     Returns
@@ -540,7 +545,9 @@ def array_to_img(data_array: DataArray, cmap: ListedColormap) -> str:
     return base64.b64encode(buf.getvalue()).decode("utf-8")
 
 
-def plot_earthquake(geocoded_ds: _DatasetHasBandData, step: int) -> folium.Map:
+def plot_earthquake(
+    geocoded_ds: Dataset | _DatasetHasBandData, step: int
+) -> folium.Map:
     """Create a Folium map with a downsampled interferogram overlay.
 
     Parameters
@@ -605,9 +612,9 @@ def plot_earthquake(geocoded_ds: _DatasetHasBandData, step: int) -> folium.Map:
 
 
 def plot_interferogram_map(
-    ds: _DatasetHasPhase,
+    ds: Dataset | _DatasetHasPhase,
     mask: DataArray,
-    cmap_cyc: Colormap,
+    cmap_cyc: ColorMapLike,
 ) -> None:
     """Plot a wrapped phase interferogram image.
 
@@ -637,9 +644,9 @@ def plot_interferogram_map(
 
 
 def plot_compare_wrapped_unwrapped_completewrapped(  # noqa: PLR0913
-    subset: _DatasetHasUnwrapped,
-    cmap_cyc: Colormap | str,
-    ds: _DatasetHasPhase,
+    subset: Dataset | _DatasetHasUnwrapped,
+    cmap_cyc: ColorMapLike,
+    ds: Dataset | _DatasetHasPhase,
     mask: DataArray,
     p0: tuple[int, int],
     dxy: tuple[int, int],
@@ -721,8 +728,8 @@ def plot_compare_wrapped_unwrapped_completewrapped(  # noqa: PLR0913
 
 
 def plot_compare_coherence_mask_presence(
-    subset: _DatasetHasUnwrapped,
-    cmap_cyc: Colormap | str,
+    subset: Dataset | _DatasetHasUnwrapped,
+    cmap_cyc: ColorMapLike,
     threshold: float,
 ) -> None:
     """Compare unwrapped phase with and without a coherence threshold mask.
@@ -770,9 +777,9 @@ def plot_compare_coherence_mask_presence(
 
 
 def plot_different_coherence_thresholds(
-    ds_coh: _DatasetHasUnwrapped,
-    ds_coh_2: _DatasetHasUnwrapped,
-    cmap_cyc: Colormap | str,
+    ds_coh: Dataset | _DatasetHasUnwrapped,
+    ds_coh_2: Dataset | _DatasetHasUnwrapped,
+    cmap_cyc: ColorMapLike,
     vmin: int = -80,
     vmax: int = 80,
 ) -> None:
@@ -825,7 +832,7 @@ def plot_different_coherence_thresholds(
 
 def plot_displacement_map(
     subset: DataArray,
-    cmap_disp: Colormap | str,
+    cmap_disp: ColorMapLike,
     title: str,
 ) -> None:
     """Plot a displacement map.
@@ -857,8 +864,8 @@ def plot_displacement_map(
 
 
 def plot_coarsened_image(
-    lowres: _DatasetHasUnwrapped,
-    cmap_cyc: Colormap | str,
+    lowres: Dataset | _DatasetHasUnwrapped,
+    cmap_cyc: ColorMapLike,
 ) -> None:
     """Plot a coarsened (low-resolution) unwrapped phase map of the entire scene.
 
@@ -884,12 +891,12 @@ def plot_coarsened_image(
 
 
 def plot_summary(  # noqa: PLR0913
-    subset: _DatasetHasUnwrapped,
+    subset: Dataset | _DatasetHasUnwrapped,
     subset_disp: DataArray,
-    lowres: _DatasetHasUnwrapped,
+    lowres: Dataset | _DatasetHasUnwrapped,
     lowres_disp: DataArray,
-    cmap_cyc: Colormap | str,
-    cmap_disp: Colormap | str,
+    cmap_cyc: ColorMapLike,
+    cmap_disp: ColorMapLike,
 ) -> None:
     """Create a summary plot showing phase and displacement results.
 
@@ -958,8 +965,8 @@ def plot_summary(  # noqa: PLR0913
 
 
 def add_histogram_to_axis(
-    ax: np.ndarray,
-    data: np.ndarray,
+    ax: plt.Axes,
+    data: npt.NDArray,
     title: str,
     max_freq: float,
     bins: int = 25,
@@ -988,9 +995,9 @@ def add_histogram_to_axis(
 
 
 def plot_histograms_speckled_and_ideal_data(
-    ideal_data_db: np.ndarray,
-    speckled_data_db: np.ndarray,
-    speckle_fraction: float,
+    backscatter_db_ideal: npt.NDArray,
+    backscatter_db_speckle: npt.NDArray,
+    noise: float,
 ) -> None:
     """Plot ideal and speckled data with their histograms.
 
@@ -1002,11 +1009,11 @@ def plot_histograms_speckled_and_ideal_data(
 
     Parameters
     ----------
-    ideal_data_db : np.ndarray
+    backscatter_db_ideal : np.ndarray
         Ideal backscatter data in dB.
-    speckled_data_db : np.ndarray
+    backscatter_db_speckle : np.ndarray
         Speckled version of the backscatter data.
-    speckle_fraction : float
+    noise : float
         Fraction of pixels affected by speckle (0-1).
 
     Returns
@@ -1016,31 +1023,33 @@ def plot_histograms_speckled_and_ideal_data(
 
     """
     bins = 25
-    common = {"bins": bins, "range": (-20, 0)}
+    common: dict[str, Any] = {"bins": bins, "range": (-20, 0)}
 
-    hist_ideal, bins_ideal = np.histogram(ideal_data_db.ravel(), **common)  # noqa: RUF059
-    hist_speckled, bins_speckled = np.histogram(speckled_data_db.ravel(), **common)  # noqa: RUF059
+    hist_ideal, _bins_ideal = np.histogram(backscatter_db_ideal.ravel(), **common)
+    hist_speckled, _bins_speckled = np.histogram(
+        backscatter_db_speckle.ravel(), **common
+    )
 
     # maximum frequency for normalization
     max_freq = max(hist_ideal.max(), hist_speckled.max())
     # Ideal data
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(16, 10))
-    pos = axs[0, 0].imshow(ideal_data_db, cmap="gray", vmin=-20, vmax=0)
+    pos = axs[0, 0].imshow(backscatter_db_ideal, cmap="gray", vmin=-20, vmax=0)
     axs[0, 0].set_title("Ideal Backscatter (Cornfield)")
     fig.colorbar(pos, label="Backscatter (dB)", ax=axs[0, 0])
 
     # Speckled data
     plt.subplot(2, 2, 2)
-    pos2 = axs[0, 1].imshow(speckled_data_db, cmap="gray", vmin=-20, vmax=0)  # noqa: F841
+    pos2 = axs[0, 1].imshow(backscatter_db_speckle, cmap="gray", vmin=-20, vmax=0)  # noqa: F841
     axs[0, 1].set_title(
-        f"Speckled Backscatter ({int(speckle_fraction * 100)}% of Pixels)",
+        f"Speckled Backscatter ({int(noise * 100)}% of Pixels)",
     )
     fig.colorbar(pos, label="Backscatter (dB)", ax=axs[0, 1])
 
     # Histogram for ideal data
     add_histogram_to_axis(
         ax=axs[1, 0],
-        data=ideal_data_db,
+        data=backscatter_db_ideal,
         title="Histogram of Ideal Backscatter",
         max_freq=max_freq,
     )
@@ -1048,8 +1057,8 @@ def plot_histograms_speckled_and_ideal_data(
     # Histogram for speckled data
     add_histogram_to_axis(
         ax=axs[1, 1],
-        data=speckled_data_db,
-        title=f"Histogram of Speckled Backscatter ({int(speckle_fraction * 100)}%)",
+        data=backscatter_db_speckle,
+        title=f"Histogram of Speckled Backscatter ({int(noise * 100)}%)",
         max_freq=max_freq,
     )
 
@@ -1057,12 +1066,12 @@ def plot_histograms_speckled_and_ideal_data(
 
 
 def load_image_landcover(  # noqa: PLR0913
-    var_ds: Dataset,
-    time: None,
-    land_cover: any,
+    var_ds: Dataset | _DatasetHasLandCoverSig0,
+    time: pd.Timestamp | None,
+    land_cover: str,
     x_range: DataArray,
     y_range: DataArray,
-    filter_fun_spatial: None,
+    filter_spatial: Callable[[npt.NDArray], npt.NDArray] | None,
 ) -> hv.Image:
     """Load Landcover image.
 
@@ -1078,7 +1087,7 @@ def load_image_landcover(  # noqa: PLR0913
         longitude range
     y_range: array_like
         latitude range
-    filter_fun_spatial: any
+    filter_spatial: any
         filter type
 
 
@@ -1097,8 +1106,8 @@ def load_image_landcover(  # noqa: PLR0913
         mask_ds = var_ds.land_cover == land_cover_value
         sig0_selected_ds = var_ds.sig0.where(mask_ds)
 
-    if filter_fun_spatial is not None:
-        sig0_np = filter_fun_spatial(sig0_selected_ds.to_numpy())
+    if filter_spatial is not None:
+        sig0_np = filter_spatial(sig0_selected_ds.to_numpy())
     else:
         sig0_np = sig0_selected_ds.to_numpy()
 
@@ -1117,10 +1126,10 @@ def load_image_landcover(  # noqa: PLR0913
 
 def plot_variability(
     var_ds: Dataset,
-    color_mapping: dict,
+    color_mapping: dict[int, _CorineColorMapping],
     present_landcover_codes: list,
-    filter_fun_spatial: Callable[[Dataset], Dataset] | None = None,
-    filter_fun_temporal: Callable[[Dataset], Dataset] | None = None,
+    filter_spatial: Callable[[npt.NDArray], npt.NDArray] | None = None,
+    filter_temporal: Callable[[Dataset], Dataset] | None = None,
 ) -> hv.core.layout:
     """Create an interactive plot for backscatter data exploration.
 
@@ -1136,9 +1145,9 @@ def plot_variability(
         Mapping of landcover codes to color and label information.
     present_landcover_codes : list
         List of landcover codes available in the data.
-    filter_fun_spatial : callable, optional
+    filter_spatial : callable, optional
         Function to spatially filter the dataset.
-    filter_fun_temporal : callable, optional
+    filter_temporal : callable, optional
         Function to temporally filter the dataset.
 
     Returns
@@ -1167,12 +1176,12 @@ def plot_variability(
 
     rangexy = RangeXY()
 
-    if filter_fun_temporal is not None:
-        var_ds = filter_fun_temporal(var_ds)
+    if filter_temporal is not None:
+        var_ds = filter_temporal(var_ds)
         load_image_landcover_ = partial(
             load_image_landcover,
             var_ds=var_ds,
-            filter_fun_spatial=filter_fun_spatial,
+            filter_spatial=filter_spatial,
             time=None,
         )
         dmap = (
@@ -1185,7 +1194,7 @@ def plot_variability(
         load_image_landcover_ = partial(
             load_image_landcover,
             var_ds=var_ds,
-            filter_fun_spatial=filter_fun_spatial,
+            filter_spatial=filter_spatial,
         )
         dmap = (
             hv.DynamicMap(
