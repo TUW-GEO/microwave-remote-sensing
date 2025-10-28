@@ -10,6 +10,7 @@ Returns
 import os
 import urllib.parse
 from enum import StrEnum  # type: ignore[unresolved-import]
+from pathlib import Path
 
 import gitlab
 from pydantic import BaseModel, Field
@@ -20,8 +21,10 @@ ROOT = "https://git.geo.tuwien.ac.at"
 REPO_API = "api/v4/projects/1264/repository/files"
 REPO_RAW = "public_projects/microwave-remote-sensing/-/raw"
 
-os.environ["CACHE_DEST"] = (
-    "/home/jovyan/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing"
+os.environ["CACHE_DEST"] = str(
+    Path(
+        "~/shared/datasets/geo/sync/courses/120.030_Microwave-Remote-Sensing",
+    ).expanduser(),
 )
 
 
