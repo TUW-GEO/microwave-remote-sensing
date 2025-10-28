@@ -15,7 +15,7 @@ To re-create the environment as a Jupyter kernel for execution of the notebooks,
 make kernel
 ```
 
-Select the kernel `mrs-env`.
+Select the kernel `microwave-remote-sensing`.
 
 # Clean-up
 
@@ -33,7 +33,7 @@ make teardown
 
 # Developing
 
-Use the `environment-dev.yml` to setup a conda environment for developing the lecture notebooks. Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
+Use the `environment.yml` to setup a conda environment for developing the lecture notebooks. Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
 
 ```bash
 pip install nbstripout
