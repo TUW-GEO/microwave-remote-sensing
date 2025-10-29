@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build >= 0.7.19, <0.9.0"]
+requires = ["uv_build>=0.9.5,<0.10.0"]
 build-backend = "uv_build"
 
 [project]
@@ -10,8 +10,18 @@ name = "mrs"
 version = "0.1.0"
 description = "Notebooks for the TU Wien MSc course Microwave Remote Sensing"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
+    "folium>=0.20.0",
+    "holoviews>=1.21.0",
+    "matplotlib>=3.10.7",
+    "pandas-stubs>=2.3.2.250926",
+    "pydantic>=2.12.3",
+    "pydantic-extra-types>=2.10.6",
+    "python-gitlab>=6.5.0",
+    "rioxarray>=0.20.0",
+    "seaborn>=0.13.2",
+    "snaphu>=0.4.1",
 ]
 classifiers = [
     "Intended Audience :: Science/Research",
@@ -19,8 +29,8 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: POSIX",
     "Natural Language :: English",
 ]
@@ -31,23 +41,18 @@ tuwel = [
     "cmcrameri",
     "dask",
     "datashader",
-    "folium",
     "graphviz",
     "hvplot",
     "intake",
     "intake-xarray",
     "jupyter_bokeh",
-    "matplotlib",
     "odc-stac",
-    "python-gitlab",
     "pyproj",
     "pystac-client",
     "requests",
-    "rioxarray",
+    "rich",
     "scikit-image",
     "scipy",
-    "seaborn",
-    "snaphu",
     "xarray",
     "zarr<3.0",
 ]
@@ -81,12 +86,13 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    "D203",  # incorrect-blank-line-before-class
-    "D213",  # multi-line-summary-second-line (opposite to D212)
-    "PGH",   # pygrep hooks are ignored
-    "TD002", # missing-todo-author
-    "TD003", # missing-todo-link
-    "T201",  # print (should not be used)
+    "D203",   # incorrect-blank-line-before-class
+    "D213",   # multi-line-summary-second-line (opposite to D212)
+    "PGH",    # pygrep hooks are ignored
+    "TD002",  # missing-todo-author
+    "TD003",  # missing-todo-link
+    "T201",   # print (should not be used)
+    "COM812", # missing-trailing-comma (not recommended with ruff fmt)
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -101,3 +107,6 @@ docstring-code-line-length = "dynamic"
 
 [tool.ruff.lint.isort]
 known-third-party = []
+
+[tool.ty.src]
+exclude = ["**/*_homework_exercise.ipynb"]

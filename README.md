@@ -15,7 +15,7 @@ To re-create the environment as a Jupyter kernel for execution of the notebooks,
 make kernel
 ```
 
-Select the kernel `mrs-env`.
+Select the kernel `microwave-remote-sensing`.
 
 # Clean-up
 
@@ -33,7 +33,7 @@ make teardown
 
 # Developing
 
-Use the `environment-dev.yml` to setup a conda environment for developing the lecture notebooks. Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
+Use the `environment.yml` to setup a conda environment for developing the lecture notebooks. Commit notebooks without output for smaller file sizes and interactive teaching. For convenience use `nbstripout` to clean notebooks, like so:
 
 ```bash
 pip install nbstripout
@@ -56,6 +56,9 @@ uvx ruff check --fix
 uvx ruff format
 ```
 
+> [!IMPORTANT]
+> Keep in mind, that the `homework` notebooks are automatically excluded from formatting with `ruff` and typechecking with `ty`, as defined in the `pyproject.toml` file.
+
 The pre-commit hooks can be used to check whether outputs are empty. This can be achieved, like so:
 
 ```bash
@@ -66,5 +69,14 @@ pre-commit install
 uvx pre-commit install
 ```
 
+To type check your code/notebook, and to make your code a little more static you might want to run:
+
+```bash
+uvx ty check
+```
+
+Alternatively a static type-checker like [mypy] can also be used, but that is more difficult to run on notebooks.
+
 [ruff]: https://docs.astral.sh/ruff/
 [uv]: https://docs.astral.sh/uv/
+[mypy]: https://mypy.readthedocs.io/en/stable/index.html
