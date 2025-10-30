@@ -9,10 +9,10 @@ book:
     - index.qmd
     - part: "Unit 1"
       chapters:
-        # - text: EO Data Discovery
-        #   file: unit_01/01_in_class_exercise.ipynb
-        # - text: Unit Conversions
-        #   file: unit_01/02_in_class_exercise.ipynb
+        - text: EO Data Discovery
+          file: unit_01/01_in_class_exercise.ipynb
+        - text: Unit Conversions
+          file: unit_01/02_in_class_exercise.ipynb
         - text: Backscattering Coefficients
           file: unit_01/03_in_class_exercise.ipynb
     - part: "Unit 2"
