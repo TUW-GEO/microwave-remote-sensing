@@ -77,6 +77,12 @@ uvx ty check
 
 Alternatively a static type-checker like [mypy] can also be used, but that is more difficult to run on notebooks.
 
+To run all of the mentioned tools you can use the following command. This will run the linter, the formatter, the typechecker and strips the notebooks outputs.
+
+```bash
+make chore
+```
+
 [ruff]: https://docs.astral.sh/ruff/
 [uv]: https://docs.astral.sh/uv/
 [mypy]: https://mypy.readthedocs.io/en/stable/index.html
