@@ -15,6 +15,7 @@ help:
 	@echo "  "
 	@echo "  make teardown     - Remove Conda environments and Jupyter kernels"
 	@echo "  make clean        - Removes ipynb_checkpoints"
+	@echo "  make chore        - Run the linter, formatter, typechecker and strip the outputs from notebooks"
 	@echo "  make help         - Display this help message"
 
 clean:
@@ -41,3 +42,13 @@ $(KERNEL_DIR): $(CONDA_ENV_DIR)
 
 kernel: $(KERNEL_DIR)
 	@echo -e "conda jupyter kernel is ready."
+
+chore:
+	@echo "Run the ruff linter:"
+	uvx ruff check --fix
+	@echo "Run the ruff formatter:"
+	uvx ruff format
+	@echo "Strip the notebook output:"
+	uvx nbstripout **/*.ipynb
+	@echo "Run the ty typechecker:"
+	uvx ty check
