@@ -4,7 +4,7 @@ project:
     - make kernel
 
 book:
-  title: "JupyerHub Guide"
+  title: "JupyterHub Guide"
   chapters:
     - index.qmd
     - part: "Unit 1"
