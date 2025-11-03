@@ -35,6 +35,20 @@ After some intense coding and analysis, it can happen that you have many termina
 ::::
 :::
 
+## Fetch Jupyter Notebooks
+
+The Jupyter notebooks for the course can be obtained by executing the following command from the terminal line.
+
+Start by launching a terminal.
+
+![](images/start_terminal.png)
+
+Then type the following at the prompt.
+
+```bash
+git clone https://github.com/TUW-GEO/microwave-remote-sensing.git
+```
+
 ## Editing Jupyter Notebooks
 
 The homework exercises of the course are labeled as `homework_exercise.ipynb`. You are supposed to use these notebooks for the homework assignments and the completed notebooks should be submitted through TUWEL. The notebooks consist of two types of cells: Python and Markdown cells. Python cells contain executable Python code, whereas Markdown cells are used for open text and multiple choice questions. Double click on an existing cell to alter its content. To add new cells click select the cell type from the drop-down menu and click on the plus sign, as follows for Python cells:
