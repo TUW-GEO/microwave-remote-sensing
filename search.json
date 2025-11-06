@@ -34,7 +34,7 @@
     "href": "index.html#fetch-jupyter-notebooks",
     "title": "JupyterHub Guide",
     "section": "Fetch Jupyter Notebooks",
-    "text": "Fetch Jupyter Notebooks\nThe Jupyter notebooks for the course can be obtained by executing the following command from the terminal line.\nStart by launching a terminal.\n\nThen type the following at the prompt.\ngit clone https://github.com/TUW-GEO/microwave-remote-sensing.git",
+    "text": "Fetch Jupyter Notebooks\nThe Jupyter notebooks for the course can be obtained by executing the following command from the terminal line.\nStart by launching a terminal.\n\nThen type the following at the prompt.\ngit clone --branch tuwel https://github.com/TUW-GEO/microwave-remote-sensing.git",
     "crumbs": [
       "JupyterHub Guide"
     ]
