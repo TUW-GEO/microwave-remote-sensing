@@ -46,7 +46,7 @@ Start by launching a terminal.
 Then type the following at the prompt.
 
 ```bash
-git clone --branch tuwel https://github.com/TUW-GEO/microwave-remote-sensing.git
+git clone --depth=1 --branch tuwel https://github.com/TUW-GEO/microwave-remote-sensing.git
 ```
 
 ## Editing Jupyter Notebooks
