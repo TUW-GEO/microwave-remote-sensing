@@ -399,7 +399,7 @@ window.Quarto = {
 
 
 <p>We have seen that cross- and co-polarized signals for Sentinel-1 and ALOS-2 seem to be dependent on the type of vegetation. Let’s have a closer look at this.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -1018,7 +1018,7 @@ if (window.Jupyter !== undefined) {
 <div class="alert alert-block alert-info">
 <p><b>Tip:</b> The calculation of the cross-ratio refers to the linear domain and therefore needs a conversion from dB to linear scale. Checkout Notebook 2 again for the conversion.</p>
 </div>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fused_ds <span class="op">=</span> cat[<span class="st">"fused_array"</span>].read().compute()</span>
@@ -1575,12 +1575,12 @@ Data variables:
 \frac{\gamma^0_{VH,\text{linear}}}{\gamma^0_{VV,\text{linear}}}
 = 10^{\frac{\gamma^0_{VH,\text{dB}} - \gamma^0_{VV,\text{dB}}}{10}}
 \]</span></p>
-<div id="5" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rcross_da_s1 <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rcross_da_alos <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>After you calculate the CR, plot the results with the following code.</p>
-<div id="7" class="cell" data-execution_count="4">
+<div id="7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LAI_mean <span class="op">=</span> fused_ds.LAI.mean(<span class="st">"time"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>LAI_image <span class="op">=</span> LAI_mean.hvplot.<span class="op">\</span></span>
@@ -1640,7 +1640,7 @@ Data variables:
 <section id="question-3" class="level2" data-number="E.3">
 <h2 data-number="E.3" class="anchored" data-anchor-id="question-3"><span class="header-section-number">E.3</span> Question 3</h2>
 <p>For this question we will create a boxplot to analyse the sensitivity of CR with to changes in LAI. Sensitivity means how high a response is when we change another variable, like LAI in this case. So an increased sensitivity means a higher response for the same increase in LAI. The boxplot uses boxes to illustrate the distributions of binned LAI values. Box limits indicate the range of the central 50% of the data (a.k.a inter quartile range: IQR), with the median value depicted as a central red line. The whisker limits demarcate 1.5 times the distance of the IQR. Values outside of the whiskers are considered outliers. Outliers have been eliminated in this plot to make the plot more readable.</p>
-<div id="9" class="cell" data-execution_count="5">
+<div id="9" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># labels for LAI bins</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ranger <span class="op">=</span> [<span class="bu">str</span>(x).zfill(<span class="dv">1</span>) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)]</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>

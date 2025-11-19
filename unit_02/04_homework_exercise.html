@@ -399,7 +399,7 @@ window.Quarto = {
 
 
 <p>For the homework assignement we will continue work on the same data as in the in-class exercise. Hence we will load the same data which has been stored as a Zarr datastore. Zarr is efficient for storing chunked data and much faster for reading.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray  <span class="co"># noqa</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -1007,7 +1007,7 @@ if (window.Jupyter !== undefined) {
 })(window);</script>
 </div>
 </div>
-<div id="2" class="cell" data-execution_count="2">
+<div id="2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fused_ds <span class="op">=</span> cat[<span class="st">"fused_array"</span>].read().compute()</span>
@@ -1554,7 +1554,7 @@ Data variables:
 <section id="question-1" class="level2" data-number="D.1">
 <h2 data-number="D.1" class="anchored" data-anchor-id="question-1"><span class="header-section-number">D.1</span> Question 1</h2>
 <p>Load the new LAI data with the below provided code snippet and extract the CRS and resolution of the raster. Apply what you have learned in the in-class exercise by only using the packages as listed in the imports of this notebook.</p>
-<div id="4" class="cell" data-execution_count="3">
+<div id="4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>lai_ds <span class="op">=</span> cat[<span class="st">"lai"</span>].read().compute()</span>
@@ -2115,7 +2115,7 @@ Data variables:
 <section id="question-2" class="level2" data-number="D.2">
 <h2 data-number="D.2" class="anchored" data-anchor-id="question-2"><span class="header-section-number">D.2</span> Question 2</h2>
 <p>In order to compare LAI with ALOS-2 L-band and Sentinel-1 C-band data, we will merge this variable with the SAR datacube (of the in-class exercise). Let’s first check the temporal range of the SAR datacube (<code>fused_ds</code>) and the new <code>xarray</code> dataset: <code>lai_ds</code>.</p>
-<div id="6" class="cell" data-execution_count="4">
+<div id="6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fused_ds.time</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -2609,7 +2609,7 @@ Coordinates:
        '2022-10-31T00:00:00.000000000'], dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-862586eb-1de9-4b6b-b819-a134d46a1443" class="xr-var-attrs-in" type="checkbox"><label for="attrs-862586eb-1de9-4b6b-b819-a134d46a1443" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-11eef5c2-b4ff-418a-aaaa-eeaa160b8aec" class="xr-var-data-in" type="checkbox"><label for="data-11eef5c2-b4ff-418a-aaaa-eeaa160b8aec" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>GeoTransform :</span></dt><dd>4769370.0 10.0 0.0 1397370.0 0.0 -10.0</dd><dt><span>crs_wkt :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd><dt><span>false_easting :</span></dt><dd>5837287.81977</dd><dt><span>false_northing :</span></dt><dd>2121415.69617</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>grid_mapping_name :</span></dt><dd>azimuthal_equidistant</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>53.0</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>24.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>projected_crs_name :</span></dt><dd>Azimuthal_Equidistant</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["Azimuthal_Equidistant",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Azimuthal_Equidistant"],PARAMETER["latitude_of_center",53],PARAMETER["longitude_of_center",24],PARAMETER["false_easting",5837287.81977],PARAMETER["false_northing",2121415.69617],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li></ul></div></div>
 </div>
 </div>
-<div id="7" class="cell" data-execution_count="5">
+<div id="7" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lai_ds.time</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -3152,7 +3152,7 @@ Attributes:
 </div>
 </div>
 <p>The temporal range of <code>lai_ds</code> is longer then the fused ALOS-2 L-band and Sentinel-1 C-band datacube. To fit <code>lai_ds</code> object to the SAR datacube, we will need to cut the <code>lai_ds</code> temporal extent using the selection method (<code>sel</code>). Complete the following code snippet to perform the previous described selection operation.</p>
-<div id="9" class="cell" data-execution_count="6">
+<div id="9" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lai_ds <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lai_ds.time</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -3164,36 +3164,36 @@ Attributes:
 <ol type="1">
 <li>Align both datacubes. Remember to use the <code>rioxarray</code> package and use the default resampling method.</li>
 </ol>
-<div id="11" class="cell" data-execution_count="7">
+<div id="11" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lai_ds <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lai_ds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="2" type="1">
 <li>Write the coordinates of <code>fused_ds</code> to the reprojected <code>lai_ds</code> object to prevent mistakes caused by floating point errors. Use the <code>assign_coords</code> method.</li>
 </ol>
-<div id="13" class="cell" data-execution_count="8">
+<div id="13" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lai_ds <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lai_ds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If the previous operations were successfull, 3) we can merge the two variables: SAR and LAI. We use a different <code>xarray</code> function for this, where we combine the two variable to a <code>xarray.DataSet</code> with the <code>merge</code> function.</p>
-<div id="15" class="cell" data-execution_count="9">
+<div id="15" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE ----------------------------------------------------------</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fused_ds <span class="op">=</span> ...  <span class="co"># combine two variables in an Xarray.Dataset</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE ----------------------------------------------------------</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>fused_ds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The last step is the 4) <code>resample</code> operation to align the timestamps. Use again a median value.</p>
-<div id="17" class="cell" data-execution_count="10">
+<div id="17" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fused_ds <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Plot the LAI variable with the following lines of code to check your results:</p>
-<div id="19" class="cell" data-execution_count="11">
+<div id="19" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fused_ds.LAI.<span class="op">\</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    dropna(dim<span class="op">=</span><span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>).<span class="op">\</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    hvplot.image(robust<span class="op">=</span><span class="va">True</span>, data_aspect<span class="op">=</span><span class="dv">1</span>, cmap<span class="op">=</span><span class="st">"viridis"</span>, rasterize<span class="op">=</span><span class="va">True</span>).<span class="op">\</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    opts(frame_height<span class="op">=</span><span class="dv">400</span>, aspect<span class="op">=</span><span class="st">"equal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="20" class="cell" data-execution_count="12">
+<div id="20" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>to_store <span class="op">=</span> fused_ds.copy()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> var <span class="kw">in</span> to_store.variables:</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    to_store[var].encoding.clear()</span>

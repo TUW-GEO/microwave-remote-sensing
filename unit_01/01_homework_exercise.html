@@ -379,13 +379,13 @@ background: #006699;
 <li><label><input type="checkbox">Plot one of the items</label></li>
 </ul>
 <p>To help you to get started, we already imported all required packages and provided some code blocks. Your task is now to fill in the missing code cells indicated with # YOUR CODE HERE.</p>
-<div id="2" class="cell" data-execution_count="1">
+<div id="2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pystac_client</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> odc <span class="im">import</span> stac <span class="im">as</span> odc_stac</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="list-all-collection-names-and-select-one" class="level2" data-number="A.1">
 <h2 data-number="A.1" class="anchored" data-anchor-id="list-all-collection-names-and-select-one"><span class="header-section-number">A.1</span> List all collection names and select one</h2>
-<div id="4" class="cell" data-execution_count="2">
+<div id="4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>eodc_catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(<span class="st">"https://stac.eodc.eu/api/v1"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>colllection_id <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
@@ -396,7 +396,7 @@ background: #006699;
 </section>
 <section id="define-spatial-and-temporal-extent-and-use-client-to-load-the-metadata" class="level2" data-number="A.2">
 <h2 data-number="A.2" class="anchored" data-anchor-id="define-spatial-and-temporal-extent-and-use-client-to-load-the-metadata"><span class="header-section-number">A.2</span> Define spatial and temporal extent and use client to load the metadata</h2>
-<div id="6" class="cell" data-execution_count="3">
+<div id="6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the area of interest by providing coordinates that cover your latest</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># holiday destination (can be a city, state, country, etc.)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>latmin, latmax <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
@@ -414,7 +414,7 @@ background: #006699;
 </section>
 <section id="find-necessary-metadata-like-bands-resolution-coordinate-reference-system" class="level2" data-number="A.3">
 <h2 data-number="A.3" class="anchored" data-anchor-id="find-necessary-metadata-like-bands-resolution-coordinate-reference-system"><span class="header-section-number">A.3</span> Find necessary metadata, like bands, resolution, coordinate reference system</h2>
-<div id="8" class="cell" data-execution_count="4">
+<div id="8" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pick one item from items using indexing get the relative orbit from the item</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># properties</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>relative_orbit <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
@@ -424,7 +424,7 @@ background: #006699;
 <section id="lazily-load-the-data-into-an-xarray" class="level2" data-number="A.4">
 <h2 data-number="A.4" class="anchored" data-anchor-id="lazily-load-the-data-into-an-xarray"><span class="header-section-number">A.4</span> Lazily load the data into an Xarray</h2>
 <p><strong>Take care that your dataset is not to big by limiting the bounds and time range!</strong></p>
-<div id="10" class="cell" data-execution_count="5">
+<div id="10" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>chunks <span class="op">=</span> {<span class="st">"time"</span>: <span class="dv">1</span>, <span class="st">"x"</span>: <span class="dv">1000</span>, <span class="st">"y"</span>: <span class="dv">1000</span>}</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -438,7 +438,7 @@ background: #006699;
 </section>
 <section id="define-the-nodata-value-and-scale-factor-and-decode-the-data" class="level2" data-number="A.5">
 <h2 data-number="A.5" class="anchored" data-anchor-id="define-the-nodata-value-and-scale-factor-and-decode-the-data"><span class="header-section-number">A.5</span> Define the nodata value and scale factor and decode the data</h2>
-<div id="12" class="cell" data-execution_count="6">
+<div id="12" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nodata <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -447,7 +447,7 @@ background: #006699;
 </section>
 <section id="plot-the-loaded-data" class="level2" data-number="A.6">
 <h2 data-number="A.6" class="anchored" data-anchor-id="plot-the-loaded-data"><span class="header-section-number">A.6</span> Plot the loaded data</h2>
-<div id="14" class="cell" data-execution_count="7">
+<div id="14" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>...  <span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
