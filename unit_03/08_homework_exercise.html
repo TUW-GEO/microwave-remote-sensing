@@ -371,7 +371,7 @@ background: #006699;
 
 
 <p>The following data were acquired from Sentinel-1 on April 23, 2018, from 16:15:24 to 16:15:51 over the region of Hawaii, with Descending orbit direction. Use the provided code to load and plot the preprocessed SAR interferometric data. Observe, analyse, and visually interpret the results.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> base64</span>
@@ -987,7 +987,7 @@ if (window.Jupyter !== undefined) {
 </div>
 <section id="load-the-data" class="level2" data-number="H.1">
 <h2 data-number="H.1" class="anchored" data-anchor-id="load-the-data"><span class="header-section-number">H.1</span> Load the data</h2>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> cat.ex8.read().compute()</span>
@@ -1502,7 +1502,7 @@ Data variables:
 </section>
 <section id="plotting-the-data" class="level2" data-number="H.2">
 <h2 data-number="H.2" class="anchored" data-anchor-id="plotting-the-data"><span class="header-section-number">H.2</span> Plotting the data</h2>
-<div id="5" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="dv">4</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cmap_hls <span class="op">=</span> sns.color_palette(<span class="st">"hls"</span>, n_colors<span class="op">=</span><span class="dv">256</span>).as_hex()</span>
@@ -1625,7 +1625,7 @@ Data variables:
 <li><label><input type="checkbox">Focus on the left part of the image, where you see the circular fringe pattern: the deformation is faster towards the center of the circular pattern.</label></li>
 </ul>
 <p>Don’t change anything in the next cell, besides the step for sampling (skipping pixels in the plot), if the plotting takes too long to finish.</p>
-<div id="9" class="cell" data-execution_count="4">
+<div id="9" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cmap_hls <span class="op">=</span> ListedColormap(sns.color_palette(<span class="st">"hls"</span>, <span class="dv">256</span>).as_hex())</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>

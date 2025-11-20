@@ -370,7 +370,7 @@ background: #006699;
 
 
 <p>To successfully finish this notebook, you have to answer/solve the following three questions.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># noqa</span></span>
@@ -979,7 +979,7 @@ if (window.Jupyter !== undefined) {
 })(window);</script>
 </div>
 </div>
-<div id="2" class="cell" data-editable="true" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;&quot;}}" data-tags="[]" data-execution_count="2">
+<div id="2" class="cell" data-editable="true" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;&quot;}}" data-tags="[]" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ex3_dc <span class="op">=</span> cat[<span class="st">"ex3"</span>].read().compute()</span>
@@ -1501,7 +1501,7 @@ Data variables:
 <li><label><input type="checkbox">Radiometric terrain correction (terrain flattening)</label></li>
 </ul>
 <p>Select the answers you think are correct by editing the markdown text and putting an ‘x’ in the brackets. Note: One, several, or all answers are possible.</p>
-<div id="5" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ex3_dc.hvplot.image(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"x"</span>,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"y"</span>,</span>
@@ -1596,7 +1596,7 @@ Data variables:
 <section id="question-3" class="level2" data-number="C.3">
 <h2 data-number="C.3" class="anchored" data-anchor-id="question-3"><span class="header-section-number">C.3</span> Question 3</h2>
 <p>Use the figure below question 1 to identify areas that are affected by foreshortening and radar shadows. Use the mouseover to retrieve their x/y coordinates. Then use these coordinates to annotate the following <code>matplotlib</code> figure with labels by putting them in the lines indicated with # Your coordinates here.</p>
-<div id="8" class="cell" data-execution_count="4">
+<div id="8" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>zoom <span class="op">=</span> ex3_dc.sel(x<span class="op">=</span><span class="bu">slice</span>(<span class="fl">11.25</span>, <span class="fl">11.5</span>), y<span class="op">=</span><span class="bu">slice</span>(<span class="fl">47.75</span>, <span class="fl">47.5</span>)).band_data</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>

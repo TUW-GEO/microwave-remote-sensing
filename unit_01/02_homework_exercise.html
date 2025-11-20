@@ -378,13 +378,13 @@ background: #006699;
 <p>As a reminder, backscatter data is typically provided in ‘dB’, so make sure to perform the mean calculation for the weekly mosaics in the correct domain.</p>
 <section id="load-the-data" class="level2" data-number="B.1">
 <h2 data-number="B.1" class="anchored" data-anchor-id="load-the-data"><span class="header-section-number">B.1</span> Load the data</h2>
-<div id="2" class="cell" data-execution_count="1">
+<div id="2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pystac_client</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> odc.stac</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rasterio.crs <span class="im">import</span> CRS</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray  <span class="co"># noqa</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Search for some data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>crs <span class="op">=</span> CRS.from_epsg(<span class="dv">27704</span>)  <span class="co"># WGS 84</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -415,7 +415,7 @@ background: #006699;
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(items), <span class="st">"scenes found"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="4" class="cell" data-execution_count="3">
+<div id="4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data and lazily combine items</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc.stac.stac_load(</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    items,</span>
@@ -427,7 +427,7 @@ background: #006699;
 </section>
 <section id="preprocess-the-data" class="level2" data-number="B.2">
 <h2 data-number="B.2" class="anchored" data-anchor-id="preprocess-the-data"><span class="header-section-number">B.2</span> Preprocess the Data</h2>
-<div id="6" class="cell" data-execution_count="4">
+<div id="6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the nodata value and scale factor</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>nodata <span class="op">=</span> <span class="op">-</span><span class="dv">9999</span>  <span class="co"># Sentinel-1 nodata value as defined by EODC</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>scale <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Sentinel-1 scale factor as defined by EODC</span></span>
@@ -438,19 +438,19 @@ background: #006699;
 </section>
 <section id="create-weekly-mosaics" class="level2" data-number="B.3">
 <h2 data-number="B.3" class="anchored" data-anchor-id="create-weekly-mosaics"><span class="header-section-number">B.3</span> Create Weekly Mosaics</h2>
-<div id="8" class="cell" data-execution_count="5">
+<div id="8" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sig0_weekly <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="plot-one-of-the-weekly-mosaics" class="level2" data-number="B.4">
 <h2 data-number="B.4" class="anchored" data-anchor-id="plot-one-of-the-weekly-mosaics"><span class="header-section-number">B.4</span> Plot one of the Weekly Mosaics</h2>
-<div id="10" class="cell" data-execution_count="6">
+<div id="10" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="save-one-of-the-weekly-mosaics-as-tif" class="level2" data-number="B.5">
 <h2 data-number="B.5" class="anchored" data-anchor-id="save-one-of-the-weekly-mosaics-as-tif"><span class="header-section-number">B.5</span> Save one of the Weekly Mosaics as Tif</h2>
-<div id="12" class="cell" data-execution_count="7">
+<div id="12" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 

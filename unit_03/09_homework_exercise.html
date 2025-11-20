@@ -369,7 +369,7 @@ background: #006699;
 
 
 <p>Your task in this exercise is to read the provided data, plot it, unwrap and plot the phase, and calculate the displacement. Then interpret your results. The following data were acquired from Sentinel-1 on April 23, 2018, from 16:15:24 to 16:15:51 over the region of Hawaii (same data as 08_homework_exercise).</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> intake</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt  <span class="co"># noqa: F401</span></span>
@@ -381,7 +381,7 @@ background: #006699;
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> clear_output</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mrs.catalog <span class="im">import</span> get_intake_url</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="2" class="cell" data-execution_count="2">
+<div id="2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> cat.ex9.read().compute()</span>
@@ -924,14 +924,14 @@ Data variables:
 <section id="question-1" class="level2" data-number="I.1">
 <h2 data-number="I.1" class="anchored" data-anchor-id="question-1"><span class="header-section-number">I.1</span> Question 1</h2>
 <p>Plot the above provided data. Please note that we are plotting images in Slant Range geometry (East-West flipped due to the descending acquisition pass).</p>
-<div id="4" class="cell" data-execution_count="3">
+<div id="4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ds.phase.where(mask).plot.imshow(cmap<span class="op">=</span>cmap_cyc, ax<span class="op">=</span>axes[<span class="dv">0</span>]).axes.set_title(<span class="st">'Phase'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE -&gt; (Plot intensity map)</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE -&gt; (Plot coherence map)</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="5" class="cell" data-execution_count="4">
+<div id="5" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unwrap_array(data: xr.DataArray,</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                 mask: xr.DataArray <span class="op">=</span> <span class="va">True</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 coherence: xr.DataArray <span class="op">=</span> <span class="va">None</span>,</span>
@@ -992,17 +992,17 @@ Data variables:
 <section id="question-2" class="level2" data-number="I.2">
 <h2 data-number="I.2" class="anchored" data-anchor-id="question-2"><span class="header-section-number">I.2</span> Question 2</h2>
 <p>Use the above function to unwrap the given interferogram and to plot your result. Use a coherence threshold of 0.2 for your unwrapping and use the provided lines of code below to coarsen the input (to fasten the process). Kernels with values higher than 3 might lead the unwrapping function to crash, therefore please do not change it. It might take up to 1 or 2 minutes to execute the function, let the code run, and the output be printed (it will be cleared out at the end).</p>
-<div id="7" class="cell" data-execution_count="5">
+<div id="7" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># coarsen </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>kernel <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> ds.coarsen(x<span class="op">=</span>kernel, y<span class="op">=</span>kernel, boundary<span class="op">=</span><span class="st">"trim"</span>).mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="8" class="cell" data-execution_count="6">
+<div id="8" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>unwrapped <span class="op">=</span> ... <span class="co"># YOUR CODE HERE -&gt; perform unwrapping function</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>unwrapped.plot.imshow(cmap<span class="op">=</span>cmap_cyc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9" class="cell" data-execution_count="7">
+<div id="9" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> displacement(unwrapped, lambda_val: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.056</span>) <span class="op">-&gt;</span> xr.DataArray:</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the displacement from the unwrapped phase</span></span>
@@ -1021,7 +1021,7 @@ Data variables:
 <section id="question-3" class="level2" data-number="I.3">
 <h2 data-number="I.3" class="anchored" data-anchor-id="question-3"><span class="header-section-number">I.3</span> Question 3</h2>
 <p>Use the above function to calculate the displacement from the unwrapped interferogram, then plot your result with the correct colormap. Can you guess which kind of phenomenon is responsible for the ground surface displacement that you observe? Elaborate on the direction of the displacement movement (is it towards or away from satellite?)</p>
-<div id="11" class="cell" data-execution_count="8">
+<div id="11" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE -&gt; perform displacement function</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE -&gt; plot displacement map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>

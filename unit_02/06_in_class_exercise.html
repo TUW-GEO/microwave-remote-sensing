@@ -374,7 +374,7 @@ background: #006699;
 
 
 <p>In this notebook, we will investigate the varying backscatter values associated with different land surfaces like water bodies, forests, grasslands and urban areas. We will use backscatter data from the Sentinel-1 satellite and we will utilize the CORINE Land Cover dataset to classify and extrapolate these surfaces, enabling us to analyze how different land cover types influence backscatter responses.</p>
-<div id="1" class="cell" data-execution_count="1">
+<div id="1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> holoviews <span class="im">as</span> hv</span>
@@ -1608,7 +1608,7 @@ if (window.Jupyter !== undefined) {
 <section id="load-sentinel-1-data" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="load-sentinel-1-data"><span class="header-section-number">6.1</span> Load Sentinel-1 Data</h2>
 <p>For our analysis we are using sigma naught backscattering data from Sentinel-1. The images that we are analyzing cover the region south of Vienna and west of Lake Neusiedl. We will now load the data and and apply again a preprocessing function. Here we extract the scaling factor and the date the image was taken from the metadata. We will focus our attention to a smaller area containing a part of the Lake Neusiedl Lake and its surrounding land. The obtained<code>xarray</code> dataset and is then converted to an array, because we only have one variable, the VV backscatter values.</p>
-<div id="3" class="cell" data-execution_count="2">
+<div id="3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sig0_da <span class="op">=</span> cat.neusiedler.read().sig0.compute()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1617,7 +1617,7 @@ if (window.Jupyter !== undefined) {
 </div>
 </div>
 <p>Let’s have a look at the data by plotting the first timeslice.</p>
-<div id="5" class="cell" data-execution_count="3">
+<div id="5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sig0_da.isel(time<span class="op">=</span><span class="dv">0</span>).plot(robust<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"Greys_r"</span>).axes.set_aspect(<span class="st">"equal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1631,13 +1631,13 @@ if (window.Jupyter !== undefined) {
 <section id="load-corine-landcover-data" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="load-corine-landcover-data"><span class="header-section-number">6.2</span> Load CORINE Landcover Data</h2>
 <p>We will load the CORINE Land Cover, which is a pan-European land cover and land use inventory with 44 thematic classes. The resolution of this classification is 100 by 100m and the file was created in 2018 (<a href="https://land.copernicus.eu/en/products/corine-land-cover">CORINE Land Cover</a>).</p>
-<div id="7" class="cell" data-execution_count="4">
+<div id="7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cor_da <span class="op">=</span> cat.corine.read().land_cover.compute()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="colormapping-and-encoding" class="level3" data-number="6.2.1">
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="colormapping-and-encoding"><span class="header-section-number">6.2.1</span> Colormapping and Encoding</h3>
 <p>For the different land cover types we use the official color encoding which can be found in <a href="https://collections.sentinel-hub.com/corine-land-cover/readme.html">CORINE Land Cover</a>.</p>
-<div id="9" class="cell" data-execution_count="5">
+<div id="9" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load encoding and validate with Pydantic</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> cat.corine_cmap.read()[<span class="dv">0</span>] <span class="im">as</span> f:</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    corine_colors <span class="op">=</span> CorineColorCollection.model_validate(json.load(f))</span>
@@ -1649,7 +1649,7 @@ if (window.Jupyter !== undefined) {
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> BoundaryNorm([<span class="op">*</span>categories, <span class="bu">max</span>(categories) <span class="op">+</span> <span class="dv">1</span>], <span class="bu">len</span>(categories))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we can plot the CORINE Land Cover dataset.</p>
-<div id="11" class="cell" data-execution_count="6">
+<div id="11" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>present_landcover_codes <span class="op">=</span> np.unique(cor_da.values[<span class="op">~</span>np.isnan(cor_da.values)].astype(<span class="bu">int</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
@@ -1663,7 +1663,7 @@ if (window.Jupyter !== undefined) {
 </div>
 </div>
 <p>Now we are ready to merge the backscatter data (<code>sig0_da</code>) with the land cover dataset (<code>cor_da</code>) to have one dataset combining all data.</p>
-<div id="13" class="cell" data-execution_count="7">
+<div id="13" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>var_ds <span class="op">=</span> xr.merge([sig0_da, cor_da], compat<span class="op">=</span><span class="st">"no_conflicts"</span>).drop_vars(<span class="st">"band"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>var_ds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -2213,7 +2213,7 @@ Data variables:
 <section id="backscatter-variability" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="backscatter-variability"><span class="header-section-number">6.3</span> Backscatter Variability</h2>
 <p>With this combined dataset we can study the backscatter variability in relation to natural media. For example, we can analyze the backscatter variability for water by clipping the dataset to include only the water land cover class, as shown below.</p>
-<div id="15" class="cell" data-execution_count="8">
+<div id="15" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 41 = encoded value for water bodies</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>encoded_value_for_waterbodies <span class="op">=</span> <span class="dv">41</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>waterbodies_mask <span class="op">=</span> var_ds.land_cover <span class="op">==</span> encoded_value_for_waterbodies</span>
@@ -2227,7 +2227,7 @@ Data variables:
 </div>
 </div>
 <p>This gives use backscatter values over water only.</p>
-<div id="17" class="cell" data-execution_count="9">
+<div id="17" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>waterbodies_sig0 <span class="op">=</span> var_ds.sig0.isel(time<span class="op">=</span><span class="dv">0</span>).where(waterbodies_mask)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>waterbodies_sig0.plot(robust<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"Greys_r"</span>).axes.set_aspect(<span class="st">"equal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -2239,7 +2239,7 @@ Data variables:
 </div>
 </div>
 <p>To get an idea of the variability we can create a histogram. Radar backscatter from water bodies fluctuates with surface roughness, which changes with wind conditions, creating spatial and temporal variations in signal intensity.</p>
-<div id="19" class="cell" data-execution_count="10">
+<div id="19" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>waterbodies_sig0.plot.hist(bins<span class="op">=</span><span class="dv">50</span>, edgecolor<span class="op">=</span><span class="st">"black"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -2261,7 +2261,7 @@ Data variables:
 <li><p>Crop phenology, where different growth stages affect canopy density and structure.</p></li>
 <li><p>Canopy moisture dynamics, influencing how radar signals are scattered and absorbed.</p></li>
 </ul>
-<div id="21" class="cell" data-execution_count="11">
+<div id="21" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot_variability_over_time(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    var_ds<span class="op">=</span>var_ds,</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    color_mapping<span class="op">=</span>corine_colors.to_dict(),</span>
