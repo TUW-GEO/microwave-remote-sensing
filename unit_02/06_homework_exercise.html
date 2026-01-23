@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -405,7 +405,7 @@ window.Quarto = {
 <h2 data-number="F.1" class="anchored" data-anchor-id="rgb-composite"><span class="header-section-number">F.1</span> RGB Composite</h2>
 <p>Not only radar reflectivity vary according to different land cover classes. The backscattered signal also depends on the change of the imagined natural media over time. We may want to capture in one single image how different land covers comparably change across the same time range. A way to do achieve that is by generating a RGB composite. But what is a RGB composite? It all comes down to combining three image bands into one picture by setting each band as either Red, Green or Blue channel.</p>
 <p>In order to highlight the temporal variability of the backscatter response, we want to select 3 images with maximal distance in time. Therefore we take the first, the middle and the last time available out of the input images available for this exercise. We use RGB coloring where we want to color the first image with Red, the second with Green and the Third with Blue color. When we overlay the images the color will show the differences over time.</p>
-<div id="1" class="cell" data-execution_count="2">
+<div id="1" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> intake</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  <span class="co"># noqa</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -421,7 +421,7 @@ window.Quarto = {
 </section>
 <section id="load-sentinel-1-data" class="level2" data-number="F.2">
 <h2 data-number="F.2" class="anchored" data-anchor-id="load-sentinel-1-data"><span class="header-section-number">F.2</span> Load Sentinel-1 Data</h2>
-<div id="3" class="cell" data-execution_count="3">
+<div id="3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> get_intake_url()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> intake.open_catalog(url)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sig0_da <span class="op">=</span> cat.neusiedler.read().sig0.compute()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -439,7 +439,7 @@ window.Quarto = {
 <li>Use the <code>sel</code> method with nearest neighbor (<code>method=\"nearest\"</code>) interpolation method to obtain the resulting <code>sig0_rgb_da</code> object.</li>
 <li>Do not forget to use the <code>compute()</code> method (when you use the <code>sel</code> method) to finally load the result into memory.</li>
 </ul>
-<div id="5" class="cell" data-execution_count="4">
+<div id="5" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE ----------------------------------------------------------</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>first <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>second <span class="op">=</span> ...  <span class="co"># YOUR CODE HERE</span></span>
@@ -454,7 +454,7 @@ window.Quarto = {
 <p>To visualize backscatter data in RGB, we need to transform the data into values between 0 and 1 to match it to colors. The first step is to convert the backscattering values into linear scale so we can perform meaningful calculations. Now we can normalise the values to be between 0 and 1 using the following formula: <span class="math display">\[
 sig0_{norm} = \frac{sig0 - sig0_{min}}{sig0_{98th} - sig0_{min}}
 \]</span> We replaced the traditional maximum value with the 98th quantile in our normalization process to enhance robustness against outliers. Due to the nature of backscattering some sigma nought values get very high so taking the 98th quantile is important. The linear backscattering values are bounded by 0 so using for example the 2nd quantile is not necessary. After applying the formula, any values exceeding the 98th quantile will be greater than 1. We map these values to 1 to ensure they fit within our specified range.”</p>
-<div id="7" class="cell" data-execution_count="5">
+<div id="7" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>linear_ds <span class="op">=</span> <span class="dv">10</span> <span class="op">**</span> (sig0_rgb_da <span class="op">/</span> <span class="dv">10</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>min_value <span class="op">=</span> linear_ds.quantile(<span class="fl">0.02</span>).item()</span>
@@ -492,7 +492,7 @@ sig0_{norm} = \frac{sig0 - sig0_{min}}{sig0_{98th} - sig0_{min}}
 <section id="individual-rgb-channels" class="level2" data-number="F.4">
 <h2 data-number="F.4" class="anchored" data-anchor-id="individual-rgb-channels"><span class="header-section-number">F.4</span> Individual RGB Channels</h2>
 <p>Let´s first plot the three normalized images separately (Red = Oldest image, Green = Middle image, Blue = Newest image).</p>
-<div id="9" class="cell" data-execution_count="6">
+<div id="9" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>normalized_ds.isel(time<span class="op">=</span><span class="dv">0</span>).plot(ax<span class="op">=</span>axes[<span class="dv">0</span>], cmap<span class="op">=</span><span class="st">"Reds"</span>)</span>
@@ -509,7 +509,7 @@ sig0_{norm} = \frac{sig0 - sig0_{min}}{sig0_{98th} - sig0_{min}}
 <section id="plotting-the-rgb-composite" class="level2" data-number="F.5">
 <h2 data-number="F.5" class="anchored" data-anchor-id="plotting-the-rgb-composite"><span class="header-section-number">F.5</span> Plotting the RGB Composite</h2>
 <p>And finally, let´s plot the RGB composite.</p>
-<div id="11" class="cell" data-execution_count="7">
+<div id="11" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>normalized_ds.plot.imshow()</span>
