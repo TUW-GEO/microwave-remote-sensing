@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Appendix I — Homework Exercise 9: Phase Unwrapping Exercise – JupyterHub Guide</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -68,15 +71,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../unit_03/08_homework_exercise.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-36bf55b16c7cb4b1420f41495cb5446a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -397,7 +399,7 @@ background: #006699;
 <pre><code>https://git.geo.tuwien.ac.at/public_projects/microwave-remote-sensing/-/raw/main/microwave-remote-sensing.yml</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/home/runner/work/microwave-remote-sensing/microwave-remote-sensing/.conda_envs/microwave-remote-sensing/lib/python3.13/site-packages/xarray/coding/variables.py:432: ComplexWarning: Casting complex values to real discards the imaginary part
+<pre><code>/home/runner/work/microwave-remote-sensing/microwave-remote-sensing/.conda_envs/microwave-remote-sensing/lib/python3.13/site-packages/xarray/coding/variables.py:434: ComplexWarning: Casting complex values to real discards the imaginary part
   data = data.astype(dtype=dtype, copy=True)</code></pre>
 </div>
 </div>
@@ -517,6 +519,7 @@ body.vscode-dark {
   min-width: 300px;
   max-width: 700px;
   line-height: 1.6;
+  padding-bottom: 4px;
 }
 
 .xr-text-repr-fallback {
@@ -527,8 +530,11 @@ body.vscode-dark {
 .xr-header {
   padding-top: 6px;
   padding-bottom: 6px;
-  margin-bottom: 4px;
+}
+
+.xr-header {
   border-bottom: solid 1px var(--xr-border-color);
+  margin-bottom: 4px;
 }
 
 .xr-header > div,
@@ -539,20 +545,15 @@ body.vscode-dark {
 }
 
 .xr-obj-type,
-.xr-obj-name,
-.xr-group-name {
+.xr-obj-name {
   margin-left: 2px;
   margin-right: 10px;
 }
 
-.xr-group-name::before {
-  content: "📁";
-  padding-right: 0.3em;
-}
-
-.xr-group-name,
-.xr-obj-type {
+.xr-obj-type,
+.xr-group-box-contents > label {
   color: var(--xr-font-color2);
+  display: block;
 }
 
 .xr-sections {
@@ -567,28 +568,39 @@ body.vscode-dark {
   display: contents;
 }
 
-.xr-section-item input {
-  display: inline-block;
+.xr-section-item > input,
+.xr-group-box-contents > input,
+.xr-array-wrap > input {
+  display: block;
   opacity: 0;
   height: 0;
   margin: 0;
 }
 
-.xr-section-item input + label {
+.xr-section-item > input + label,
+.xr-var-item > input + label {
   color: var(--xr-disabled-color);
-  border: 2px solid transparent !important;
 }
 
-.xr-section-item input:enabled + label {
+.xr-section-item > input:enabled + label,
+.xr-var-item > input:enabled + label,
+.xr-array-wrap > input:enabled + label,
+.xr-group-box-contents > input:enabled + label {
   cursor: pointer;
   color: var(--xr-font-color2);
 }
 
-.xr-section-item input:focus + label {
-  border: 2px solid var(--xr-font-color0) !important;
+.xr-section-item > input:focus-visible + label,
+.xr-var-item > input:focus-visible + label,
+.xr-array-wrap > input:focus-visible + label,
+.xr-group-box-contents > input:focus-visible + label {
+  outline: auto;
 }
 
-.xr-section-item input:enabled + label:hover {
+.xr-section-item > input:enabled + label:hover,
+.xr-var-item > input:enabled + label:hover,
+.xr-array-wrap > input:enabled + label:hover,
+.xr-group-box-contents > input:enabled + label:hover {
   color: var(--xr-font-color0);
 }
 
@@ -596,11 +608,25 @@ body.vscode-dark {
   grid-column: 1;
   color: var(--xr-font-color2);
   font-weight: 500;
+  white-space: nowrap;
+}
+
+.xr-section-summary > em {
+  font-weight: normal;
+}
+
+.xr-span-grid {
+  grid-column-end: -1;
 }
 
 .xr-section-summary > span {
   display: inline-block;
-  padding-left: 0.5em;
+  padding-left: 0.3em;
+}
+
+.xr-group-box-contents > input:checked + label > span {
+  display: inline-block;
+  padding-left: 0.6em;
 }
 
 .xr-section-summary-in:disabled + label {
@@ -628,7 +654,8 @@ body.vscode-dark {
 }
 
 .xr-section-summary,
-.xr-section-inline-details {
+.xr-section-inline-details,
+.xr-group-box-contents > label {
   padding-top: 4px;
 }
 
@@ -637,20 +664,29 @@ body.vscode-dark {
 }
 
 .xr-section-details {
-  display: none;
   grid-column: 1 / -1;
   margin-top: 4px;
   margin-bottom: 5px;
+}
+
+.xr-section-summary-in ~ .xr-section-details {
+  display: none;
 }
 
 .xr-section-summary-in:checked ~ .xr-section-details {
   display: contents;
 }
 
+.xr-children {
+  display: inline-grid;
+  grid-template-columns: 100%;
+  grid-column: 1 / -1;
+  padding-top: 4px;
+}
+
 .xr-group-box {
   display: inline-grid;
-  grid-template-columns: 0px 20px auto;
-  width: 100%;
+  grid-template-columns: 0px 30px auto;
 }
 
 .xr-group-box-vline {
@@ -664,13 +700,43 @@ body.vscode-dark {
   grid-column-start: 2;
   grid-row-start: 1;
   height: 1em;
-  width: 20px;
+  width: 26px;
   border-bottom: 0.2em solid;
   border-color: var(--xr-border-color);
 }
 
 .xr-group-box-contents {
   grid-column-start: 3;
+  padding-bottom: 4px;
+}
+
+.xr-group-box-contents > label::before {
+  content: "📂";
+  padding-right: 0.3em;
+}
+
+.xr-group-box-contents > input:checked + label::before {
+  content: "📁";
+}
+
+.xr-group-box-contents > input:checked + label {
+  padding-bottom: 0px;
+}
+
+.xr-group-box-contents > input:checked ~ .xr-sections {
+  display: none;
+}
+
+.xr-group-box-contents > input + label > span {
+  display: none;
+}
+
+.xr-group-box-ellipsis {
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--xr-font-color2);
+  letter-spacing: 0.15em;
+  cursor: default;
 }
 
 .xr-array-wrap {
@@ -912,33 +978,33 @@ Data variables:
     complex      (y, x) float64 168MB 0.0 0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0
     intensity    (y, x) float32 84MB 0.0 0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0 0.0
     phase        (y, x) float32 84MB 0.0 0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0 0.0
-    cmplx        (y, x) complex64 168MB 0j 0j 0j 0j 0j 0j ... 0j 0j 0j 0j 0j 0j</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-b5cec727-3f7c-49dd-aa21-b80c7e4018e3" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-b5cec727-3f7c-49dd-aa21-b80c7e4018e3" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 6110</li><li><span class="xr-has-index">x</span>: 3435</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-64255931-53e4-4b49-8574-f1b0e1103af4" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-64255931-53e4-4b49-8574-f1b0e1103af4" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-0.0001007 -0.000302 ... -1.23</div><input id="attrs-e13cb8c6-7472-4e33-8c66-242636c10df3" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-e13cb8c6-7472-4e33-8c66-242636c10df3" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e9f09d5b-53f6-4e2d-a0f6-5ce9c9c224d3" class="xr-var-data-in" type="checkbox"><label for="data-e9f09d5b-53f6-4e2d-a0f6-5ce9c9c224d3" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-1.006741e-04, -3.020223e-04, -5.033705e-04, ..., -1.229734e+00,
-       -1.229935e+00, -1.230137e+00], shape=(6110,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.0001525 0.0004576 ... 1.047 1.048</div><input id="attrs-1cc0cd3a-39cf-4cfe-bf86-4b92a73edfc1" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-1cc0cd3a-39cf-4cfe-bf86-4b92a73edfc1" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ee79ec6f-252b-441d-966d-e0a7b850a183" class="xr-var-data-in" type="checkbox"><label for="data-ee79ec6f-252b-441d-966d-e0a7b850a183" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1.525203e-04, 4.575610e-04, 7.626016e-04, ..., 1.047052e+00,
-       1.047357e+00, 1.047662e+00], shape=(3435,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>band</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1</div><input id="attrs-268039a1-79af-40bd-b787-9a0d890163a9" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-268039a1-79af-40bd-b787-9a0d890163a9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-69707bcf-9d68-42cd-8822-4e2f80a0066d" class="xr-var-data-in" type="checkbox"><label for="data-69707bcf-9d68-42cd-8822-4e2f80a0066d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(1)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-2bc85abb-c1bf-4526-b4f5-dd73b3947d13" class="xr-var-attrs-in" type="checkbox"><label for="attrs-2bc85abb-c1bf-4526-b4f5-dd73b3947d13" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f072467d-d5f0-4125-9aed-fe44b146ade5" class="xr-var-data-in" type="checkbox"><label for="data-f072467d-d5f0-4125-9aed-fe44b146ade5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>GeoTransform :</span></dt><dd>0.0 0.0003050406542399742 0.0 0.0 0.0 -0.0002013481828520014</dd><dt><span>crs_wkt :</span></dt><dd>GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>grid_mapping_name :</span></dt><dd>latitude_longitude</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>spatial_ref :</span></dt><dd>GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-90ea34b3-d342-43f3-9b38-c2179646129d" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-90ea34b3-d342-43f3-9b38-c2179646129d" class="xr-section-summary">Data variables: <span>(5)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>coh</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-58e818b9-1806-42f4-a2e8-30589974cb4f" class="xr-var-attrs-in" type="checkbox"><label for="attrs-58e818b9-1806-42f4-a2e8-30589974cb4f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-7ed505ff-acf3-4c3e-be67-6d25607927b5" class="xr-var-data-in" type="checkbox"><label for="data-7ed505ff-acf3-4c3e-be67-6d25607927b5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
+    cmplx        (y, x) complex64 168MB 0j 0j 0j 0j 0j 0j ... 0j 0j 0j 0j 0j 0j</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-ff760d11-011b-4a6e-beaa-a375ebddf861" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-ff760d11-011b-4a6e-beaa-a375ebddf861" class="xr-section-summary">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 6110</li><li><span class="xr-has-index">x</span>: 3435</li></ul></div></li><li class="xr-section-item"><input id="section-fd6e0647-367d-47be-827f-239e1a635d3c" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-fd6e0647-367d-47be-827f-239e1a635d3c" class="xr-section-summary" title="Expand/collapse section">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-0.0001007 -0.000302 ... -1.23</div><input id="attrs-e5397252-d642-48a0-a7d5-11ef7ae0f4e4" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-e5397252-d642-48a0-a7d5-11ef7ae0f4e4" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e869cb03-824e-45b7-a724-6979989da508" class="xr-var-data-in" type="checkbox"><label for="data-e869cb03-824e-45b7-a724-6979989da508" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-1.006741e-04, -3.020223e-04, -5.033705e-04, ..., -1.229734e+00,
+       -1.229935e+00, -1.230137e+00], shape=(6110,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.0001525 0.0004576 ... 1.047 1.048</div><input id="attrs-e53012a0-c87d-4548-906a-a51d26fae083" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-e53012a0-c87d-4548-906a-a51d26fae083" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3d5023bd-09c2-40c4-a2bd-828a78091ae2" class="xr-var-data-in" type="checkbox"><label for="data-3d5023bd-09c2-40c4-a2bd-828a78091ae2" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1.525203e-04, 4.575610e-04, 7.626016e-04, ..., 1.047052e+00,
+       1.047357e+00, 1.047662e+00], shape=(3435,))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>band</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1</div><input id="attrs-6674abb0-ba95-4cf5-af51-ffbb7c484c18" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-6674abb0-ba95-4cf5-af51-ffbb7c484c18" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3e9b5858-3375-485f-8408-bb864f476b0b" class="xr-var-data-in" type="checkbox"><label for="data-3e9b5858-3375-485f-8408-bb864f476b0b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(1)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-650ff9bc-a941-4639-b22f-11bf578502ab" class="xr-var-attrs-in" type="checkbox"><label for="attrs-650ff9bc-a941-4639-b22f-11bf578502ab" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-657077d4-a2a0-4983-8172-c02589fca244" class="xr-var-data-in" type="checkbox"><label for="data-657077d4-a2a0-4983-8172-c02589fca244" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>GeoTransform :</span></dt><dd>0.0 0.0003050406542399742 0.0 0.0 0.0 -0.0002013481828520014</dd><dt><span>crs_wkt :</span></dt><dd>GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>grid_mapping_name :</span></dt><dd>latitude_longitude</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>spatial_ref :</span></dt><dd>GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-69f7063d-7595-476a-a68d-04deafb2d6d9" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-69f7063d-7595-476a-a68d-04deafb2d6d9" class="xr-section-summary" title="Expand/collapse section">Data variables: <span>(5)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>coh</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-6896c891-6604-4484-9278-1b62664584f3" class="xr-var-attrs-in" type="checkbox"><label for="attrs-6896c891-6604-4484-9278-1b62664584f3" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-c1d00882-1161-4cec-ab85-b1bf507ed958" class="xr-var-data-in" type="checkbox"><label for="data-c1d00882-1161-4cec-ab85-b1bf507ed958" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        ...,
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
-       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435), dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>complex</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-d3e91b5d-ba4e-4104-8671-aacf458a4683" class="xr-var-attrs-in" type="checkbox"><label for="attrs-d3e91b5d-ba4e-4104-8671-aacf458a4683" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-faca982c-dc3b-46b9-aaa7-c6164a6f487c" class="xr-var-data-in" type="checkbox"><label for="data-faca982c-dc3b-46b9-aaa7-c6164a6f487c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435), dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>complex</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-341a1db7-3d7d-4db3-9e0f-b818ce2e66b0" class="xr-var-attrs-in" type="checkbox"><label for="attrs-341a1db7-3d7d-4db3-9e0f-b818ce2e66b0" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6d55659b-a96c-4ae5-9116-df52c44e3c33" class="xr-var-data-in" type="checkbox"><label for="data-6d55659b-a96c-4ae5-9116-df52c44e3c33" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        ...,
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
-       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>intensity</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-a404a929-cf38-4e7e-bf6d-3d9a8a9c341f" class="xr-var-attrs-in" type="checkbox"><label for="attrs-a404a929-cf38-4e7e-bf6d-3d9a8a9c341f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4abf31e0-2317-4a6b-902b-06da9b872104" class="xr-var-data-in" type="checkbox"><label for="data-4abf31e0-2317-4a6b-902b-06da9b872104" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435))</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>intensity</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-31511a5f-f693-4337-8f72-b98e7a35cfbe" class="xr-var-attrs-in" type="checkbox"><label for="attrs-31511a5f-f693-4337-8f72-b98e7a35cfbe" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1a36cb1d-ff64-47ce-ba01-f2878b72a7b0" class="xr-var-data-in" type="checkbox"><label for="data-1a36cb1d-ff64-47ce-ba01-f2878b72a7b0" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        ...,
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
-       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435), dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>phase</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-2fff7e87-58a2-4abb-a802-8432c15414ff" class="xr-var-attrs-in" type="checkbox"><label for="attrs-2fff7e87-58a2-4abb-a802-8432c15414ff" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4c425c71-abf8-4821-ba06-06ac13c90c92" class="xr-var-data-in" type="checkbox"><label for="data-4c425c71-abf8-4821-ba06-06ac13c90c92" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435), dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>phase</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">0.0 0.0 0.0 0.0 ... 0.0 0.0 0.0 0.0</div><input id="attrs-42929c0d-45dd-4241-84a1-62bc4c88a12b" class="xr-var-attrs-in" type="checkbox"><label for="attrs-42929c0d-45dd-4241-84a1-62bc4c88a12b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-2c6b551d-9024-459c-bccf-a728f08a8477" class="xr-var-data-in" type="checkbox"><label for="data-2c6b551d-9024-459c-bccf-a728f08a8477" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
        ...,
        [0., 0., 0., ..., 0., 0., 0.],
        [0., 0., 0., ..., 0., 0., 0.],
-       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435), dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>cmplx</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">complex64</div><div class="xr-var-preview xr-preview">0j 0j 0j 0j 0j ... 0j 0j 0j 0j 0j</div><input id="attrs-89594ed4-8b4b-40aa-a167-af097c593a08" class="xr-var-attrs-in" type="checkbox"><label for="attrs-89594ed4-8b4b-40aa-a167-af097c593a08" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-50a65aaa-0cef-4611-8582-368f71141e70" class="xr-var-data-in" type="checkbox"><label for="data-50a65aaa-0cef-4611-8582-368f71141e70" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0.+0.j, 0.+0.j, 0.+0.j, ..., 0.+0.j, 0.+0.j, 0.+0.j],
+       [0., 0., 0., ..., 0., 0., 0.]], shape=(6110, 3435), dtype=float32)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>cmplx</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">complex64</div><div class="xr-var-preview xr-preview">0j 0j 0j 0j 0j ... 0j 0j 0j 0j 0j</div><input id="attrs-908c36c3-2c95-4316-8050-4cd767925096" class="xr-var-attrs-in" type="checkbox"><label for="attrs-908c36c3-2c95-4316-8050-4cd767925096" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-18d2a5c6-fe8b-414c-8067-b5cf7623bd14" class="xr-var-data-in" type="checkbox"><label for="data-18d2a5c6-fe8b-414c-8067-b5cf7623bd14" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd></dl></div><div class="xr-var-data"><pre>array([[0.+0.j, 0.+0.j, 0.+0.j, ..., 0.+0.j, 0.+0.j, 0.+0.j],
        [0.+0.j, 0.+0.j, 0.+0.j, ..., 0.+0.j, 0.+0.j, 0.+0.j],
        [0.+0.j, 0.+0.j, 0.+0.j, ..., 0.+0.j, 0.+0.j, 0.+0.j],
        ...,
